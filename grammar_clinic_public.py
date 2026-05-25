@@ -13,11 +13,10 @@ st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
 # 1. 🔑 제미나이 API 키 로드
 api_key = os.environ.get("GEMINI_API_KEY")
 
-# 2. 🔥 파이어베이스 초기화 (Secrets 금고에서 열쇠 꺼내기)
+# 2. 🔥 파이어베이스 초기화 (Secrets 금고 연동)
 if not firebase_admin._apps:
     try:
         fb_credentials = dict(st.secrets["firebase"])
-        # private_key의 줄바꿈 문자(\\n) 처리
         if "private_key" in fb_credentials:
             fb_credentials["private_key"] = fb_credentials["private_key"].replace("\\n", "\n")
         
@@ -32,7 +31,7 @@ db = firestore.client()
 # 관리자 비밀번호
 ADMIN_PASSWORD = "chamut"
 
-# CSS 스타일 로드
+# CSS 스타일 로드 (다크모드 완벽 대응)
 try:
     with open("style.css", "r", encoding="utf-8") as css_file:
         custom_css = css_file.read()
@@ -40,7 +39,7 @@ try:
 except FileNotFoundError:
     pass
 
-# 다국어 UI 사전
+# 다국어 UI 사전 (6개국어 복구 및 로그인/비회원 관련 텍스트 추가)
 ui_texts = {
     "English": {
         "nav_title": "📌 Menu", "menu_clinic": "📚 Clinic Home", "menu_board": "💬 Community Board",
@@ -50,7 +49,17 @@ ui_texts = {
         "board_title": "Community Board", "board_prompt": "Share your questions or feedback!", "board_btn": "Post",
         "like": "👍 Like", "comment_prompt": "Write a comment...", "comment_btn": "Reply",
         "select_lang": "Select Language", "delete_btn": "🗑️ Delete",
-        "login_title": "🔐 Sign In / Sign Up", "email": "Email", "pwd": "Password", "btn_login": "Sign In", "btn_signup": "Sign Up"
+        "login_title": "🔐 Sign In / Sign Up", "email": "Email", "pwd": "Password", "btn_login": "Sign In", "btn_signup": "Sign Up", "btn_guest": "👤 Continue as Guest"
+    },
+    "日本語": {
+        "nav_title": "📌 メニュー", "menu_clinic": "📚 クリニックホーム", "menu_board": "💬 コミュニティ",
+        "clinic": "クリニック", "select_room": "文法トピック", "input_prompt": "質問を入力...", 
+        "no_files": "ファイルがありません。", "error_key": "APIキーなし", "error_msg": "エラー",
+        "welcome": "こんにちは！**{room}**へようこそ。どんな質問がありますか？", "loading": "考え中...",
+        "board_title": "コミュニティ掲示板", "board_prompt": "質問や意見を共有しましょう！", "board_btn": "投稿",
+        "like": "👍 いいね", "comment_prompt": "コメントを入力...", "comment_btn": "返信",
+        "select_lang": "言語を選択", "delete_btn": "🗑️ 削除",
+        "login_title": "🔐 ログイン / 新規登録", "email": "メールアドレス", "pwd": "パスワード", "btn_login": "ログイン", "btn_signup": "新規登録", "btn_guest": "👤 ゲストとして続ける"
     },
     "한국어": {
         "nav_title": "📌 메뉴", "menu_clinic": "📚 문법 클리닉 홈", "menu_board": "💬 커뮤니티 게시판",
@@ -60,7 +69,37 @@ ui_texts = {
         "board_title": "커뮤니티 게시판", "board_prompt": "궁금한 점이나 의견을 남겨주세요!", "board_btn": "게시글 작성",
         "like": "👍 공감", "comment_prompt": "댓글을 남겨주세요...", "comment_btn": "댓글 달기",
         "select_lang": "언어를 선택하세요", "delete_btn": "🗑️ 삭제",
-        "login_title": "🔐 로그인 / 회원가입", "email": "이메일 주소", "pwd": "비밀번호", "btn_login": "로그인", "btn_signup": "회원가입"
+        "login_title": "🔐 로그인 / 회원가입", "email": "이메일 주소", "pwd": "비밀번호", "btn_login": "로그인", "btn_signup": "회원가입", "btn_guest": "👤 비회원으로 시작하기"
+    },
+    "中文": {
+        "nav_title": "📌 导航菜单", "menu_clinic": "📚 语法诊所主页", "menu_board": "💬 社区论坛",
+        "clinic": "诊所", "select_room": "语法主题", "input_prompt": "请输入问题...", 
+        "no_files": "暂无文件。", "error_key": "无 API 密钥", "error_msg": "错误",
+        "welcome": "你好！欢迎来到 **{room}**。有什么想问的吗？", "loading": "思考中...",
+        "board_title": "社区论坛", "board_prompt": "分享您的问题或意见！", "board_btn": "发布",
+        "like": "👍 赞", "comment_prompt": "写评论...", "comment_btn": "回复",
+        "select_lang": "选择语言", "delete_btn": "🗑️ 删除",
+        "login_title": "🔐 登录 / 注册", "email": "邮箱", "pwd": "密码", "btn_login": "登录", "btn_signup": "注册", "btn_guest": "👤 以游客身份继续"
+    },
+    "Español": {
+        "nav_title": "📌 Menú", "menu_clinic": "📚 Inicio de Clínica", "menu_board": "💬 Comunidad",
+        "clinic": "Clínica", "select_room": "Temas de Gramática", "input_prompt": "Ingresa pregunta...", 
+        "no_files": "Sin archivos.", "error_key": "Falta API", "error_msg": "Error",
+        "welcome": "¡Hola! Bienvenido a la **{room}**. ¿Qué dudas tienes?", "loading": "Pensando...",
+        "board_title": "Comunidad", "board_prompt": "¡Comparte preguntas o comentarios!", "board_btn": "Publicar",
+        "like": "👍 Me gusta", "comment_prompt": "Escribe un comentario...", "comment_btn": "Responder",
+        "select_lang": "Seleccionar idioma", "delete_btn": "🗑️ Eliminar",
+        "login_title": "🔐 Iniciar sesión / Registrarse", "email": "Correo electrónico", "pwd": "Contraseña", "btn_login": "Iniciar sesión", "btn_signup": "Registrarse", "btn_guest": "👤 Continuar como invitado"
+    },
+    "Tiếng Việt": {
+        "nav_title": "📌 Thực đơn", "menu_clinic": "📚 Trang chủ Phòng khám", "menu_board": "💬 Cộng đồng",
+        "clinic": "Phòng khám", "select_room": "Chủ đề ngữ pháp", "input_prompt": "Nhập câu hỏi...", 
+        "no_files": "Chưa có tệp.", "error_key": "Thiếu API", "error_msg": "Lỗi",
+        "welcome": "Xin chào! Chào mừng đến với **{room}**. Bạn có câu hỏi nào?", "loading": "Đang nghĩ...",
+        "board_title": "Bảng cộng đồng", "board_prompt": "Chia sẻ câu hỏi hoặc ý kiến!", "board_btn": "Đăng",
+        "like": "👍 Thích", "comment_prompt": "Viết bình luận...", "comment_btn": "Trả lời",
+        "select_lang": "Chọn ngôn ngữ", "delete_btn": "🗑️ Xóa",
+        "login_title": "🔐 Đăng nhập / Đăng ký", "email": "Email", "pwd": "Mật khẩu", "btn_login": "Đăng nhập", "btn_signup": "Đăng ký", "btn_guest": "👤 Tiếp tục với tư cách khách"
     }
 }
 
@@ -72,24 +111,27 @@ if "user_email" not in st.session_state:
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
 
-t = ui_texts.get(st.session_state.selected_lang, ui_texts["한국어"])
+# 현재 선택된 언어 사전 불러오기
+t = ui_texts[st.session_state.selected_lang]
+lang_list = list(ui_texts.keys())
 
 # ==========================================
-# 🔓 비로그인 상태: 로그인 / 회원가입 화면
+# 🔓 비로그인 상태: 로그인 / 회원가입 / 비회원 접속 화면
 # ==========================================
 if st.session_state.user_email is None:
     st.title("Welcome to Korean Grammar Clinic! 👋")
     
-    # 언어 선택 먼저 보여주기
-    lang_choice = st.selectbox("🌐 Choose Your Language", ["한국어", "English"])
+    # 언어 선택 드롭다운
+    default_idx = lang_list.index(st.session_state.selected_lang)
+    lang_choice = st.selectbox("🌐 Choose Your Language", lang_list, index=default_idx)
     if lang_choice != st.session_state.selected_lang:
         st.session_state.selected_lang = lang_choice
         st.rerun()
         
     st.write("---")
     
-    col1, col2 = st.columns([1, 1])
-    
+    # 로그인 화면 렌더링
+    col1, col2, col3 = st.columns([1.5, 0.5, 2])
     with col1:
         st.subheader(t["login_title"])
         auth_email = st.text_input(t["email"], key="auth_email")
@@ -97,7 +139,7 @@ if st.session_state.user_email is None:
         
         btn_action1, btn_action2 = st.columns(2)
         
-        # 🔑 로그인 로직 (Firestore 조회)
+        # 🔑 로그인
         with btn_action1:
             if st.button(t["btn_login"], use_container_width=True):
                 if auth_email and auth_pwd:
@@ -111,7 +153,7 @@ if st.session_state.user_email is None:
                 else:
                     st.warning("Please fill in all fields.")
                     
-        # 📝 회원가입 로직 (Firestore 저장)
+        # 📝 회원가입
         with btn_action2:
             if st.button(t["btn_signup"], use_container_width=True):
                 if auth_email and auth_pwd:
@@ -127,10 +169,17 @@ if st.session_state.user_email is None:
                         st.success("Account created successfully! Please click Login.")
                 else:
                     st.warning("Please fill in all fields.")
-    st.stop() # 로그인 안 되었으면 아래 메인 화면 구동 중단
+        
+        st.write("<br><br>", unsafe_allow_html=True)
+        # 👤 비회원(Guest) 입장 버튼
+        if st.button(t["btn_guest"], use_container_width=True, type="primary"):
+            st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
+            st.rerun()
+            
+    st.stop() # 접속 안 되었으면 아래 메인 화면 구동 중단
 
 # ==========================================
-# 🔐 로그인 완료 상태: 메인 앱 화면 구동
+# 🔐 로그인/비회원 접속 완료 상태: 메인 앱 화면 구동
 # ==========================================
 
 # 사이드바 상단 정보 및 로그아웃
@@ -143,7 +192,6 @@ if st.sidebar.button("Logout", size="small"):
 st.sidebar.divider()
 
 # 사이드바 언어 설정
-lang_list = ["한국어", "English"]
 default_idx = lang_list.index(st.session_state.selected_lang)
 selected_lang = st.sidebar.selectbox("🌐 Language", lang_list, index=default_idx)
 if selected_lang != st.session_state.selected_lang:
@@ -192,7 +240,7 @@ else:
 
 # --- 메인 기능 렌더링 ---
 
-# 1. 📊 관리자 대시보드 (진짜 DB 원격 조회)
+# 1. 📊 관리자 대시보드
 if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
     st.title("📊 실시간 이용 통계 및 로그 (Firestore)")
     
@@ -210,7 +258,7 @@ if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_ad
         </div>
         """, unsafe_allow_html=True)
 
-# 2. 📢 커뮤니티 게시판 (진짜 DB 연동)
+# 2. 📢 커뮤니티 게시판
 elif selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
@@ -265,7 +313,7 @@ elif selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 3. 🚪 문법 클리닉 챗봇 (유저별 대화 기록 DB 무한 보관!)
+# 3. 🚪 문법 클리닉 챗봇
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -275,7 +323,6 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
 
-    # DB에서 해당 유저의 이 대화방 기존 기록 불러오기
     chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
     chat_ref = db.collection("chats").document(chat_doc_id).get()
     
@@ -295,7 +342,6 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         with st.chat_message("user"): 
             st.markdown(prompt)
             
-        # 📊 통계용 글로벌 로그 기록 누적 (Firestore)
         db.collection("logs").add({
             "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
             "user": st.session_state.user_email,
@@ -338,7 +384,6 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     st.markdown(response.text)
                     
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
-                    # 유저 대화 기록 업데이트 후 DB에 영구 저장
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
             except Exception as e:
                 with st.chat_message("assistant"):
