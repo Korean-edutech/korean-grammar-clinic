@@ -118,7 +118,7 @@ if selected_main_nav == t["menu_clinic"]:
         grammar_meta_words = [os.path.basename(path).replace(".txt", "") for path in file_paths]
         
         # 기호(▪️)와 HTML 띄어쓰기(&nbsp;)를 사용해 버튼 안쪽으로 강제 들여쓰기 효과
-        room_display_names = [f"&nbsp;&nbsp;&nbsp;▪️ {meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
+        room_display_names = [f"&nbsp;&nbsp;&nbsp;{meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
         
         selected_display_name = st.sidebar.radio(
             "sub_menu_hidden_label", 
