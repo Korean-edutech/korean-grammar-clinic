@@ -31,7 +31,7 @@ db = firestore.client()
 # 관리자 비밀번호
 ADMIN_PASSWORD = "admin"
 
-# CSS 스타일 로드 (다크모드 완벽 대응)
+# CSS 스타일 로드
 try:
     with open("style.css", "r", encoding="utf-8") as css_file:
         custom_css = css_file.read()
@@ -39,7 +39,7 @@ try:
 except FileNotFoundError:
     pass
 
-# 🌐 다국어 UI 사전 (프랑스어, 힌디어, 이탈리아어 포함 총 9개 국어 지원!)
+# 🌐 다국어 UI 사전 (총 9개 국어 지원)
 ui_texts = {
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -272,7 +272,7 @@ if st.session_state.user_email is None:
                 st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
                 st.rerun()
             
-    st.stop() # 인증되지 않은 상태면 메인 로직 구동 차단
+    st.stop() 
 
 # ==========================================
 # 🔐 인증 완료 상태: 메인 대시보드 및 서비스 구동
@@ -336,7 +336,7 @@ else:
 
 # --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
 
-# 1. 📊 관리자 대시보드 로직 (Firestore 실시간 중앙 원격 연동)
+# 1. 📊 관리자 대시보드 로직 (표 형태로 UI 업그레이드!)
 if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
     st.title("📊 실시간 이용 통계 및 로그 (Firestore)")
     
@@ -346,15 +346,26 @@ if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_ad
     st.metric(label="총 누적 질문 수", value=f"{len(logs_list)} 회")
     st.divider()
     
-    for log in logs_list:
-        st.markdown(f"""
-        <div style='background-color: var(--secondary-background-color); padding:10px; border-radius:5px; margin-bottom:10px;'>
-            <span style='font-size:0.8em; color:gray;'>⏰ {log.get('time')} | 👤 {log.get('user')} | 🌐 {log.get('lang')} | 🚪 {log.get('room')}</span><br>
-            <strong>Q:</strong> {log.get('prompt')}
-        </div>
-        """, unsafe_allow_html=True)
+    st.subheader("📝 상세 질문 로그 데이터")
+    
+    if logs_list:
+        # 데이터프레임(표) 형태로 깔끔하게 렌더링
+        st.dataframe(
+            logs_list,
+            column_config={
+                "time": st.column_config.TextColumn("⏰ 질문 시간", width="medium"),
+                "user": st.column_config.TextColumn("👤 사용자(이메일/게스트)", width="medium"),
+                "lang": st.column_config.TextColumn("🌐 언어", width="small"),
+                "room": st.column_config.TextColumn("🚪 문법 주제", width="small"),
+                "prompt": st.column_config.TextColumn("💬 질문 내용", width="large")
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+    else:
+        st.info("아직 수집된 질문 데이터가 없습니다.")
 
-# 2. 📢 실시간 커뮤니티 게시판 로직 (개인정보 보호 적용된 영구 DB 연동)
+# 2. 📢 실시간 커뮤니티 게시판 로직
 elif selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
@@ -409,7 +420,7 @@ elif selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (개인정보 수집 동의 고지 완료 및 기록 암묵적 무한 영구 저장)
+# 3. 🚪 문법 클리닉 챗봇 엔진 로직 
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
