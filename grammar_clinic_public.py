@@ -185,8 +185,13 @@ if selected_main_nav == t["menu_board"]:
     for idx, post in enumerate(posts):
         with st.container():
             st.markdown(f"""
-            <div style='background-color:#FFFFFF; padding:15px; border-radius:10px; border:1px solid #E2E8F0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
-                <span style='font-size:0.8em; color:#64748B;'>✍️ {post['time']} ({post['lang']})</span><br>
+            <div style='background-color: var(--secondary-background-color); 
+                        padding:15px; 
+                        border-radius:10px; 
+                        border: 1px solid rgba(128, 128, 128, 0.2); 
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+                        color: var(--text-color);'>
+                <span style='font-size:0.8em; opacity: 0.7;'>✍️ {post['time']} ({post['lang']})</span><br>
                 <div style='margin-top:10px; font-size:1.05em;'>{post['content'].replace('\n', '<br>')}</div>
             </div>
             """, unsafe_allow_html=True)
