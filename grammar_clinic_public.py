@@ -39,9 +39,10 @@ try:
 except FileNotFoundError:
     pass
 
-# 🌐 다국어 UI 사전 (6개국어 완벽 복구 및 개인정보 관련 안내 문구 자동화)
+# 🌐 다국어 UI 사전 (프랑스어, 힌디어, 이탈리아어 포함 총 9개 국어 지원!)
 ui_texts = {
     "English": {
+        "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
         "nav_title": "📌 Menu", "menu_clinic": "📚 Clinic Home", "menu_board": "💬 Community Board",
         "clinic": "Clinic", "select_room": "Grammar Topics", "input_prompt": "Enter your question...", 
         "no_files": "No grammar files yet.", "error_key": "API key missing", "error_msg": "Error",
@@ -57,6 +58,7 @@ ui_texts = {
         "chat_warn": "⚠️ Chat logs may be collected anonymously to improve service quality. Do NOT enter personal information (name, contact info, etc.)."
     },
     "日本語": {
+        "main_title": "韓国語文法クリニックへようこそ！ 👋", "choose_lang": "🌐 言語を選択してください",
         "nav_title": "📌 メニュー", "menu_clinic": "📚 クリニックホーム", "menu_board": "💬 コミュニティ",
         "clinic": "クリニック", "select_room": "文法トピック", "input_prompt": "質問を入力...", 
         "no_files": "ファイルがありません。", "error_key": "APIキーなし", "error_msg": "エラー",
@@ -72,6 +74,7 @@ ui_texts = {
         "chat_warn": "⚠️ 対話内容はサービス向上のため無名で収集される場合があります。個人情報（氏名、連絡先など）は絶対に入力しないでください。"
     },
     "한국어": {
+        "main_title": "한국어 문법 클리닉에 오신 것을 환영합니다! 👋", "choose_lang": "🌐 언어를 선택하세요",
         "nav_title": "📌 메뉴", "menu_clinic": "📚 문법 클리닉 홈", "menu_board": "💬 커뮤니티 게시판",
         "clinic": "클리닉", "select_room": "학습할 문법 목록", "input_prompt": "질문을 입력하세요...", 
         "no_files": "등록된 문법이 없습니다.", "error_key": "API 키 오류", "error_msg": "에러 발생",
@@ -87,6 +90,7 @@ ui_texts = {
         "chat_warn": "⚠️ 대화 내용은 서비스 품질 향상을 위해 익명으로 수집될 수 있습니다. 개인정보(이름, 연락처 등)를 절대 입력하지 마세요."
     },
     "中文": {
+        "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
         "nav_title": "📌 导航菜单", "menu_clinic": "📚 语法诊所主页", "menu_board": "💬 社区论坛",
         "clinic": "诊所", "select_room": "语法主题", "input_prompt": "请输入问题...", 
         "no_files": "暂无文件。", "error_key": "无 API 密钥", "error_msg": "错误",
@@ -102,6 +106,7 @@ ui_texts = {
         "chat_warn": "⚠️ 聊天记录可能会被匿名收集以用于改进服务质量。请勿输入个人信息（姓名、联系方式等）。"
     },
     "Español": {
+        "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
         "nav_title": "📌 Menú", "menu_clinic": "📚 Inicio de Clínica", "menu_board": "💬 Comunidad",
         "clinic": "Clínica", "select_room": "Temas de Gramática", "input_prompt": "Ingresa pregunta...", 
         "no_files": "Sin archivos.", "error_key": "Falta API", "error_msg": "Error",
@@ -117,6 +122,7 @@ ui_texts = {
         "chat_warn": "⚠️ Los registros de chat pueden recopilarse de forma anónima para mejorar la calidad del servicio. NO introduzca información personal (nombre, contacto, etc.)."
     },
     "Tiếng Việt": {
+        "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
         "nav_title": "📌 Thực đơn", "menu_clinic": "📚 Trang chủ Phòng khám", "menu_board": "💬 Cộng đồng",
         "clinic": "Phòng khám", "select_room": "Chủ đề ngữ pháp", "input_prompt": "Nhập câu hỏi...", 
         "no_files": "Chưa có tệp.", "error_key": "Thiếu API", "error_msg": "Lỗi",
@@ -130,6 +136,54 @@ ui_texts = {
         "agree_warn_signup": "Vui lòng đồng ý với chính sách bảo mật để đăng ký.",
         "agree_warn_guest": "Vui lòng đồng ý thu thập dữ liệu để tiếp tục với tư cách khách.",
         "chat_warn": "⚠️ Lịch sử trò chuyện có thể được thu thập ẩn danh để cải thiện chất lượng dịch vụ. TUYỆT ĐỐI KHÔNG nhập thông tin cá nhân (tên, số điện thoại, v.v.)."
+    },
+    "Français": {
+        "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
+        "nav_title": "📌 Menu", "menu_clinic": "📚 Accueil Clinique", "menu_board": "💬 Forum Communautaire",
+        "clinic": "Clinique", "select_room": "Sujets de Grammaire", "input_prompt": "Entrez votre question...", 
+        "no_files": "Aucun fichier de grammaire.", "error_key": "Clé API manquante", "error_msg": "Erreur",
+        "welcome": "Bonjour ! Bienvenue dans la **{room}**. Quelles questions avez-vous aujourd'hui ?", "loading": "Réflexion...",
+        "board_title": "Forum Communautaire", "board_prompt": "Partagez vos questions ou commentaires !", "board_btn": "Publier",
+        "like": "👍 J'aime", "comment_prompt": "Écrire un commentaire...", "comment_btn": "Répondre",
+        "select_lang": "Choisir la langue", "delete_btn": "🗑️ Supprimer",
+        "login_title": "🔐 Connexion / Inscription", "email": "E-mail", "pwd": "Mot de passe", "btn_login": "Se connecter", "btn_signup": "S'inscrire", "btn_guest": "👤 Continuer en tant qu'invité",
+        "signup_agree": "J'accepte la collecte et l'utilisation d'informations personnelles (Requis)",
+        "guest_agree": "J'accepte la collecte anonyme des journaux de discussion pour l'amélioration du service (Requis)",
+        "agree_warn_signup": "Veuillez accepter la politique de confidentialité pour vous inscrire.",
+        "agree_warn_guest": "Veuillez accepter la collecte de données pour continuer en tant qu'invité.",
+        "chat_warn": "⚠️ Les journaux de discussion peuvent être collectés anonymement pour améliorer le service. N'entrez PAS d'informations personnelles (nom, contact, etc.)."
+    },
+    "हिन्दी": {
+        "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
+        "nav_title": "📌 मेनू", "menu_clinic": "📚 क्लिनिक होम", "menu_board": "💬 सामुदायिक बोर्ड",
+        "clinic": "क्लिनिक", "select_room": "व्याकरण विषय", "input_prompt": "अपना प्रश्न दर्ज करें...", 
+        "no_files": "अभी तक कोई फ़ाइल नहीं।", "error_key": "एपीआई कुंजी गायब है", "error_msg": "त्रुटि",
+        "welcome": "नमस्ते! **{room}** में आपका स्वागत है। आज आपके क्या प्रश्न हैं?", "loading": "सोच रहा हूँ...",
+        "board_title": "सामुदायिक बोर्ड", "board_prompt": "अपने प्रश्न या प्रतिक्रिया साझा करें!", "board_btn": "पोस्ट करें",
+        "like": "👍 लाइक", "comment_prompt": "एक टिप्पणी लिखें...", "comment_btn": "उत्तर दें",
+        "select_lang": "भाषा चुनें", "delete_btn": "🗑️ हटाएं",
+        "login_title": "🔐 साइन इन / साइन अप", "email": "ईमेल", "pwd": "पासवर्ड", "btn_login": "साइन इन", "btn_signup": "साइन अप", "btn_guest": "👤 अतिथि के रूप में जारी रखें",
+        "signup_agree": "मैं व्यक्तिगत जानकारी के संग्रह और उपयोग से सहमत हूँ (आवश्यक)",
+        "guest_agree": "मैं सेवा सुधार के लिए चैट लॉग के अनाम संग्रह से सहमत हूँ (आवश्यक)",
+        "agree_warn_signup": "साइन अप करने के लिए कृपया गोपनीयता नीति से सहमत हों।",
+        "agree_warn_guest": "अतिथि के रूप में जारी रखने के लिए कृपया डेटा संग्रह से सहमत हों।",
+        "chat_warn": "⚠️ सेवा की गुणवत्ता में सुधार के लिए चैट लॉग को गुमनाम रूप से एकत्र किया जा सकता है। व्यक्तिगत जानकारी (नाम, संपर्क आदि) दर्ज न करें।"
+    },
+    "Italiano": {
+        "main_title": "Benvenuti alla Clinica di Grammatica Coreana! 👋", "choose_lang": "🌐 Scegli la tua lingua",
+        "nav_title": "📌 Menu", "menu_clinic": "📚 Home Clinica", "menu_board": "💬 Bacheca Comunità",
+        "clinic": "Clinica", "select_room": "Argomenti di Grammatica", "input_prompt": "Inserisci la tua domanda...", 
+        "no_files": "Nessun file di grammatica.", "error_key": "Chiave API mancante", "error_msg": "Errore",
+        "welcome": "Ciao! Benvenuto nella **{room}**. Che domande hai oggi?", "loading": "Pensando...",
+        "board_title": "Bacheca Comunità", "board_prompt": "Condividi le tue domande o feedback!", "board_btn": "Pubblica",
+        "like": "👍 Mi piace", "comment_prompt": "Scrivi un commento...", "comment_btn": "Rispondi",
+        "select_lang": "Seleziona lingua", "delete_btn": "🗑️ Elimina",
+        "login_title": "🔐 Accedi / Registrati", "email": "Email", "pwd": "Password", "btn_login": "Accedi", "btn_signup": "Registrati", "btn_guest": "👤 Continua come ospite",
+        "signup_agree": "Accetto la raccolta e l'uso delle informazioni personali (Obbligatorio)",
+        "guest_agree": "Accetto la raccolta anonima dei registri di chat per migliorare il servizio (Obbligatorio)",
+        "agree_warn_signup": "Si prega di accettare l'informativa sulla privacy per registrarsi.",
+        "agree_warn_guest": "Si prega di accettare la raccolta dei dati per continuare come ospite.",
+        "chat_warn": "⚠️ I registri delle chat possono essere raccolti in modo anonimo per migliorare il servizio. NON inserire informazioni personali (nome, contatti, ecc.)."
     }
 }
 
@@ -149,11 +203,11 @@ lang_list = list(ui_texts.keys())
 # 🔓 비로그인 상태: 로그인 / 회원가입 / 비회원 접속 화면
 # ==========================================
 if st.session_state.user_email is None:
-    st.title("Welcome to Korean Grammar Clinic! 👋")
+    st.title(t["main_title"]) 
     
-    # 첫 화면 언어 선택 드롭다운
+    # 첫 화면 언어 선택 드롭다운 
     default_idx = lang_list.index(st.session_state.selected_lang)
-    lang_choice = st.selectbox("🌐 Choose Your Language", lang_list, index=default_idx)
+    lang_choice = st.selectbox(t["choose_lang"], lang_list, index=default_idx)
     if lang_choice != st.session_state.selected_lang:
         st.session_state.selected_lang = lang_choice
         st.rerun()
@@ -224,7 +278,7 @@ if st.session_state.user_email is None:
 # 🔐 인증 완료 상태: 메인 대시보드 및 서비스 구동
 # ==========================================
 
-# 사이드바 프로필 및 로그아웃 처리 (size 제거 완료)
+# 사이드바 프로필 및 로그아웃 처리
 st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
 if st.sidebar.button("Logout"):
     st.session_state.user_email = None
@@ -235,7 +289,7 @@ st.sidebar.divider()
 
 # 사이드바 내부 언어 변경 연동
 default_idx = lang_list.index(st.session_state.selected_lang)
-selected_lang = st.sidebar.selectbox("🌐 Language", lang_list, index=default_idx)
+selected_lang = st.sidebar.selectbox(t["choose_lang"], lang_list, index=default_idx)
 if selected_lang != st.session_state.selected_lang:
     st.session_state.selected_lang = selected_lang
     st.rerun()
