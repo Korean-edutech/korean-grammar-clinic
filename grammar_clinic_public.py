@@ -22,11 +22,11 @@ try:
 except FileNotFoundError:
     pass
 
-# 각 언어별 UI 사전 (💡 최상단 Navigation 문구 다국어 추가 및 안내문 수정)
+# 각 언어별 UI 사전
 ui_texts = {
     "English": {
         "nav_title": "📌 Menu", "menu_clinic": "📚 Clinic Home", "menu_board": "💬 Community Board",
-        "clinic": "Clinic", "select_room": "👈 Select a grammar point from the left menu!", "input_prompt": "Enter your question...", 
+        "clinic": "Clinic", "select_room": "Grammar Topics", "input_prompt": "Enter your question...", 
         "no_files": "No grammar files yet.", "error_key": "API key missing", "error_msg": "Error",
         "welcome": "Hello! Welcome to the **{room}**. What questions do you have today?", "loading": "Thinking...",
         "board_title": "Community Board", "board_prompt": "Share your questions or feedback!", "board_btn": "Post",
@@ -34,8 +34,8 @@ ui_texts = {
         "select_lang": "Select Language", "delete_btn": "🗑️ Delete"
     },
     "日本語": {
-        "nav_title": "📌 メニュー", "menu_clinic": "📚 クリニックホーム", "menu_board": "💬 コミュニティ掲示板",
-        "clinic": "クリニック", "select_room": "👈 左のメニューから文法を選択してください！", "input_prompt": "質問を入力...", 
+        "nav_title": "📌 メニュー", "menu_clinic": "📚 クリニックホーム", "menu_board": "💬 コミュニティ",
+        "clinic": "クリニック", "select_room": "文法トピック", "input_prompt": "質問を入力...", 
         "no_files": "ファイルがありません。", "error_key": "APIキーなし", "error_msg": "エラー",
         "welcome": "こんにちは！**{room}**へようこそ。どんな質問がありますか？", "loading": "考え中...",
         "board_title": "コミュニティ掲示板", "board_prompt": "質問や意見を共有しましょう！", "board_btn": "投稿",
@@ -44,7 +44,7 @@ ui_texts = {
     },
     "한국어": {
         "nav_title": "📌 메뉴", "menu_clinic": "📚 문법 클리닉 홈", "menu_board": "💬 커뮤니티 게시판",
-        "clinic": "클리닉", "select_room": "👈 왼쪽 메뉴에서 학습할 문법을 선택해 주세요!", "input_prompt": "질문을 입력하세요...", 
+        "clinic": "클리닉", "select_room": "학습할 문법 목록", "input_prompt": "질문을 입력하세요...", 
         "no_files": "등록된 문법이 없습니다.", "error_key": "API 키 오류", "error_msg": "에러 발생",
         "welcome": "안녕하세요! **{room}**에 오신 것을 환영합니다. 오늘 어떤 점이 궁금하신가요?", "loading": "작성 중...",
         "board_title": "커뮤니티 게시판", "board_prompt": "궁금한 점이나 의견을 남겨주세요!", "board_btn": "게시글 작성",
@@ -53,7 +53,7 @@ ui_texts = {
     },
     "中文": {
         "nav_title": "📌 导航菜单", "menu_clinic": "📚 语法诊所主页", "menu_board": "💬 社区论坛",
-        "clinic": "诊所", "select_room": "👈 请从左侧菜单中选择语法！", "input_prompt": "请输入问题...", 
+        "clinic": "诊所", "select_room": "语法主题", "input_prompt": "请输入问题...", 
         "no_files": "暂无文件。", "error_key": "无 API 密钥", "error_msg": "错误",
         "welcome": "你好！欢迎来到 **{room}**。有什么想问的吗？", "loading": "思考中...",
         "board_title": "社区论坛", "board_prompt": "分享您的问题或意见！", "board_btn": "发布",
@@ -62,7 +62,7 @@ ui_texts = {
     },
     "Español": {
         "nav_title": "📌 Menú", "menu_clinic": "📚 Inicio de Clínica", "menu_board": "💬 Comunidad",
-        "clinic": "Clínica", "select_room": "👈 ¡Selecciona una gramática en el menú izquierdo!", "input_prompt": "Ingresa pregunta...", 
+        "clinic": "Clínica", "select_room": "Temas de Gramática", "input_prompt": "Ingresa pregunta...", 
         "no_files": "Sin archivos.", "error_key": "Falta API", "error_msg": "Error",
         "welcome": "¡Hola! Bienvenido a la **{room}**. ¿Qué dudas tienes?", "loading": "Pensando...",
         "board_title": "Comunidad", "board_prompt": "¡Comparte preguntas o comentarios!", "board_btn": "Publicar",
@@ -71,7 +71,7 @@ ui_texts = {
     },
     "Tiếng Việt": {
         "nav_title": "📌 Thực đơn", "menu_clinic": "📚 Trang chủ Phòng khám", "menu_board": "💬 Cộng đồng",
-        "clinic": "Phòng khám", "select_room": "👈 Vui lòng chọn một ngữ pháp từ menu bên trái!", "input_prompt": "Nhập câu hỏi...", 
+        "clinic": "Phòng khám", "select_room": "Chủ đề ngữ pháp", "input_prompt": "Nhập câu hỏi...", 
         "no_files": "Chưa có tệp.", "error_key": "Thiếu API", "error_msg": "Lỗi",
         "welcome": "Xin chào! Chào mừng đến với **{room}**. Bạn có câu hỏi nào?", "loading": "Đang nghĩ...",
         "board_title": "Bảng cộng đồng", "board_prompt": "Chia sẻ câu hỏi hoặc ý kiến!", "board_btn": "Đăng",
@@ -98,25 +98,37 @@ if selected_lang != st.session_state.selected_lang:
 t = ui_texts[st.session_state.selected_lang]
 st.sidebar.divider()
 
-# 💡 [핵심 개선] 메뉴와 문법 방 목록을 '단 하나의 리스트'로 합쳐서 완벽한 계층 구조 만들기
-file_paths = glob.glob("grammar_data/*.txt")
-grammar_meta_words = [os.path.basename(path).replace(".txt", "") for path in file_paths]
-room_display_names = [f"{meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
+# 💡 1. 최상위 메인 네비게이션 (클리닉 vs 게시판)
+selected_main_nav = st.sidebar.radio(
+    t["nav_title"], 
+    [t["menu_clinic"], t["menu_board"]]
+)
 
-# 1. 클리닉 홈
-nav_options = [t["menu_clinic"]]
-# 2. 하위 메뉴(문법 방) 삽입
-for room in room_display_names:
-    nav_options.append(f" ↳ {room}")
-# 3. 커뮤니티 게시판
-nav_options.append(t["menu_board"])
+selected_display_name = None
 
-# 사이드바 메뉴 렌더링 (영어 Navigation 대신 다국어 nav_title 사용)
-selected_nav = st.sidebar.radio(t["nav_title"], nav_options)
+# 💡 2. '문법 클리닉'을 선택했을 때만 나타나는 조건부 하위 메뉴
+if selected_main_nav == t["menu_clinic"]:
+    file_paths = glob.glob("grammar_data/*.txt")
+    if not file_paths:
+        st.sidebar.warning(t["no_files"])
+    else:
+        st.sidebar.markdown("<br>", unsafe_allow_html=True)
+        st.sidebar.caption(f"📂 {t['select_room']}") # 안내 캡션 추가
+        
+        grammar_meta_words = [os.path.basename(path).replace(".txt", "") for path in file_paths]
+        
+        # 기호(▪️)와 HTML 띄어쓰기(&nbsp;)를 사용해 버튼 안쪽으로 강제 들여쓰기 효과
+        room_display_names = [f"&nbsp;&nbsp;&nbsp;▪️ {meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
+        
+        selected_display_name = st.sidebar.radio(
+            "sub_menu_hidden_label", 
+            room_display_names, 
+            label_visibility="collapsed" # 라벨을 숨겨서 깔끔하게 배치
+        )
 
 st.sidebar.divider()
 
-# 관리자 모드
+# 관리자 모드 (항상 맨 아래에 위치)
 st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True) 
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
@@ -138,12 +150,13 @@ else:
         st.session_state.is_admin = False
         st.rerun()
 
+
 # ==========================================
-# 메인 화면 로직 분기
+# 메인 화면 렌더링 로직
 # ==========================================
 
-# 1. 커뮤니티 게시판 페이지
-if selected_nav == t["menu_board"]:
+# 1. 커뮤니티 게시판 렌더링
+if selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
     board_db = "community_board.json"
@@ -208,18 +221,10 @@ if selected_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 2. 문법 클리닉 '홈' 화면 (아무 방도 선택 안 했을 때)
-elif selected_nav == t["menu_clinic"]:
-    st.title(t["menu_clinic"])
-    if not file_paths:
-        st.warning(t["no_files"])
-    else:
-        st.info(t["select_room"])
-
-# 3. 특정 문법 방(챗봇) 화면 (하위 메뉴를 클릭했을 때)
-else:
-    # ' ↳ 아요어요 클리닉' 에서 ' ↳ ' 부분 제거하여 실제 방 이름 추출
-    actual_room_name = selected_nav.replace(" ↳ ", "")
+# 2. 문법 클리닉 챗봇 렌더링
+elif selected_main_nav == t["menu_clinic"] and selected_display_name:
+    # 버튼에 넣었던 공백 기호와 아이콘을 지우고 실제 방 이름만 깨끗하게 추출
+    actual_room_name = selected_display_name.replace("&nbsp;&nbsp;&nbsp;▪️ ", "").strip()
     st.title(f"🚪 {actual_room_name}")
     
     selected_meta_word = actual_room_name.replace(f" {t['clinic']}", "")
