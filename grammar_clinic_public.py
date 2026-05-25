@@ -1,5 +1,3 @@
-with open("grammar_clinic_public.py", "w", encoding="utf-8") as f:
-    f.write("""
 import streamlit as st
 import google.generativeai as genai
 import os
@@ -13,8 +11,8 @@ st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
 
 api_key = os.environ.get("GEMINI_API_KEY")
 
-# 💡 [관리자 비밀번호] 원하는 비밀번호로 언제든 변경 가능!
-ADMIN_PASSWORD = "admin1234"
+# 💡 [관리자 비밀번호] 
+ADMIN_PASSWORD = "admin"
 
 # CSS 스타일 로드
 try:
@@ -24,7 +22,7 @@ try:
 except FileNotFoundError:
     pass
 
-# 각 언어별 UI 사전 (💡 언어 선택 라벨 'select_lang' 및 관리자 문구 추가)
+# 각 언어별 UI 사전
 ui_texts = {
     "English": {
         "menu_clinic": "📚 Clinic", "menu_board": "💬 Community",
@@ -33,7 +31,7 @@ ui_texts = {
         "welcome": "Hello! Welcome to the **{room}**. What questions do you have today?", "loading": "Thinking...",
         "board_title": "Community Board", "board_prompt": "Share your questions or feedback!", "board_btn": "Post",
         "like": "👍 Like", "comment_prompt": "Write a comment...", "comment_btn": "Reply",
-        "select_lang": "Select Language", "admin_mode": "Admin Mode", "admin_btn": "Login", "admin_success": "Admin mode enabled!", "admin_fail": "Incorrect password.", "delete_btn": "🗑️ Delete"
+        "select_lang": "Select Language", "delete_btn": "🗑️ Delete"
     },
     "日本語": {
         "menu_clinic": "📚 クリニック", "menu_board": "💬 コミュニティ",
@@ -42,7 +40,7 @@ ui_texts = {
         "welcome": "こんにちは！**{room}**へようこそ。どんな質問がありますか？", "loading": "考え中...",
         "board_title": "コミュニティ掲示板", "board_prompt": "質問や意見を共有しましょう！", "board_btn": "投稿",
         "like": "👍 いいね", "comment_prompt": "コメントを入力...", "comment_btn": "返信",
-        "select_lang": "言語を選択してください", "admin_mode": "管理者モード", "admin_btn": "ログイン", "admin_success": "管理者モード有効！", "admin_fail": "パスワードが違います。", "delete_btn": "🗑️ 削除"
+        "select_lang": "言語を選択してください", "delete_btn": "🗑️ 削除"
     },
     "한국어": {
         "menu_clinic": "📚 문법 클리닉", "menu_board": "💬 커뮤니티 게시판",
@@ -51,7 +49,7 @@ ui_texts = {
         "welcome": "안녕하세요! **{room}**에 오신 것을 환영합니다. 오늘 어떤 점이 궁금하신가요?", "loading": "작성 중...",
         "board_title": "커뮤니티 게시판", "board_prompt": "궁금한 점이나 의견을 남겨주세요!", "board_btn": "게시글 작성",
         "like": "👍 공감", "comment_prompt": "댓글을 남겨주세요...", "comment_btn": "댓글 달기",
-        "select_lang": "언어를 선택하세요", "admin_mode": "관리자 모드", "admin_btn": "인증", "admin_success": "관리자 인증 성공!", "admin_fail": "비밀번호가 틀렸습니다.", "delete_btn": "🗑️ 삭제"
+        "select_lang": "언어를 선택하세요", "delete_btn": "🗑️ 삭제"
     },
     "中文": {
         "menu_clinic": "📚 语法诊所", "menu_board": "💬 社区",
@@ -60,7 +58,7 @@ ui_texts = {
         "welcome": "你好！欢迎来到 **{room}**。有什么想问的吗？", "loading": "思考中...",
         "board_title": "社区论坛", "board_prompt": "分享您的问题或意见！", "board_btn": "发布",
         "like": "👍 赞", "comment_prompt": "写评论...", "comment_btn": "回复",
-        "select_lang": "请选择语言", "admin_mode": "管理员模式", "admin_btn": "登录", "admin_success": "管理员模式已启用！", "admin_fail": "密码错误。", "delete_btn": "🗑️ 删除"
+        "select_lang": "请选择语言", "delete_btn": "🗑️ 删除"
     },
     "Español": {
         "menu_clinic": "📚 Clínica", "menu_board": "💬 Comunidad",
@@ -69,7 +67,7 @@ ui_texts = {
         "welcome": "¡Hola! Bienvenido a la **{room}**. ¿Qué dudas tienes?", "loading": "Pensando...",
         "board_title": "Comunidad", "board_prompt": "¡Comparte preguntas o comentarios!", "board_btn": "Publicar",
         "like": "👍 Me gusta", "comment_prompt": "Escribe un comentario...", "comment_btn": "Responder",
-        "select_lang": "Selecciona el idioma", "admin_mode": "Modo Administrador", "admin_btn": "Entrar", "admin_success": "¡Modo administrador activado!", "admin_fail": "Contraseña incorrecta.", "delete_btn": "🗑️ Eliminar"
+        "select_lang": "Selecciona el idioma", "delete_btn": "🗑️ Eliminar"
     },
     "Tiếng Việt": {
         "menu_clinic": "📚 Phòng khám", "menu_board": "💬 Cộng đồng",
@@ -78,11 +76,11 @@ ui_texts = {
         "welcome": "Xin chào! Chào mừng đến với **{room}**. Bạn có câu hỏi nào?", "loading": "Đang nghĩ...",
         "board_title": "Bảng cộng đồng", "board_prompt": "Chia sẻ câu hỏi hoặc ý kiến!", "board_btn": "Đăng",
         "like": "👍 Thích", "comment_prompt": "Viết bình luận...", "comment_btn": "Trả lời",
-        "select_lang": "Chọn ngôn ngữ", "admin_mode": "Chế độ quản trị", "admin_btn": "Đăng nhập", "admin_success": "Đã bật chế độ quản trị!", "admin_fail": "Sai mật khẩu.", "delete_btn": "🗑️ Xóa"
+        "select_lang": "Chọn ngôn ngữ", "delete_btn": "🗑️ Xóa"
     }
 }
 
-# 💡 언어 선택 창 문구 다국어화 상태 유지 로직
+# 언어 선택 창 문구 다국어화 상태 유지 로직
 if "selected_lang" not in st.session_state:
     st.session_state.selected_lang = "한국어"
 
@@ -107,25 +105,30 @@ page_mode = st.sidebar.radio("📌 Navigation", [t["menu_clinic"], t["menu_board
 
 st.sidebar.divider()
 
-# 💡 [관리자 인증 기능] 사이드바 맨 하단에 배치
+# 💡 [업데이트] 관리자 모드를 티 안 나게 구석으로 밀어내기 (공백 추가)
+st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True) 
+
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
 
-with st.sidebar.expander(t["admin_mode"]):
-    if not st.session_state.is_admin:
-        admin_pwd = st.text_input("Password", type="password", key="admin_pwd_input")
-        if st.button(t["admin_btn"], key="admin_login_btn"):
-            if admin_pwd == ADMIN_PASSWORD:
-                st.session_state.is_admin = True
-                st.success(t["admin_success"])
-                st.rerun()
-            else:
-                st.error(t["admin_fail"])
-    else:
-        st.write("🔓 Admin Active")
-        if st.button("Logout"):
-            st.session_state.is_admin = False
-            st.rerun()
+# 큰 버튼이나 텍스트 없이, 라벨을 숨긴 텍스트 입력창 하나만 배치
+if not st.session_state.is_admin:
+    admin_pwd = st.sidebar.text_input(
+        "admin_hidden", 
+        type="password", 
+        placeholder="🔒", 
+        label_visibility="collapsed", 
+        key="admin_pwd_input"
+    )
+    # 버튼 없이 비밀번호를 치고 엔터를 누르면 즉시 관리자 모드 온!
+    if admin_pwd == ADMIN_PASSWORD:
+        st.session_state.is_admin = True
+        st.rerun()
+else:
+    st.sidebar.caption("🔓 Admin Active")
+    if st.sidebar.button("Logout"):
+        st.session_state.is_admin = False
+        st.rerun()
 
 # ==========================================
 # 1. 커뮤니티 게시판 페이지 로직
@@ -164,12 +167,12 @@ if page_mode == t["menu_board"]:
     # 게시글 목록 출력
     for idx, post in enumerate(posts):
         with st.container():
-            st.markdown(f\"\"\"
+            st.markdown(f"""
             <div style='background-color:#FFFFFF; padding:15px; border-radius:10px; border:1px solid #E2E8F0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
                 <span style='font-size:0.8em; color:#64748B;'>✍️ {post['time']} ({post['lang']})</span><br>
-                <div style='margin-top:10px; font-size:1.05em;'>{post['content'].replace('\\n', '<br>')}</div>
+                <div style='margin-top:10px; font-size:1.05em;'>{post['content'].replace('\n', '<br>')}</div>
             </div>
-            \"\"\", unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
             
             col1, col2, col3 = st.columns([1, 1, 3])
             
@@ -181,7 +184,7 @@ if page_mode == t["menu_board"]:
                         json.dump(posts, f, ensure_ascii=False, indent=4)
                     st.rerun()
             
-            # 💡 [삭제 권한] 관리자 모드가 켜졌을 때만 각 글마다 [삭제] 버튼이 나타남
+            # 관리자 전용 삭제 버튼
             with col2:
                 if st.session_state.is_admin:
                     if st.button(t["delete_btn"], key=f"del_{post['id']}"):
@@ -246,7 +249,7 @@ else:
                 else:
                     genai.configure(api_key=api_key)
                     
-                    system_instruction = f\"\"\"
+                    system_instruction = f"""
                     당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
                     모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)
                     
@@ -260,7 +263,7 @@ else:
                     
                     [관리자 등록 문법 규칙]
                     {target_rules}
-                    \"\"\"
+                    """
                     
                     try:
                         model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
@@ -273,5 +276,3 @@ else:
                     except Exception as e:
                         with st.chat_message("assistant"):
                             st.error(f"{t['error_msg']}: {e}")
-""")
-print("⚙️ 언어 선택 다국어 최적화 및 관리자 모드 탑재 완료!")
