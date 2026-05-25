@@ -1,36 +1,24 @@
+/* 1. 스트림릿 기본 상단 메뉴와 하단 워터마크 숨기기 (깔끔한 UI 유지) */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
 
-/* 1. 전체 웹 폰트를 깔끔한 Pretendard로 변경 */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-html, body, [class*="css"]  {
-    font-family: 'Pretendard', sans-serif;
-}
-
-/* 2. 메인 타이틀(문법 방 이름) 꾸미기 */
-h1 {
-    color: #1E3A8A;
-    font-weight: 800;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #E5E7EB;
-}
-
-/* 3. 사이드바 배경색 부드럽게 변경 */
+/* 2. 사이드바 디자인 (테마에 맞춰 자동 변경, 구분선만 살짝 추가) */
 [data-testid="stSidebar"] {
-    background-color: #F8FAFC;
-    border-right: 1px solid #E2E8F0;
+    border-right: 1px solid rgba(128, 128, 128, 0.1);
 }
 
-/* 4. 채팅 말풍선 예쁘게 다듬기 */
-.stChatMessage {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E7EB;
+/* 3. 챗봇 대화 말풍선 디자인 (테마 배경색 적용, 둥근 모서리) */
+[data-testid="stChatMessage"] {
+    background-color: var(--secondary-background-color);
     border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 10px;
 }
 
-/* 5. 사용자가 입력하는 채팅창 디자인 */
-[data-testid="stChatInput"] {
-    border-radius: 20px;
-    border: 1px solid #CBD5E1;
+/* 4. 관리자 로그인 입력창 은밀하게 숨기기 */
+input[aria-label="admin_hidden"] {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--text-color) !important;
+    opacity: 0.3;
 }
