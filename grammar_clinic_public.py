@@ -98,7 +98,7 @@ if selected_lang != st.session_state.selected_lang:
 t = ui_texts[st.session_state.selected_lang]
 st.sidebar.divider()
 
-# 💡 1. 최상위 메인 네비게이션
+# 메인 네비게이션
 selected_main_nav = st.sidebar.radio(
     t["nav_title"], 
     [t["menu_clinic"], t["menu_board"]]
@@ -106,7 +106,7 @@ selected_main_nav = st.sidebar.radio(
 
 selected_display_name = None
 
-# 💡 2. '문법 클리닉' 선택 시 나타나는 하위 메뉴 (검은 점 제거)
+# 하위 메뉴 (문법 방)
 if selected_main_nav == t["menu_clinic"]:
     file_paths = glob.glob("grammar_data/*.txt")
     if not file_paths:
@@ -116,8 +116,6 @@ if selected_main_nav == t["menu_clinic"]:
         st.sidebar.caption(f"📂 {t['select_room']}") 
         
         grammar_meta_words = [os.path.basename(path).replace(".txt", "") for path in file_paths]
-        
-        # HTML 띄어쓰기(&nbsp;)만 사용하여 깔끔하게 들여쓰기
         room_display_names = [f"&nbsp;&nbsp;&nbsp;{meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
         
         selected_display_name = st.sidebar.radio(
@@ -155,7 +153,6 @@ else:
 # 메인 화면 렌더링 로직
 # ==========================================
 
-# 1. 커뮤니티 게시판
 if selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
@@ -221,9 +218,7 @@ if selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 2. 문법 클리닉 챗봇
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
-    # 공백 기호(&nbsp;)만 지우고 실제 방 이름 추출
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
     
@@ -252,11 +247,17 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         else:
             genai.configure(api_key=api_key)
             
+            # 💡 [핵심 교체] 한국어일 때와 외국어일 때 AI 프롬프트 분기 처리!
+            if st.session_state.selected_lang == "한국어":
+                lang_rule = "모든 답변은 한자(漢字)나 영어를 절대 섞지 말고 오직 '자연스러운 한글(한국어)'로만 작성하세요. 문법 용어도 무조건 한글로만 적으세요."
+            else:
+                lang_rule = f"모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)"
+            
             system_instruction = f"""
             당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
-            모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)
             
             [대화 행동 지침 - 최우선 준수 사항]
+            0. {lang_rule}
             1. 질문자가 대화를 시작하기 전에 간단한 인사를 먼저 건네세요. (시스템 내부적으로 이미 선제 인사가 이루어졌음을 인지할 것)
             2. 사용자가 "안녕", "Hello", "니하오" 등 가벼운 인사만 건네면, 문법 설명을 절대로 먼저 하지 말고 친절하게 해당 언어로 인사만 받아주세요.
             3. 답변은 잡다한 설명 없이 간단하게 질문에 대한 핵심 내용만 명확히 하세요.
