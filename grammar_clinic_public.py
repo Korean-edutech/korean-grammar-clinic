@@ -29,7 +29,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 # 관리자 비밀번호
-ADMIN_PASSWORD = "chamut"
+ADMIN_PASSWORD = "admin"
 
 # CSS 스타일 로드 (다크모드 완벽 대응)
 try:
@@ -39,7 +39,7 @@ try:
 except FileNotFoundError:
     pass
 
-# 다국어 UI 사전 (6개국어 복구 및 로그인/비회원 관련 텍스트 추가)
+# 🌐 다국어 UI 사전 (6개국어 완벽 복구 및 개인정보 관련 안내 문구 자동화)
 ui_texts = {
     "English": {
         "nav_title": "📌 Menu", "menu_clinic": "📚 Clinic Home", "menu_board": "💬 Community Board",
@@ -49,7 +49,12 @@ ui_texts = {
         "board_title": "Community Board", "board_prompt": "Share your questions or feedback!", "board_btn": "Post",
         "like": "👍 Like", "comment_prompt": "Write a comment...", "comment_btn": "Reply",
         "select_lang": "Select Language", "delete_btn": "🗑️ Delete",
-        "login_title": "🔐 Sign In / Sign Up", "email": "Email", "pwd": "Password", "btn_login": "Sign In", "btn_signup": "Sign Up", "btn_guest": "👤 Continue as Guest"
+        "login_title": "🔐 Sign In / Sign Up", "email": "Email", "pwd": "Password", "btn_login": "Sign In", "btn_signup": "Sign Up", "btn_guest": "👤 Continue as Guest",
+        "signup_agree": "I agree to the collection and use of personal information (Required)",
+        "guest_agree": "I agree to the anonymous collection of chat logs for service improvement (Required)",
+        "agree_warn_signup": "Please agree to the privacy policy to sign up.",
+        "agree_warn_guest": "Please agree to the data collection to continue as guest.",
+        "chat_warn": "⚠️ Chat logs may be collected anonymously to improve service quality. Do NOT enter personal information (name, contact info, etc.)."
     },
     "日本語": {
         "nav_title": "📌 メニュー", "menu_clinic": "📚 クリニックホーム", "menu_board": "💬 コミュニティ",
@@ -59,7 +64,12 @@ ui_texts = {
         "board_title": "コミュニティ掲示板", "board_prompt": "質問や意見を共有しましょう！", "board_btn": "投稿",
         "like": "👍 いいね", "comment_prompt": "コメントを入力...", "comment_btn": "返信",
         "select_lang": "言語を選択", "delete_btn": "🗑️ 削除",
-        "login_title": "🔐 ログイン / 新規登録", "email": "メールアドレス", "pwd": "パスワード", "btn_login": "ログイン", "btn_signup": "新規登録", "btn_guest": "👤 ゲストとして続ける"
+        "login_title": "🔐 ログイン / 新規登録", "email": "メールアドレス", "pwd": "パスワード", "btn_login": "ログイン", "btn_signup": "新規登録", "btn_guest": "👤 ゲストとして続ける",
+        "signup_agree": "個人情報の収集および利用に同意します（必須）",
+        "guest_agree": "サービス向上のための対話記録の無名収集に同意します（必須）",
+        "agree_warn_signup": "会員登録には個人情報収集への同意が必要です。",
+        "agree_warn_guest": "ゲスト利用にはデータ収集への同意が必要です。",
+        "chat_warn": "⚠️ 対話内容はサービス向上のため無名で収集される場合があります。個人情報（氏名、連絡先など）は絶対に入力しないでください。"
     },
     "한국어": {
         "nav_title": "📌 메뉴", "menu_clinic": "📚 문법 클리닉 홈", "menu_board": "💬 커뮤니티 게시판",
@@ -69,7 +79,12 @@ ui_texts = {
         "board_title": "커뮤니티 게시판", "board_prompt": "궁금한 점이나 의견을 남겨주세요!", "board_btn": "게시글 작성",
         "like": "👍 공감", "comment_prompt": "댓글을 남겨주세요...", "comment_btn": "댓글 달기",
         "select_lang": "언어를 선택하세요", "delete_btn": "🗑️ 삭제",
-        "login_title": "🔐 로그인 / 회원가입", "email": "이메일 주소", "pwd": "비밀번호", "btn_login": "로그인", "btn_signup": "회원가입", "btn_guest": "👤 비회원으로 시작하기"
+        "login_title": "🔐 로그인 / 회원가입", "email": "이메일 주소", "pwd": "비밀번호", "btn_login": "로그인", "btn_signup": "회원가입", "btn_guest": "👤 비회원으로 시작하기",
+        "signup_agree": "개인정보 수집 및 이용 동의 (필수)",
+        "guest_agree": "서비스 품질 향상을 위한 대화 기록 무기명 수집에 동의합니다. (필수)",
+        "agree_warn_signup": "회원가입을 위해 개인정보 수집 및 이용에 동의해 주세요.",
+        "agree_warn_guest": "비회원 이용을 위해 데이터 수집에 동의해 주세요.",
+        "chat_warn": "⚠️ 대화 내용은 서비스 품질 향상을 위해 익명으로 수집될 수 있습니다. 개인정보(이름, 연락처 등)를 절대 입력하지 마세요."
     },
     "中文": {
         "nav_title": "📌 导航菜单", "menu_clinic": "📚 语法诊所主页", "menu_board": "💬 社区论坛",
@@ -79,7 +94,12 @@ ui_texts = {
         "board_title": "社区论坛", "board_prompt": "分享您的问题或意见！", "board_btn": "发布",
         "like": "👍 赞", "comment_prompt": "写评论...", "comment_btn": "回复",
         "select_lang": "选择语言", "delete_btn": "🗑️ 删除",
-        "login_title": "🔐 登录 / 注册", "email": "邮箱", "pwd": "密码", "btn_login": "登录", "btn_signup": "注册", "btn_guest": "👤 以游客身份继续"
+        "login_title": "🔐 登录 / 注册", "email": "邮箱", "pwd": "密码", "btn_login": "登录", "btn_signup": "注册", "btn_guest": "👤 以游客身份继续",
+        "signup_agree": "我同意收集和使用个人信息（必填）",
+        "guest_agree": "我同意匿名收集聊天记录以用于改进服务（必填）",
+        "agree_warn_signup": "请同意隐私政策以进行注册。",
+        "agree_warn_guest": "请同意数据收集以游客身份继续。",
+        "chat_warn": "⚠️ 聊天记录可能会被匿名收集以用于改进服务质量。请勿输入个人信息（姓名、联系方式等）。"
     },
     "Español": {
         "nav_title": "📌 Menú", "menu_clinic": "📚 Inicio de Clínica", "menu_board": "💬 Comunidad",
@@ -89,7 +109,12 @@ ui_texts = {
         "board_title": "Comunidad", "board_prompt": "¡Comparte preguntas o comentarios!", "board_btn": "Publicar",
         "like": "👍 Me gusta", "comment_prompt": "Escribe un comentario...", "comment_btn": "Responder",
         "select_lang": "Seleccionar idioma", "delete_btn": "🗑️ Eliminar",
-        "login_title": "🔐 Iniciar sesión / Registrarse", "email": "Correo electrónico", "pwd": "Contraseña", "btn_login": "Iniciar sesión", "btn_signup": "Registrarse", "btn_guest": "👤 Continuar como invitado"
+        "login_title": "🔐 Iniciar sesión / Registrarse", "email": "Correo electrónico", "pwd": "Contraseña", "btn_login": "Iniciar sesión", "btn_signup": "Registrarse", "btn_guest": "👤 Continuar como invitado",
+        "signup_agree": "Acepto la recopilación y el uso de información personal (Obligatorio)",
+        "guest_agree": "Acepto la recopilación anónima de registros de chat para mejorar el servicio (Obligatorio)",
+        "agree_warn_signup": "Por favor, acepte la política de privacidad para registrarse.",
+        "agree_warn_guest": "Por favor, acepte la recopilación de datos para continuar como invitado.",
+        "chat_warn": "⚠️ Los registros de chat pueden recopilarse de forma anónima para mejorar la calidad del servicio. NO introduzca información personal (nombre, contacto, etc.)."
     },
     "Tiếng Việt": {
         "nav_title": "📌 Thực đơn", "menu_clinic": "📚 Trang chủ Phòng khám", "menu_board": "💬 Cộng đồng",
@@ -99,7 +124,12 @@ ui_texts = {
         "board_title": "Bảng cộng đồng", "board_prompt": "Chia sẻ câu hỏi hoặc ý kiến!", "board_btn": "Đăng",
         "like": "👍 Thích", "comment_prompt": "Viết bình luận...", "comment_btn": "Trả lời",
         "select_lang": "Chọn ngôn ngữ", "delete_btn": "🗑️ Xóa",
-        "login_title": "🔐 Đăng nhập / Đăng ký", "email": "Email", "pwd": "Mật khẩu", "btn_login": "Đăng nhập", "btn_signup": "Đăng ký", "btn_guest": "👤 Tiếp tục với tư cách khách"
+        "login_title": "🔐 Đăng nhập / Đăng ký", "email": "Email", "pwd": "Mật khẩu", "btn_login": "Đăng nhập", "btn_signup": "Đăng ký", "btn_guest": "👤 Tiếp tục với tư cách khách",
+        "signup_agree": "Tôi đồng ý thu thập và sử dụng thông tin cá nhân (Bắt buộc)",
+        "guest_agree": "Tôi đồng ý thu thập ẩn danh lịch sử trò chuyện để cải thiện dịch vụ (Bắt buộc)",
+        "agree_warn_signup": "Vui lòng đồng ý với chính sách bảo mật để đăng ký.",
+        "agree_warn_guest": "Vui lòng đồng ý thu thập dữ liệu để tiếp tục với tư cách khách.",
+        "chat_warn": "⚠️ Lịch sử trò chuyện có thể được thu thập ẩn danh để cải thiện chất lượng dịch vụ. TUYỆT ĐỐI KHÔNG nhập thông tin cá nhân (tên, số điện thoại, v.v.)."
     }
 }
 
@@ -111,7 +141,7 @@ if "user_email" not in st.session_state:
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
 
-# 현재 선택된 언어 사전 불러오기
+# 현재 선택된 언어 사전 매핑
 t = ui_texts[st.session_state.selected_lang]
 lang_list = list(ui_texts.keys())
 
@@ -121,7 +151,7 @@ lang_list = list(ui_texts.keys())
 if st.session_state.user_email is None:
     st.title("Welcome to Korean Grammar Clinic! 👋")
     
-    # 언어 선택 드롭다운
+    # 첫 화면 언어 선택 드롭다운
     default_idx = lang_list.index(st.session_state.selected_lang)
     lang_choice = st.selectbox("🌐 Choose Your Language", lang_list, index=default_idx)
     if lang_choice != st.session_state.selected_lang:
@@ -130,16 +160,18 @@ if st.session_state.user_email is None:
         
     st.write("---")
     
-    # 로그인 화면 렌더링
-    col1, col2, col3 = st.columns([1.5, 0.5, 2])
+    col1, col2, col3 = st.columns([1.6, 0.4, 2])
     with col1:
         st.subheader(t["login_title"])
         auth_email = st.text_input(t["email"], key="auth_email")
         auth_pwd = st.text_input(t["pwd"], type="password", key="auth_pwd")
         
+        # 📝 회원가입용 필수 약관 체크박스
+        signup_agree = st.checkbox(t["signup_agree"], key="signup_agree_key")
+        
         btn_action1, btn_action2 = st.columns(2)
         
-        # 🔑 로그인
+        # 🔑 로그인 인증 기능
         with btn_action1:
             if st.button(t["btn_login"], use_container_width=True):
                 if auth_email and auth_pwd:
@@ -153,10 +185,12 @@ if st.session_state.user_email is None:
                 else:
                     st.warning("Please fill in all fields.")
                     
-        # 📝 회원가입
+        # 📝 회원가입 데이터 수집 기능 (체크박스 검증)
         with btn_action2:
             if st.button(t["btn_signup"], use_container_width=True):
-                if auth_email and auth_pwd:
+                if not signup_agree:
+                    st.warning(t["agree_warn_signup"])
+                elif auth_email and auth_pwd:
                     user_ref = db.collection("users").document(auth_email).get()
                     if user_ref.exists:
                         st.error("This email already exists.")
@@ -170,19 +204,27 @@ if st.session_state.user_email is None:
                 else:
                     st.warning("Please fill in all fields.")
         
-        st.write("<br><br>", unsafe_allow_html=True)
-        # 👤 비회원(Guest) 입장 버튼
+        st.write("<br><br><br>", unsafe_allow_html=True)
+        st.write("---")
+        
+        # 👤 비회원 무기명 로그 수집 필수 약관 체크박스
+        guest_agree = st.checkbox(t["guest_agree"], key="guest_agree_key")
+        
+        # 👤 비회원(Guest) 입장 처리 버튼
         if st.button(t["btn_guest"], use_container_width=True, type="primary"):
-            st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
-            st.rerun()
+            if not guest_agree:
+                st.warning(t["agree_warn_guest"])
+            else:
+                st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
+                st.rerun()
             
-    st.stop() # 접속 안 되었으면 아래 메인 화면 구동 중단
+    st.stop() # 인증되지 않은 상태면 메인 로직 구동 차단
 
 # ==========================================
-# 🔐 로그인/비회원 접속 완료 상태: 메인 앱 화면 구동
+# 🔐 인증 완료 상태: 메인 대시보드 및 서비스 구동
 # ==========================================
 
-# 사이드바 상단 정보 및 로그아웃
+# 사이드바 프로필 및 로그아웃 처리 (size 제거 완료)
 st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
 if st.sidebar.button("Logout"):
     st.session_state.user_email = None
@@ -191,7 +233,7 @@ if st.sidebar.button("Logout"):
 
 st.sidebar.divider()
 
-# 사이드바 언어 설정
+# 사이드바 내부 언어 변경 연동
 default_idx = lang_list.index(st.session_state.selected_lang)
 selected_lang = st.sidebar.selectbox("🌐 Language", lang_list, index=default_idx)
 if selected_lang != st.session_state.selected_lang:
@@ -200,7 +242,7 @@ if selected_lang != st.session_state.selected_lang:
 
 st.sidebar.divider()
 
-# 네비게이션 옵션 구성
+# 메인 메뉴 탭 구성
 nav_options = [t["menu_clinic"], t["menu_board"]]
 if st.session_state.is_admin:
     nav_options.append("📊 관리자 대시보드")
@@ -208,7 +250,7 @@ if st.session_state.is_admin:
 selected_main_nav = st.sidebar.radio(t["nav_title"], nav_options)
 selected_display_name = None
 
-# 하위 문법 목록 스캔
+# 로컬 교안 데이터 자동 연동 스캔
 if selected_main_nav == t["menu_clinic"]:
     file_paths = glob.glob("grammar_data/*.txt")
     if not file_paths:
@@ -228,7 +270,7 @@ if selected_main_nav == t["menu_clinic"]:
 
 st.sidebar.divider()
 
-# 관리자 인증 히든 입력창
+# 은밀한 관리자 활성화 인증 창
 st.sidebar.markdown("<br>" * 4, unsafe_allow_html=True) 
 if not st.session_state.is_admin:
     admin_pwd = st.sidebar.text_input("admin_hidden", type="password", placeholder="🔒", label_visibility="collapsed")
@@ -238,9 +280,9 @@ if not st.session_state.is_admin:
 else:
     st.sidebar.caption("🔓 Admin Active")
 
-# --- 메인 기능 렌더링 ---
+# --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
 
-# 1. 📊 관리자 대시보드
+# 1. 📊 관리자 대시보드 로직 (Firestore 실시간 중앙 원격 연동)
 if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
     st.title("📊 실시간 이용 통계 및 로그 (Firestore)")
     
@@ -258,7 +300,7 @@ if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_ad
         </div>
         """, unsafe_allow_html=True)
 
-# 2. 📢 커뮤니티 게시판
+# 2. 📢 실시간 커뮤니티 게시판 로직 (개인정보 보호 적용된 영구 DB 연동)
 elif selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
@@ -313,7 +355,7 @@ elif selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 3. 🚪 문법 클리닉 챗봇
+# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (개인정보 수집 동의 고지 완료 및 기록 암묵적 무한 영구 저장)
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -323,6 +365,7 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
 
+    # 각 개인 유저 이메일/게스트 ID 기반의 Firestore 개인 대화 백업 세션 로드
     chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
     chat_ref = db.collection("chats").document(chat_doc_id).get()
     
@@ -337,11 +380,15 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         with st.chat_message(msg["role"]): 
             st.markdown(msg["content"])
 
+    # 💡 개인정보 입력 절대 금지 안내 자막 실시간 다국어 출력 
+    st.caption(t["chat_warn"])
+    
     if prompt := st.chat_input(t["input_prompt"]):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"): 
             st.markdown(prompt)
             
+        # 📊 중앙 대시보드 집계용 글로벌 로그 기록 누적 (Firestore)
         db.collection("logs").add({
             "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
             "user": st.session_state.user_email,
@@ -384,6 +431,7 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     st.markdown(response.text)
                     
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
+                    # 실시간 대화 상태 변경 후 Firestore 원격 백업 갱신
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
             except Exception as e:
                 with st.chat_message("assistant"):
