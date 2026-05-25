@@ -1,0 +1,36 @@
+
+/* 1. 전체 웹 폰트를 깔끔한 Pretendard로 변경 */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+html, body, [class*="css"]  {
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 2. 메인 타이틀(문법 방 이름) 꾸미기 */
+h1 {
+    color: #1E3A8A;
+    font-weight: 800;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #E5E7EB;
+}
+
+/* 3. 사이드바 배경색 부드럽게 변경 */
+[data-testid="stSidebar"] {
+    background-color: #F8FAFC;
+    border-right: 1px solid #E2E8F0;
+}
+
+/* 4. 채팅 말풍선 예쁘게 다듬기 */
+.stChatMessage {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* 5. 사용자가 입력하는 채팅창 디자인 */
+[data-testid="stChatInput"] {
+    border-radius: 20px;
+    border: 1px solid #CBD5E1;
+}
