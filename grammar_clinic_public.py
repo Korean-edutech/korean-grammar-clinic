@@ -184,7 +184,7 @@ if st.session_state.user_email is None:
 
 # 사이드바 상단 정보 및 로그아웃
 st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
-if st.sidebar.button("Logout", size="small"):
+if st.sidebar.button("Logout"):
     st.session_state.user_email = None
     st.session_state.is_admin = False
     st.rerun()
