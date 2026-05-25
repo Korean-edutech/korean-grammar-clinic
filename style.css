@@ -1,7 +1,5 @@
-/* 1. 스트림릿 기본 상단 메뉴와 하단 워터마크 숨기기 (깔끔한 UI 유지) */
-#MainMenu {visibility: hidden;}
+/* 1. 하단 워터마크만 숨기기 (상단 메뉴는 다크모드 설정을 위해 살려둠!) */
 footer {visibility: hidden;}
-header {visibility: hidden;}
 
 /* 2. 사이드바 디자인 (테마에 맞춰 자동 변경, 구분선만 살짝 추가) */
 [data-testid="stSidebar"] {
