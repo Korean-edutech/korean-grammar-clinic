@@ -98,7 +98,7 @@ if selected_lang != st.session_state.selected_lang:
 t = ui_texts[st.session_state.selected_lang]
 st.sidebar.divider()
 
-# 💡 1. 최상위 메인 네비게이션 (클리닉 vs 게시판)
+# 💡 1. 최상위 메인 네비게이션
 selected_main_nav = st.sidebar.radio(
     t["nav_title"], 
     [t["menu_clinic"], t["menu_board"]]
@@ -106,29 +106,29 @@ selected_main_nav = st.sidebar.radio(
 
 selected_display_name = None
 
-# 💡 2. '문법 클리닉'을 선택했을 때만 나타나는 조건부 하위 메뉴
+# 💡 2. '문법 클리닉' 선택 시 나타나는 하위 메뉴 (검은 점 제거)
 if selected_main_nav == t["menu_clinic"]:
     file_paths = glob.glob("grammar_data/*.txt")
     if not file_paths:
         st.sidebar.warning(t["no_files"])
     else:
         st.sidebar.markdown("<br>", unsafe_allow_html=True)
-        st.sidebar.caption(f"📂 {t['select_room']}") # 안내 캡션 추가
+        st.sidebar.caption(f"📂 {t['select_room']}") 
         
         grammar_meta_words = [os.path.basename(path).replace(".txt", "") for path in file_paths]
         
-        # 기호(▪️)와 HTML 띄어쓰기(&nbsp;)를 사용해 버튼 안쪽으로 강제 들여쓰기 효과
-        room_display_names = [f"&nbsp;&nbsp;&nbsp; {meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
+        # HTML 띄어쓰기(&nbsp;)만 사용하여 깔끔하게 들여쓰기
+        room_display_names = [f"&nbsp;&nbsp;&nbsp;{meta_word} {t['clinic']}" for meta_word in grammar_meta_words]
         
         selected_display_name = st.sidebar.radio(
             "sub_menu_hidden_label", 
             room_display_names, 
-            label_visibility="collapsed" # 라벨을 숨겨서 깔끔하게 배치
+            label_visibility="collapsed"
         )
 
 st.sidebar.divider()
 
-# 관리자 모드 (항상 맨 아래에 위치)
+# 관리자 모드
 st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True) 
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
@@ -155,7 +155,7 @@ else:
 # 메인 화면 렌더링 로직
 # ==========================================
 
-# 1. 커뮤니티 게시판 렌더링
+# 1. 커뮤니티 게시판
 if selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
@@ -221,10 +221,10 @@ if selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 2. 문법 클리닉 챗봇 렌더링
+# 2. 문법 클리닉 챗봇
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
-    # 버튼에 넣었던 공백 기호와 아이콘을 지우고 실제 방 이름만 깨끗하게 추출
-    actual_room_name = selected_display_name.replace("&nbsp;&nbsp;&nbsp;▪️ ", "").strip()
+    # 공백 기호(&nbsp;)만 지우고 실제 방 이름 추출
+    actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
     
     selected_meta_word = actual_room_name.replace(f" {t['clinic']}", "")
