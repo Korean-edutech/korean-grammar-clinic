@@ -666,12 +666,15 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                 
                 if final_score == total_q:
                     st.success(f"🎉 완벽해요! {total_q}문제 중 {final_score}문제를 맞혔습니다! 100점!")
-                    st.balloons()
                 else:
                     st.info(f"👍 노력했어요! {total_q}문제 중 {final_score}문제를 맞혔습니다.")
                 
                 save_flag_key = f"quiz_saved_{selected_meta_word}"
                 if save_flag_key not in st.session_state:
+                    # 💡 여기에 풍선 코드를 추가! (100점일 때 딱 한 번만 터짐)
+                    if final_score == total_q:
+                        st.balloons()
+                        
                     if st.session_state.user_email:
                         chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
                         quiz_log_msg = f"📝 **[미니 퀴즈 완료]** 방금 이 클리닉에서 {total_q}문제 중 {final_score}문제를 맞혔습니다! 복습이 필요하다면 언제든 질문해 주세요."
