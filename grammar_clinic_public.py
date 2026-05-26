@@ -29,7 +29,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 # 관리자 비밀번호
-ADMIN_PASSWORD = "admin"
+ADMIN_PASSWORD = "chamut"
 
 # CSS 스타일 로드
 try:
@@ -38,8 +38,8 @@ try:
     st.markdown(f"<style>{custom_css}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
     pass
-
-# 🌐 다국어 UI 사전 (총 9개 국어 지원)
+    
+# 🌐 다국어 UI 사전 (추천 질문 및 가이드 다국어 완벽 추가!)
 ui_texts = {
     "한국어": {
         "main_title": "한국어 문법 클리닉에 오신 것을 환영합니다! 👋", "choose_lang": "🌐 언어를 선택하세요",
@@ -60,7 +60,13 @@ ui_texts = {
         "history_search": "🔍 검색어 입력 (문법 방 이름이나 질문 내용을 검색해 보세요)",
         "history_no_record": "아직 대화 기록이 없습니다. 문법 클리닉에서 첫 질문을 남겨보세요!",
         "history_no_result": "'{query}'에 대한 검색 결과가 없습니다.",
-        "history_view": "🚪 '{room}' 클리닉 기록 보기", "history_me": "👤 나", "history_teacher": "🤖 선생님"
+        "history_view": "🚪 '{room}' 클리닉 기록 보기", "history_me": "👤 나", "history_teacher": "🤖 선생님",
+        "guide_title": "📖 '{room}' 학습 가이드 및 추천 질문",
+        "guide_desc": "이 방에서는 **{room}** 문법에 대해 집중적으로 묻고 답할 수 있습니다. 어떻게 시작할지 모르겠다면 아래 버튼을 클릭해 보세요!",
+        "btn_q1": "🎯 기본 의미와 규칙", "btn_q2": "📝 예문 3개 만들기", "btn_q3": "🤔 비슷한 문법 비교",
+        "prompt_q1": "'{room}' 문법의 기본적인 의미와 사용 규칙을 초보자도 이해하기 쉽게 설명해 줘.",
+        "prompt_q2": "'{room}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘.",
+        "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘."
     },
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -81,7 +87,13 @@ ui_texts = {
         "history_search": "🔍 Search (Enter a grammar topic or keyword)",
         "history_no_record": "No chat history found. Leave your first question in the Grammar Clinic!",
         "history_no_result": "No search results found for '{query}'.",
-        "history_view": "🚪 View '{room}' Clinic Records", "history_me": "👤 Me", "history_teacher": "🤖 Teacher"
+        "history_view": "🚪 View '{room}' Clinic Records", "history_me": "👤 Me", "history_teacher": "🤖 Teacher",
+        "guide_title": "📖 '{room}' Study Guide & Suggested Questions",
+        "guide_desc": "In this room, you can ask and answer questions focusing on the **{room}** grammar. If you don't know how to start, click the buttons below!",
+        "btn_q1": "🎯 Basic Meaning & Rules", "btn_q2": "📝 Create 3 Examples", "btn_q3": "🤔 Compare Similar Grammar",
+        "prompt_q1": "Please explain the basic meaning and usage rules of the '{room}' grammar in an easy way for beginners to understand.",
+        "prompt_q2": "Please create 3 natural Korean example sentences using the '{room}' grammar.",
+        "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar."
     },
     "日本語": {
         "main_title": "韓国語文法クリニックへようこそ！ 👋", "choose_lang": "🌐 言語を選択してください",
@@ -93,7 +105,7 @@ ui_texts = {
         "like": "👍 いいね", "comment_prompt": "コメントを入力...", "comment_btn": "返信",
         "select_lang": "言語を選択", "delete_btn": "🗑️ 削除",
         "login_title": "🔐 ログイン / 新規登録", "email": "メールアドレス", "pwd": "パスワード", "btn_login": "ログイン", "btn_signup": "新規登録", "btn_guest": "👤 ゲストとして続ける",
-        "signup_agree": "個人情報の収集および利用에同意します（必須）",
+        "signup_agree": "個人情報の収集および利用に同意します（必須）",
         "guest_agree": "サービス向上のための対話記録の無名収集に同意します（必須）",
         "agree_warn_signup": "会員登録には個人情報収集への同意が必要です。",
         "agree_warn_guest": "ゲスト利用にはデータ収集への同意が必要です。",
@@ -102,7 +114,13 @@ ui_texts = {
         "history_search": "🔍 検索 (文法トピックやキーワードを入力してください)",
         "history_no_record": "まだ会話履歴がありません。文法クリニックで最初の質問を残してみましょう！",
         "history_no_result": "'{query}' に関する検索結果がありません。",
-        "history_view": "🚪 '{room}' クリニック履歴を見る", "history_me": "👤 私", "history_teacher": "🤖 先生"
+        "history_view": "🚪 '{room}' クリニック履歴を見る", "history_me": "👤 私", "history_teacher": "🤖 先生",
+        "guide_title": "📖 '{room}' 学習ガイドとおすすめの質問",
+        "guide_desc": "この部屋では、**{room}** の文法に集中して質疑応答ができます。始め方がわからない場合は、下のボタンをクリックしてみてください！",
+        "btn_q1": "🎯 基本的な意味と規則", "btn_q2": "📝 例文を3つ作成", "btn_q3": "🤔 似ている文法と比較",
+        "prompt_q1": "初心者にもわかりやすいように、'{room}' 文法の基本的な意味と使用規則を説明してください。",
+        "prompt_q2": "'{room}' 文法を活用した自然な韓国語の例文を3つ作成してください。",
+        "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。"
     },
     "中文": {
         "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
@@ -123,7 +141,13 @@ ui_texts = {
         "history_search": "🔍 输入关键字 (搜索语法聊天室名称或对话内容)",
         "history_no_record": "暂无对话记录。请在语法诊所留下您的第一个问题！",
         "history_no_result": "没有找到关于 '{query}' 的搜索结果。",
-        "history_view": "🚪 查看 '{room}' 诊所记录", "history_me": "👤 我", "history_teacher": "🤖 老师"
+        "history_view": "🚪 查看 '{room}' 诊所记录", "history_me": "👤 我", "history_teacher": "🤖 老师",
+        "guide_title": "📖 '{room}' 学习指南与推荐问题",
+        "guide_desc": "在这个房间里，您可以集中提问和回答关于 **{room}** 语法的问题。如果您不知道如何开始，请点击下面的按钮！",
+        "btn_q1": "🎯 基本含义与规则", "btn_q2": "📝 创建3个例句", "btn_q3": "🤔 比较相似语法",
+        "prompt_q1": "请用初学者易于理解的方式解释 '{room}' 语法的基本含义和使用规则。",
+        "prompt_q2": "请使用 '{room}' 语法创建3个自然的韩语例句。",
+        "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。"
     },
     "Español": {
         "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
@@ -141,10 +165,16 @@ ui_texts = {
         "agree_warn_guest": "Por favor, acepte la recopilación de datos para continuar como invitado.",
         "chat_warn": "⚠️ Los registros de chat pueden recopilarse de forma anónima para mejorar la calidad del servicio. NO introduzca información personal (nombre, contacto, etc.).",
         "history_desc": "Puedes ver todas tus conversaciones de varias salas de gramática de un vistazo.",
-        "history_search": "🔍 Ingrese término de búsqueda (Busque salas de gramática o contenido de chat)",
-        "history_no_record": "No hay historial de chat. ¡Deja tu primera pregunta en la Clínica de Gramática!",
-        "history_no_result": "No se encontraron resultados de búsqueda para '{query}'.",
-        "history_view": "🚪 Ver registros de la clínica '{room}'", "history_me": "👤 Yo", "history_teacher": "🤖 Profesor"
+        "history_search": "🔍 Buscar (Busque salas de gramática o contenido)",
+        "history_no_record": "No hay historial de chat. ¡Deja tu primera pregunta!",
+        "history_no_result": "No se encontraron resultados para '{query}'.",
+        "history_view": "🚪 Ver registros de '{room}'", "history_me": "👤 Yo", "history_teacher": "🤖 Profesor",
+        "guide_title": "📖 Guía de Estudio y Preguntas para '{room}'",
+        "guide_desc": "En esta sala, puedes hacer y responder preguntas enfocadas en **{room}**. Si no sabes cómo empezar, ¡haz clic abajo!",
+        "btn_q1": "🎯 Significado y Reglas", "btn_q2": "📝 Crear 3 Ejemplos", "btn_q3": "🤔 Comparar Gramática",
+        "prompt_q1": "Explica el significado básico y las reglas de uso de '{room}' de manera fácil.",
+        "prompt_q2": "Crea 3 oraciones de ejemplo naturales usando '{room}'.",
+        "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'."
     },
     "Tiếng Việt": {
         "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
@@ -162,10 +192,16 @@ ui_texts = {
         "agree_warn_guest": "Vui lòng đồng ý thu thập dữ liệu để tiếp tục với tư cách khách.",
         "chat_warn": "⚠️ Lịch sử trò chuyện có thể được thu thập ẩn danh để cải thiện chất lượng dịch vụ. TUYỆT ĐỐI KHÔNG nhập thông tin cá nhân (tên, số điện thoại, v.v.).",
         "history_desc": "Bạn có thể xem thoáng qua tất cả các cuộc trò chuyện từ các phòng ngữ pháp khác nhau.",
-        "history_search": "🔍 Nhập từ khóa tìm kiếm (Tìm kiếm tên phòng hoặc nội dung trò chuyện)",
-        "history_no_record": "Chưa có lịch sử trò chuyện. Hãy để lại câu hỏi đầu tiên của bạn trong Phòng khám Ngữ pháp!",
+        "history_search": "🔍 Nhập từ khóa tìm kiếm (Tìm kiếm tên phòng hoặc nội dung)",
+        "history_no_record": "Chưa có lịch sử trò chuyện. Hãy để lại câu hỏi đầu tiên của bạn!",
         "history_no_result": "Không tìm thấy kết quả tìm kiếm cho '{query}'.",
-        "history_view": "🚪 Xem hồ sơ phòng khám '{room}'", "history_me": "👤 Tôi", "history_teacher": "🤖 Giáo viên"
+        "history_view": "🚪 Xem hồ sơ phòng khám '{room}'", "history_me": "👤 Tôi", "history_teacher": "🤖 Giáo viên",
+        "guide_title": "📖 Hướng dẫn học & Câu hỏi gợi ý '{room}'",
+        "guide_desc": "Trong phòng này, bạn có thể hỏi đáp tập trung vào ngữ pháp **{room}**. Nếu bạn không biết bắt đầu từ đâu, hãy nhấp vào các nút bên dưới!",
+        "btn_q1": "🎯 Ý nghĩa & Quy tắc", "btn_q2": "📝 Tạo 3 ví dụ", "btn_q3": "🤔 So sánh ngữ pháp",
+        "prompt_q1": "Hãy giải thích ý nghĩa cơ bản và quy tắc sử dụng của ngữ pháp '{room}' một cách dễ hiểu.",
+        "prompt_q2": "Hãy tạo 3 câu ví dụ tiếng Hàn tự nhiên sử dụng ngữ pháp '{room}'.",
+        "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'."
     },
     "Français": {
         "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
@@ -181,33 +217,45 @@ ui_texts = {
         "guest_agree": "J'accepte la collecte anonyme des journaux de discussion pour l'amélioration du service (Requis)",
         "agree_warn_signup": "Veuillez accepter la politique de confidentialité pour vous inscrire.",
         "agree_warn_guest": "Veuillez accepter la collecte de données pour continuer en tant qu'invité.",
-        "chat_warn": "⚠️ Les journaux de discussion peuvent être collectés anonymement pour améliorer le service. N'entrez PAS d'informations personnelles (nom, contact, etc.).",
+        "chat_warn": "⚠️ Les journaux de discussion peuvent être collectés anonymement pour améliorer le service. N'entrez PAS d'informations personnelles.",
         "history_desc": "Vous pouvez voir en un coup d'œil toutes vos conversations dans les différentes salles de grammaire.",
         "history_search": "🔍 Rechercher (Entrez un thème ou un mot-clé)",
-        "history_no_record": "Aucun historique de chat. Laissez votre première question à la Clinique de Grammaire !",
-        "history_no_result": "Aucun résultat de recherche trouvé pour '{query}'.",
-        "history_view": "🚪 Voir les dossiers de la clinique '{room}'", "history_me": "👤 Moi", "history_teacher": "🤖 Professeur"
+        "history_no_record": "Aucun historique de chat. Laissez votre première question !",
+        "history_no_result": "Aucun résultat trouvé pour '{query}'.",
+        "history_view": "🚪 Voir les dossiers '{room}'", "history_me": "👤 Moi", "history_teacher": "🤖 Professeur",
+        "guide_title": "📖 Guide d'étude et questions pour '{room}'",
+        "guide_desc": "Dans ce salon, posez des questions sur **{room}**. Cliquez sur les boutons ci-dessous !",
+        "btn_q1": "🎯 Sens et règles", "btn_q2": "📝 Créer 3 exemples", "btn_q3": "🤔 Comparer grammaire",
+        "prompt_q1": "Expliquez le sens de base et les règles de '{room}' facilement.",
+        "prompt_q2": "Créez 3 phrases d'exemple naturelles utilisant '{room}'.",
+        "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'."
     },
     "हिन्दी": {
         "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
         "nav_title": "📌 मेनू", "menu_clinic": "📚 क्लिनिक होम", "menu_board": "💬 कमाईनिटी बोर्ड", "menu_history": "🏆 मेरा इतिहास",
         "clinic": "क्लिनिक", "select_room": "व्याकरण विषय", "input_prompt": "अपना प्रश्न दर्ज करें...", 
-        "no_files": "अभी तक कोई फ़ाइल नहीं।", "error_key": "एपीआई कुंजी गायब है", "error_msg": "त्रुटि",
+        "no_files": "अभी तक कोई फ़ाइल नहीं।", "error_key": "एपीआई कुंजी", "error_msg": "त्रुटि",
         "welcome": "नमस्ते! **{room}** में आपका स्वागत है। आज आपके क्या प्रश्न हैं?", "loading": "सोच रहा हूँ...",
         "board_title": "सामुदायिक बोर्ड", "board_prompt": "अपने प्रश्न या प्रतिक्रिया साझा करें!", "board_btn": "पोस्ट करें",
         "like": "👍 लाइक", "comment_prompt": "एक टिप्पणी लिखें...", "comment_btn": "उत्तर दें",
         "select_lang": "भाषा चुनें", "delete_btn": "🗑️ हटाएं",
         "login_title": "🔐 साइन इन / साइन अप", "email": "ईमेल", "pwd": "पासवर्ड", "btn_login": "साइन इन", "btn_signup": "साइन अप", "btn_guest": "👤 अतिथि के रूप में जारी रखें",
-        "signup_agree": "मैं व्यक्तिगत जानकारी के संग्रह और उपयोग से सहमत हूँ (आवश्यक)",
-        "guest_agree": "मैं सेवा सुधार के लिए चैट लॉग के अनाम संग्रह से सहमत हूँ (आवश्यक)",
-        "agree_warn_signup": "साइन अप करने के लिए कृपया गोपनीयता नीति से सहमत हों।",
-        "agree_warn_guest": "अतिथि के रूप में जारी रखने के लिए कृपया डेटा संग्रह से सहमत हों।",
-        "chat_warn": "⚠️ सेवा की गुणवत्ता में सुधार के लिए चैट लॉग को गुमनाम रूप से एकत्र किया जा सकता है। व्यक्तिगत जानकारी (नाम, संपर्क आदि) दर्ज न करें।",
-        "history_desc": "आप एक ही नज़र में विभिन्न व्याकरण कक्षों की अपनी सभी बातचीत देख सकते हैं।",
-        "history_search": "🔍 खोजें (व्याकरण विषय या कीवर्ड दर्ज करें)",
-        "history_no_record": "कोई चैट इतिहास नहीं मिला। व्याकरण क्लिनिक में अपना पहला प्रश्न छोड़ें!",
+        "signup_agree": "सहमत हूँ (आवश्यक)",
+        "guest_agree": "सहमत हूँ (आवश्यक)",
+        "agree_warn_signup": "कृपया गोपनीयता नीति से सहमत हों।",
+        "agree_warn_guest": "कृपया डेटा संग्रह से सहमत हों।",
+        "chat_warn": "⚠️ व्यक्तिगत जानकारी दर्ज न करें।",
+        "history_desc": "आप अपनी सभी बातचीत देख सकते हैं।",
+        "history_search": "🔍 खोजें",
+        "history_no_record": "कोई चैट इतिहास नहीं मिला।",
         "history_no_result": "'{query}' के लिए कोई खोज परिणाम नहीं मिले।",
-        "history_view": "🚪 '{room}' क्लिनिक रिकॉर्ड देखें", "history_me": "👤 मैं", "history_teacher": "🤖 शिक्षक"
+        "history_view": "🚪 '{room}' रिकॉर्ड देखें", "history_me": "👤 मैं", "history_teacher": "🤖 शिक्षक",
+        "guide_title": "📖 '{room}' अध्ययन मार्गदर्शिका",
+        "guide_desc": "**{room}** व्याकरण पर ध्यान केंद्रित करें। नीचे दिए गए बटन पर क्लिक करें!",
+        "btn_q1": "🎯 मूल अर्थ", "btn_q2": "📝 3 उदाहरण", "btn_q3": "🤔 तुलना करें",
+        "prompt_q1": "आसान तरीके से '{room}' के मूल अर्थ की व्याख्या करें।",
+        "prompt_q2": "'{room}' का उपयोग करके 3 उदाहरण बनाएं।",
+        "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।"
     },
     "Italiano": {
         "main_title": "Benvenuti alla Clinica di Grammatica Coreana! 👋", "choose_lang": "🌐 Scegli la tua lingua",
@@ -217,18 +265,24 @@ ui_texts = {
         "welcome": "Ciao! Benvenuto nella **{room}**. Che domande hai oggi?", "loading": "Pensando...",
         "board_title": "Bacheca Comunità", "board_prompt": "Condividi le tue domande o feedback!", "board_btn": "Pubblica",
         "like": "👍 Mi piace", "comment_prompt": "Scrivi un commento...", "comment_btn": "Rispondi",
-        "select_lang": "Seleziona lingua", "delete_btn": "🗑️ Eliminar",
+        "select_lang": "Seleziona lingua", "delete_btn": "🗑️ Elimina",
         "login_title": "🔐 Accedi / Registrati", "email": "Email", "pwd": "Password", "btn_login": "Accedi", "btn_signup": "Registrati", "btn_guest": "👤 Continua come ospite",
         "signup_agree": "Accetto la raccolta e l'uso delle informazioni personali (Obbligatorio)",
-        "guest_agree": "Accetto la raccolta anonima dei registri di chat per migliorare il servizio (Obbligatorio)",
-        "agree_warn_signup": "Si prega di accettare l'informativa sulla privacy per registrarsi.",
-        "agree_warn_guest": "Si prega di accettare la raccolta dei dati per continuare come ospite.",
-        "chat_warn": "⚠️ I registri delle chat possono essere raccolti in modo anonimo per migliorare il servizio. NON inserire informazioni personali (nome, contatti, ecc.).",
-        "history_desc": "Puoi vedere a colpo d'occhio tutte le tue conversazioni dalle varie stanze di grammatica.",
-        "history_search": "🔍 Cerca (Inserisci un argomento grammaticale o una parola chiave)",
-        "history_no_record": "Nessuna cronologia chat trovata. Lascia la tua prima domanda nella Clinica di Grammatica!",
+        "guest_agree": "Accetto la raccolta anonima dei registri di chat (Obbligatorio)",
+        "agree_warn_signup": "Si prega di accettare l'informativa sulla privacy.",
+        "agree_warn_guest": "Si prega di accettare la raccolta dei dati.",
+        "chat_warn": "⚠️ NON inserire informazioni personali (nome, contatti, ecc.).",
+        "history_desc": "Puoi vedere tutte le tue conversazioni a colpo d'occhio.",
+        "history_search": "🔍 Cerca (Inserisci un argomento o una parola chiave)",
+        "history_no_record": "Nessuna cronologia chat trovata. Lascia la tua prima domanda!",
         "history_no_result": "Nessun risultato di ricerca trovato per '{query}'.",
-        "history_view": "🚪 Visualizza i record della clinica '{room}'", "history_me": "👤 Io", "history_teacher": "🤖 Insegnante"
+        "history_view": "🚪 Visualizza i record '{room}'", "history_me": "👤 Io", "history_teacher": "🤖 Insegnante",
+        "guide_title": "📖 Guida e domande per '{room}'",
+        "guide_desc": "Fai domande su **{room}**. Clicca sui pulsanti qui sotto!",
+        "btn_q1": "🎯 Significato e regole", "btn_q2": "📝 Crea 3 esempi", "btn_q3": "🤔 Confronta grammatica",
+        "prompt_q1": "Spiega il significato e le regole di '{room}' in modo facile.",
+        "prompt_q2": "Crea 3 frasi di esempio usando '{room}'.",
+        "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza."
     }
 }
 
@@ -382,12 +436,12 @@ else:
 # --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
 
 # 0. 🏆 내 학습 기록 (마이페이지) 로직
-if selected_main_nav == "🏆 내 학습 기록":
-    st.title("🏆 내 학습 기록")
-    st.write("지금까지 여러 문법 방에서 나눈 대화들을 한눈에 모아볼 수 있습니다.")
+if selected_main_nav == t["menu_history"]: 
+    st.title(t["menu_history"])
+    st.write(t["history_desc"])
     
-    # 🔍 검색창 추가
-    search_query = st.text_input("🔍 검색어 입력 (문법 방 이름이나 질문 내용을 검색해 보세요)", "")
+    # 🔍 검색창 추가 (다국어화 완료)
+    search_query = st.text_input(t["history_search"], "")
     
     # Firestore에서 내 대화 기록 싹 다 가져오기
     chats_ref = db.collection("chats").stream()
@@ -399,9 +453,8 @@ if selected_main_nav == "🏆 내 학습 기록":
             my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
             
     if not my_chats:
-        st.info("아직 대화 기록이 없습니다. 문법 클리닉에서 첫 질문을 남겨보세요!")
+        st.info(t["history_no_record"])
     else:
-        # 검색어 필터링 로직
         filtered_chats = []
         for chat in my_chats:
             if not search_query:
@@ -415,6 +468,30 @@ if selected_main_nav == "🏆 내 학습 기록":
                             break
                 if is_match:
                     filtered_chats.append(chat)
+        
+        if not filtered_chats:
+            st.warning(t["history_no_result"].format(query=search_query))
+        else:
+            import re
+            for chat in filtered_chats:
+                with st.expander(t["history_view"].format(room=chat['room']), expanded=True if search_query else False):
+                    for msg in chat['messages']:
+                        display_content = msg['content']
+                        
+                        if search_query:
+                            escaped_search = re.escape(search_query)
+                            display_content = re.sub(
+                                f"({escaped_search})", 
+                                r"<mark style='background-color: #FFEB3B; color: black; font-weight: bold; padding: 1px 3px; border-radius: 3px;'>\1</mark>", 
+                                display_content, 
+                                flags=re.IGNORECASE
+                            )
+                        
+                        if msg["role"] == "user":
+                            st.markdown(f"**{t['history_me']}:** {display_content}", unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"**{t['history_teacher']}:** {display_content}", unsafe_allow_html=True)
+                            st.divider()
         
         # 필터링된 결과 화면에 뿌려주기
         if not filtered_chats:
@@ -539,26 +616,22 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
 
+   # ==========================================
+    # 💡 [1단계 적용] 방 사용 가이드 및 예상 질문 칩 (다국어 완벽 적용)
     # ==========================================
-    # 💡 [1단계 적용] 방 사용 가이드 및 예상 질문 칩 추가
-    # ==========================================
-    with st.expander(f"📖 '{selected_meta_word}' 학습 가이드 및 추천 질문", expanded=True):
-        st.markdown(f"""
-        이 방에서는 **{selected_meta_word}** 문법에 대해 집중적으로 묻고 답할 수 있습니다.
-        어떻게 시작할지 모르겠다면 아래 버튼을 클릭해 보세요!
-        """)
+    with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
+        st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
         col1, col2, col3 = st.columns(3)
         suggested_q = None
         
-        # 버튼을 클릭하면 suggested_q 변수에 미리 세팅해 둔 질문이 쏙 들어감!
-        if col1.button("🎯 기본 의미와 규칙 설명해 줘", use_container_width=True):
-            suggested_q = f"'{selected_meta_word}' 문법의 기본적인 의미와 사용 규칙을 초보자도 이해하기 쉽게 설명해 줘."
-        if col2.button("📝 이 문법으로 예문 3개 만들어 줘", use_container_width=True):
-            suggested_q = f"'{selected_meta_word}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘."
-        if col3.button("🤔 비슷한 문법과 차이점 알려 줘", use_container_width=True):
-            # 💡 비교는 아주 짧게 하고, 다시 원래 문법으로 포커스를 돌리도록 지시!
-            suggested_q = f"'{selected_meta_word}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 아주 짧게 설명하고, 반드시 다시 '{selected_meta_word}' 문법의 핵심 특징을 요약하면서 답변을 마무리해 줘."
+        if col1.button(t["btn_q1"], use_container_width=True):
+            suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+        if col2.button(t["btn_q2"], use_container_width=True):
+            suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+        if col3.button(t["btn_q3"], use_container_width=True):
+            suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+    # ==========================================
     # ==========================================
 
     # 각 개인 유저 이메일/게스트 ID 기반의 Firestore 개인 대화 백업 세션 로드
