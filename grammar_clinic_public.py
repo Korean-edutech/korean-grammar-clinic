@@ -39,7 +39,7 @@ try:
 except FileNotFoundError:
     pass
     
-# 🌐 다국어 UI 사전 (추천 질문 및 가이드 다국어 완벽 추가!)
+# 🌐 다국어 UI 사전 (에러 메시지 다국어 완벽 추가!)
 ui_texts = {
     "한국어": {
         "main_title": "한국어 문법 클리닉에 오신 것을 환영합니다! 👋", "choose_lang": "🌐 언어를 선택하세요",
@@ -66,7 +66,8 @@ ui_texts = {
         "btn_q1": "🎯 기본 의미와 규칙", "btn_q2": "📝 예문 3개 만들기", "btn_q3": "🤔 비슷한 문법 비교",
         "prompt_q1": "'{room}' 문법의 기본적인 의미와 사용 규칙을 초보자도 이해하기 쉽게 설명해 줘.",
         "prompt_q2": "'{room}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘.",
-        "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘."
+        "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘.",
+        "error_quota": "⏳ 앗, 질문이 너무 빠르게 들어왔어요! 인공지능이 숨을 고를 수 있게 약 20초 뒤에 다시 질문해 주세요."
     },
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -93,7 +94,8 @@ ui_texts = {
         "btn_q1": "🎯 Basic Meaning & Rules", "btn_q2": "📝 Create 3 Examples", "btn_q3": "🤔 Compare Similar Grammar",
         "prompt_q1": "Please explain the basic meaning and usage rules of the '{room}' grammar in an easy way for beginners to understand.",
         "prompt_q2": "Please create 3 natural Korean example sentences using the '{room}' grammar.",
-        "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar."
+        "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar.",
+        "error_quota": "⏳ The AI needs a quick breather! Please try asking again in about 20 seconds."
     },
     "日本語": {
         "main_title": "韓国語文法クリニックへようこそ！ 👋", "choose_lang": "🌐 言語を選択してください",
@@ -120,7 +122,8 @@ ui_texts = {
         "btn_q1": "🎯 基本的な意味と規則", "btn_q2": "📝 例文を3つ作成", "btn_q3": "🤔 似ている文法と比較",
         "prompt_q1": "初心者にもわかりやすいように、'{room}' 文法の基本的な意味と使用規則を説明してください。",
         "prompt_q2": "'{room}' 文法を活用した自然な韓国語の例文を3つ作成してください。",
-        "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。"
+        "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。",
+        "error_quota": "⏳ 質問が早すぎます！AIが準備できるように、約20秒後にもう一度質問してください。"
     },
     "中文": {
         "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
@@ -147,7 +150,8 @@ ui_texts = {
         "btn_q1": "🎯 基本含义与规则", "btn_q2": "📝 创建3个例句", "btn_q3": "🤔 比较相似语法",
         "prompt_q1": "请用初学者易于理解的方式解释 '{room}' 语法的基本含义和使用规则。",
         "prompt_q2": "请使用 '{room}' 语法创建3个自然的韩语例句。",
-        "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。"
+        "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。",
+        "error_quota": "⏳ 提问太快了！请给AI一点缓冲时间，大约20秒后再试一次。"
     },
     "Español": {
         "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
@@ -174,7 +178,8 @@ ui_texts = {
         "btn_q1": "🎯 Significado y Reglas", "btn_q2": "📝 Crear 3 Ejemplos", "btn_q3": "🤔 Comparar Gramática",
         "prompt_q1": "Explica el significado básico y las reglas de uso de '{room}' de manera fácil.",
         "prompt_q2": "Crea 3 oraciones de ejemplo naturales usando '{room}'.",
-        "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'."
+        "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'.",
+        "error_quota": "⏳ ¡Demasiado rápido! Dale un respiro a la IA y vuelve a preguntar en unos 20 segundos."
     },
     "Tiếng Việt": {
         "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
@@ -201,7 +206,8 @@ ui_texts = {
         "btn_q1": "🎯 Ý nghĩa & Quy tắc", "btn_q2": "📝 Tạo 3 ví dụ", "btn_q3": "🤔 So sánh ngữ pháp",
         "prompt_q1": "Hãy giải thích ý nghĩa cơ bản và quy tắc sử dụng của ngữ pháp '{room}' một cách dễ hiểu.",
         "prompt_q2": "Hãy tạo 3 câu ví dụ tiếng Hàn tự nhiên sử dụng ngữ pháp '{room}'.",
-        "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'."
+        "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'.",
+        "error_quota": "⏳ Bạn hỏi quá nhanh! Vui lòng đợi khoảng 20 giây để AI chuẩn bị rồi hỏi lại."
     },
     "Français": {
         "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
@@ -228,7 +234,8 @@ ui_texts = {
         "btn_q1": "🎯 Sens et règles", "btn_q2": "📝 Créer 3 exemples", "btn_q3": "🤔 Comparer grammaire",
         "prompt_q1": "Expliquez le sens de base et les règles de '{room}' facilement.",
         "prompt_q2": "Créez 3 phrases d'exemple naturelles utilisant '{room}'.",
-        "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'."
+        "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'.",
+        "error_quota": "⏳ Vous posez des questions trop vite ! Laissez l'IA souffler et réessayez dans environ 20 secondes."
     },
     "हिन्दी": {
         "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
@@ -255,7 +262,8 @@ ui_texts = {
         "btn_q1": "🎯 मूल अर्थ", "btn_q2": "📝 3 उदाहरण", "btn_q3": "🤔 तुलना करें",
         "prompt_q1": "आसान तरीके से '{room}' के मूल अर्थ की व्याख्या करें।",
         "prompt_q2": "'{room}' का उपयोग करके 3 उदाहरण बनाएं।",
-        "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।"
+        "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।",
+        "error_quota": "⏳ आपने बहुत जल्दी प्रश्न पूछा! कृपया AI को थोड़ा समय दें और लगभग 20 सेकंड बाद फिर से पूछें।"
     },
     "Italiano": {
         "main_title": "Benvenuti alla Clinica di Grammatica Coreana! 👋", "choose_lang": "🌐 Scegli la tua lingua",
@@ -282,7 +290,8 @@ ui_texts = {
         "btn_q1": "🎯 Significato e regole", "btn_q2": "📝 Crea 3 esempi", "btn_q3": "🤔 Confronta grammatica",
         "prompt_q1": "Spiega il significato e le regole di '{room}' in modo facile.",
         "prompt_q2": "Crea 3 frasi di esempio usando '{room}'.",
-        "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza."
+        "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza.",
+        "error_quota": "⏳ Troppo veloce! Lascia respirare l'IA e riprova tra circa 20 secondi."
     }
 }
 
@@ -709,15 +718,15 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
                     
             except Exception as e:
+                # 💡 [버그 픽스] 에러 발생 시 방금 들어간 질문을 타임머신처럼 취소(삭제)해서 버튼 먹통 방지!
+                if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
+                    st.session_state.messages.pop() 
+                    db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages}) 
+
                 error_msg = str(e)
                 with st.chat_message("assistant"):
-                    # 💡 에러 내용에 '429'나 'quota'라는 단어가 포함되어 있으면 친절한 안내문 띄우기
                     if "429" in error_msg or "quota" in error_msg.lower():
-                        if st.session_state.selected_lang == "English":
-                            st.warning("⏳ The AI needs a quick breather! Please try asking again in about 20 seconds.")
-                        elif st.session_state.selected_lang == "한국어":
-                            st.warning("⏳ 앗, 질문이 너무 빠르게 들어왔어요! 인공지능이 숨을 고를 수 있게 약 20초 뒤에 다시 질문해 주세요.")
-                        else:
-                            st.warning("⏳ Please wait about 20 seconds before asking again. (잠시만 기다렸다가 다시 질문해 주세요.)")
+                        # 💡 길고 지저분했던 if문 다 지우고, 다국어 사전에 만들어둔 키값으로 한 방에 연동!
+                        st.warning(t["error_quota"]) 
                     else:
                         st.error(f"{t['error_msg']}: {error_msg}")
