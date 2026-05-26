@@ -70,7 +70,9 @@ ui_texts = {
         "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘.",
         "error_quota": "⏳ 앗, 선생님이 잠시 생각할 시간이 필요해요! 약 20초 뒤에 다시 질문해 주세요.",
         "note_desc": "지금까지 푼 미니 퀴즈의 상세 기록과 오답을 복습해 보세요!", "no_quiz": "아직 푼 퀴즈가 없습니다. 문법 클리닉에서 먼저 풀어보세요!",
-        "menu_quiz_note": "📝 퀴즈 복습 노트"
+        "menu_quiz_note": "📝 퀴즈 복습 노트",
+        "login_prompt": "💬 챗봇과 대화하거나 서비스를 이용하려면 로그인(또는 비회원 시작)이 필요합니다.",
+        "sidebar_login_msg": "👤 로그인이 필요합니다"
     },
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -100,7 +102,9 @@ ui_texts = {
         "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar.",
         "error_quota": "⏳ The teacher needs a moment to think! Please try asking again in about 20 seconds.",
         "note_desc": "Review your quiz history and mistakes here!", "no_quiz": "No quiz records yet. Go take a quiz in the Grammar Clinic!",
-        "menu_quiz_note": "📝 Quiz Review Note"
+        "menu_quiz_note": "📝 Quiz Review Note",
+        "login_prompt": "💬 Please sign in (or start as a guest) to chat with the bot or use the service.",
+        "sidebar_login_msg": "👤 Sign in required"
     },
     "日本語": {
         "main_title": "韓国語文法クリニックへようこそ！ 👋", "choose_lang": "🌐 言語を選択してください",
@@ -130,7 +134,9 @@ ui_texts = {
         "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。",
         "error_quota": "⏳ 先生が少し考える時間が必要です！約20秒後にもう一度質問してください。",
         "note_desc": "これまでのクイズ記録と誤答を復習しましょう！", "no_quiz": "まだクイズの履歴がありません。クリニックでクイズを解いてみましょう！",
-        "menu_quiz_note": "📝 クイズ復習ノート"
+        "menu_quiz_note": "📝 クイズ復習ノート",
+        "login_prompt": "💬 チャットボットと会話したりサービスを利用するには、ログイン（またはゲストとして開始）が必要です。",
+        "sidebar_login_msg": "👤 ログインが必要です"
     },
     "中文": {
         "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
@@ -160,7 +166,9 @@ ui_texts = {
         "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。",
         "error_quota": "⏳ 老师需要一点时间思考！请在大约20秒后再试一次。",
         "note_desc": "复习您的测验历史和错题！", "no_quiz": "暂无测验记录。请先在语法诊所参加测验！",
-        "menu_quiz_note": "📝 测验复习本"
+        "menu_quiz_note": "📝 测验复习本",
+        "login_prompt": "💬 请登录（或以游客身份开始）以进行对话或使用服务。",
+        "sidebar_login_msg": "👤 需要登录"
     },
     "Español": {
         "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
@@ -190,7 +198,9 @@ ui_texts = {
         "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'.",
         "error_quota": "⏳ ¡El profesor necesita un momento para pensar! Vuelve a preguntar en unos 20 segundos.",
         "note_desc": "¡Repasa tu historial de cuestionarios y errores aquí!", "no_quiz": "Aún no hay cuestionarios. ¡Haz uno en la Clínica de Gramática!",
-        "menu_quiz_note": "📝 Nota de repaso"
+        "menu_quiz_note": "📝 Nota de repaso",
+        "login_prompt": "💬 Por favor, inicia sesión (o continúa como invitado) para chatear o usar el servicio.",
+        "sidebar_login_msg": "👤 Inicio de sesión requerido"
     },
     "Tiếng Việt": {
         "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
@@ -220,7 +230,9 @@ ui_texts = {
         "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'.",
         "error_quota": "⏳ Giáo viên cần một chút thời gian để suy nghĩ! Vui lòng hỏi lại sau khoảng 20 giây.",
         "note_desc": "Xem lại lịch sử bài kiểm tra và các lỗi sai của bạn tại đây!", "no_quiz": "Chưa có bài kiểm tra nào. Hãy làm bài kiểm tra trong Phòng khám Ngữ pháp!",
-        "menu_quiz_note": "📝 Ghi chú ôn tập"
+        "menu_quiz_note": "📝 Ghi chú ôn tập",
+        "login_prompt": "💬 Vui lòng đăng nhập (hoặc tiếp tục với tư cách khách) để trò chuyện hoặc sử dụng dịch vụ.",
+        "sidebar_login_msg": "👤 Cần đăng nhập"
     },
     "Français": {
         "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
@@ -250,7 +262,9 @@ ui_texts = {
         "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'.",
         "error_quota": "⏳ Le professeur a besoin d'un moment pour réfléchir ! Veuillez réessayer dans environ 20 secondes.",
         "note_desc": "Revoyez votre historique de quiz et vos erreurs ici !", "no_quiz": "Aucun quiz pour le moment. Faites un quiz dans la Clinique de Grammaire !",
-        "menu_quiz_note": "📝 Notes de révision"
+        "menu_quiz_note": "📝 Notes de révision",
+        "login_prompt": "💬 Veuillez vous connecter (ou continuer en tant qu'invité) pour discuter ou utiliser le service.",
+        "sidebar_login_msg": "👤 Connexion requise"
     },
     "हिन्दी": {
         "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
@@ -280,7 +294,9 @@ ui_texts = {
         "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।",
         "error_quota": "⏳ शिक्षक को सोचने के लिए थोड़ा समय चाहिए! कृपया लगभग 20 सेकंड के बाद फिर से पूछें।",
         "note_desc": "अपने क्विज़ इतिहास और गलतियों की समीक्षा यहाँ करें!", "no_quiz": "अभी तक कोई क्विज़ रिकॉर्ड नहीं है। व्याकरण क्लिनिक में क्विज़ दें!",
-        "menu_quiz_note": "📝 क्विज़ समीक्षा नोट"
+        "menu_quiz_note": "📝 क्विज़ समीक्षा नोट",
+        "login_prompt": "💬 बॉट के साथ चैट करने या सेवा का उपयोग करने के लिए कृपया साइन इन करें (या अतिथि के रूप में जारी रखें)।",
+        "sidebar_login_msg": "👤 साइन इन आवश्यक है"
     },
     "Italiano": {
         "main_title": "Benvenuti alla Clinica di Grammatica Coreana! 👋", "choose_lang": "🌐 Scegli la tua lingua",
@@ -310,7 +326,9 @@ ui_texts = {
         "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza.",
         "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi.",
         "note_desc": "Rivedi qui la cronologia dei quiz e i tuoi errori!", "no_quiz": "Nessun record di quiz. Fai un quiz nella Clinica di Grammatica!",
-        "menu_quiz_note": "📝 Nota di ripasso"
+        "menu_quiz_note": "📝 Nota di ripasso",
+        "login_prompt": "💬 Accedi (o continua come ospite) per chattare con il bot o utilizzare il servizio.",
+        "sidebar_login_msg": "👤 Accesso richiesto"
     }
 }
 
@@ -344,7 +362,7 @@ lang_list = list(ui_texts.keys())
 # ==========================================
 def show_login_ui():
     st.write("<br>", unsafe_allow_html=True)
-    st.info("💬 챗봇과 대화하거나 서비스를 이용하려면 로그인(또는 비회원 시작)이 필요합니다.")
+    st.info(t["login_prompt"])
     with st.container(border=True):
         col1, col2, col3 = st.columns([1.6, 0.4, 2])
         with col1:
@@ -406,7 +424,7 @@ if st.session_state.user_email:
         st.session_state.is_admin = False
         st.rerun()
 else:
-    st.sidebar.markdown("👤 **로그인이 필요합니다**")
+    st.sidebar.markdown(f"**{t['sidebar_login_msg']}**")
 
 st.sidebar.divider()
 
