@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, firestore
+import json
 
 # 페이지 기본 설정
 st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
@@ -294,6 +295,19 @@ ui_texts = {
         "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi."
     }
 }
+
+# ==========================================
+# 📝 [미니 퀴즈 금고] 외부 JSON 파일에서 안전하게 불러오기
+# ==========================================
+
+quiz_vault = {}
+try:
+    with open("quiz_data.json", "r", encoding="utf-8") as f:
+        quiz_vault = json.load(f)
+except FileNotFoundError:
+    # 만약 파일을 깜빡하고 안 만들었더라도 에러가 나지 않도록 빈 금고 생성
+    quiz_vault = {}
+    st.warning("⚠️ quiz_data.json 파일을 찾을 수 없습니다. 퀴즈 기능이 비활성화됩니다.")
 
 # 기본 세션 상태 정의
 if "selected_lang" not in st.session_state:
