@@ -420,7 +420,7 @@ elif selected_main_nav == t["menu_board"]:
                         st.rerun()
         st.write("---")
 
-# 3. 🚪 문법 클리닉 챗봇 엔진 로직 
+# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (개인정보 수집 동의 고지 완료 및 기록 암묵적 무한 영구 저장)
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -429,6 +429,27 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
+
+    # ==========================================
+    # 💡 [1단계 적용] 방 사용 가이드 및 예상 질문 칩 추가
+    # ==========================================
+    with st.expander(f"📖 '{selected_meta_word}' 학습 가이드 및 추천 질문", expanded=True):
+        st.markdown(f"""
+        이 방에서는 **{selected_meta_word}** 문법에 대해 집중적으로 묻고 답할 수 있습니다.
+        어떻게 시작할지 모르겠다면 아래 버튼을 클릭해 보세요!
+        """)
+        
+        col1, col2, col3 = st.columns(3)
+        suggested_q = None
+        
+        # 버튼을 클릭하면 suggested_q 변수에 미리 세팅해 둔 질문이 쏙 들어감!
+        if col1.button("🎯 기본 의미와 규칙 설명해 줘", use_container_width=True):
+            suggested_q = f"'{selected_meta_word}' 문법의 기본적인 의미와 사용 규칙을 초보자도 이해하기 쉽게 설명해 줘."
+        if col2.button("📝 이 문법으로 예문 3개 만들어 줘", use_container_width=True):
+            suggested_q = f"'{selected_meta_word}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘."
+        if col3.button("🤔 비슷한 문법과 차이점 알려 줘", use_container_width=True):
+            suggested_q = f"'{selected_meta_word}' 문법과 의미가 비슷해서 헷갈리기 쉬운 다른 문법을 하나 소개하고 차이점을 알려 줘."
+    # ==========================================
 
     # 각 개인 유저 이메일/게스트 ID 기반의 Firestore 개인 대화 백업 세션 로드
     chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
@@ -448,7 +469,11 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     # 💡 개인정보 입력 절대 금지 안내 자막 실시간 다국어 출력 
     st.caption(t["chat_warn"])
     
-    if prompt := st.chat_input(t["input_prompt"]):
+    # 💡 추천 질문 버튼을 눌렀거나(suggested_q), 직접 텍스트를 입력했을 때(user_input) 둘 다 정상 작동하도록 설계
+    user_input = st.chat_input(t["input_prompt"])
+    prompt = suggested_q or user_input
+    
+    if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"): 
             st.markdown(prompt)
