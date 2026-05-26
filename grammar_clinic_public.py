@@ -396,7 +396,7 @@ if selected_lang != st.session_state.selected_lang:
 st.sidebar.divider()
 
 # 메인 메뉴 탭 구성
-nav_options = [t["menu_clinic"], t["menu_board"], "🏆 내 학습 기록"] # 💡 여기에 "🏆 내 학습 기록" 추가!
+nav_options = [t["menu_clinic"], t["menu_board"], t["menu_history"]] # 💡 다국어 변수로 교체 완료!
 if st.session_state.is_admin:
     nav_options.append("📊 관리자 대시보드")
 
@@ -690,6 +690,7 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             2. 모든 문법 답변엔 반드시 한국어 예문을 정확히 3개씩 덧붙이세요.
             3. 예문을 만들 땐 문법적, 문맥적 오류나 비문이 없는지 출력 전에 스스로 한 번 더 철저하게 검토하세요.
             4. 사용자가 본격적으로 문법에 대해 질문하거나 대화를 시도할 때만 아래 관리자가 등록한 교안/문법 규칙을 바탕으로 설명하세요.
+            5. 💡 답변의 맨 마지막에는 반드시 '**💡 더 알아보면 좋은 개념**'이라는 소제목을 달고, 현재 설명한 내용과 연관된 심화 문법이나 비교해서 알아두면 좋은 다른 문법 1~2가지를 짧게 추천하여 추가 학습을 유도하세요.
             
             [관리자 등록 문법 규칙]
             {target_rules}
