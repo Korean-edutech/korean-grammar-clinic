@@ -69,7 +69,8 @@ ui_texts = {
         "prompt_q2": "'{room}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘.",
         "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘.",
         "error_quota": "⏳ 앗, 선생님이 잠시 생각할 시간이 필요해요! 약 20초 뒤에 다시 질문해 주세요.",
-        "menu_quiz_note": "📝 퀴즈 오답 노트"
+        "note_desc": "지금까지 푼 미니 퀴즈의 상세 기록과 오답을 복습해 보세요!", "no_quiz": "아직 푼 퀴즈가 없습니다. 문법 클리닉에서 먼저 풀어보세요!",
+        "menu_quiz_note": "📝 퀴즈 복습 노트"
     },
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -98,6 +99,7 @@ ui_texts = {
         "prompt_q2": "Please create 3 natural Korean example sentences using the '{room}' grammar.",
         "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar.",
         "error_quota": "⏳ The teacher needs a moment to think! Please try asking again in about 20 seconds.",
+        "note_desc": "Review your quiz history and mistakes here!", "no_quiz": "No quiz records yet. Go take a quiz in the Grammar Clinic!",
         "menu_quiz_note": "📝 Quiz Review Note"
     },
     "日本語": {
@@ -127,7 +129,8 @@ ui_texts = {
         "prompt_q2": "'{room}' 文法を活用した自然な韓国語の例文を3つ作成してください。",
         "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。",
         "error_quota": "⏳ 先生が少し考える時間が必要です！約20秒後にもう一度質問してください。",
-        "menu_quiz_note": "📝 クイズ誤答ノート"
+        "note_desc": "これまでのクイズ記録と誤答を復習しましょう！", "no_quiz": "まだクイズの履歴がありません。クリニックでクイズを解いてみましょう！",
+        "menu_quiz_note": "📝 クイズ復習ノート"
     },
     "中文": {
         "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
@@ -156,7 +159,8 @@ ui_texts = {
         "prompt_q2": "请使用 '{room}' 语法创建3个自然的韩语例句。",
         "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。",
         "error_quota": "⏳ 老师需要一点时间思考！请在大约20秒后再试一次。",
-        "menu_quiz_note": "📝 测验错题本"
+        "note_desc": "复习您的测验历史和错题！", "no_quiz": "暂无测验记录。请先在语法诊所参加测验！",
+        "menu_quiz_note": "📝 测验复习本"
     },
     "Español": {
         "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
@@ -185,7 +189,8 @@ ui_texts = {
         "prompt_q2": "Crea 3 oraciones de ejemplo naturales usando '{room}'.",
         "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'.",
         "error_quota": "⏳ ¡El profesor necesita un momento para pensar! Vuelve a preguntar en unos 20 segundos.",
-        "menu_quiz_note": "📝 Nota de errores"
+        "note_desc": "¡Repasa tu historial de cuestionarios y errores aquí!", "no_quiz": "Aún no hay cuestionarios. ¡Haz uno en la Clínica de Gramática!",
+        "menu_quiz_note": "📝 Nota de repaso"
     },
     "Tiếng Việt": {
         "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
@@ -214,7 +219,8 @@ ui_texts = {
         "prompt_q2": "Hãy tạo 3 câu ví dụ tiếng Hàn tự nhiên sử dụng ngữ pháp '{room}'.",
         "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'.",
         "error_quota": "⏳ Giáo viên cần một chút thời gian để suy nghĩ! Vui lòng hỏi lại sau khoảng 20 giây.",
-        "menu_quiz_note": "📝 Ghi chú bài kiểm tra"
+        "note_desc": "Xem lại lịch sử bài kiểm tra và các lỗi sai của bạn tại đây!", "no_quiz": "Chưa có bài kiểm tra nào. Hãy làm bài kiểm tra trong Phòng khám Ngữ pháp!",
+        "menu_quiz_note": "📝 Ghi chú ôn tập"
     },
     "Français": {
         "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
@@ -243,7 +249,8 @@ ui_texts = {
         "prompt_q2": "Créez 3 phrases d'exemple naturelles utilisant '{room}'.",
         "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'.",
         "error_quota": "⏳ Le professeur a besoin d'un moment pour réfléchir ! Veuillez réessayer dans environ 20 secondes.",
-        "menu_quiz_note": "📝 Note d'erreurs"
+        "note_desc": "Revoyez votre historique de quiz et vos erreurs ici !", "no_quiz": "Aucun quiz pour le moment. Faites un quiz dans la Clinique de Grammaire !",
+        "menu_quiz_note": "📝 Notes de révision"
     },
     "हिन्दी": {
         "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
@@ -272,6 +279,7 @@ ui_texts = {
         "prompt_q2": "'{room}' का उपयोग करके 3 उदाहरण बनाएं।",
         "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।",
         "error_quota": "⏳ शिक्षक को सोचने के लिए थोड़ा समय चाहिए! कृपया लगभग 20 सेकंड के बाद फिर से पूछें।",
+        "note_desc": "अपने क्विज़ इतिहास और गलतियों की समीक्षा यहाँ करें!", "no_quiz": "अभी तक कोई क्विज़ रिकॉर्ड नहीं है। व्याकरण क्लिनिक में क्विज़ दें!",
         "menu_quiz_note": "📝 क्विज़ समीक्षा नोट"
     },
     "Italiano": {
@@ -301,7 +309,8 @@ ui_texts = {
         "prompt_q2": "Crea 3 frasi di esempio usando '{room}'.",
         "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza.",
         "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi.",
-        "menu_quiz_note": "📝 Nota sugli errori"
+        "note_desc": "Rivedi qui la cronologia dei quiz e i tuoi errori!", "no_quiz": "Nessun record di quiz. Fai un quiz nella Clinica di Grammatica!",
+        "menu_quiz_note": "📝 Nota di ripasso"
     }
 }
 
@@ -610,6 +619,33 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             suggested_q = t["prompt_q2"].format(room=selected_meta_word)
         if col3.button(t["btn_q3"], use_container_width=True):
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+
+# 4. 📝 퀴즈 복습 노트 페이지 로직
+elif selected_main_nav == t["menu_quiz_note"]: 
+    st.title(t["menu_quiz_note"])
+    st.write(t["note_desc"]) # 💡 다국어 문구 적용
+    
+    if st.session_state.user_email is None:
+        show_login_ui()
+    else:
+        # DB에서 퀴즈 기록 가져오기
+        history_ref = db.collection("quiz_history").where("user", "==", st.session_state.user_email).stream()
+        records = sorted([doc.to_dict() for doc in history_ref], key=lambda x: x.get("time", ""), reverse=True)
+        
+        if not records:
+            st.info(t["no_quiz"]) # 💡 다국어 문구 적용
+        else:
+            for rec in records:
+                status = "🎉" if rec['score'] == rec['total'] else "💪"
+                with st.expander(f"{status} {rec['room']} ({rec['score']}/{rec['total']}) - ⏰ {rec['time']}"):
+                    for i, d in enumerate(rec['details']):
+                        st.markdown(f"**Q{i+1}. {d['question']}**")
+                        
+                        if d['is_correct']:
+                            st.success(f"✅ {t.get('history_me', 'Me')}: {d['user_ans']}")
+                        else:
+                            st.error(f"❌ {t.get('history_me', 'Me')}: {d['user_ans']}  |  🎯 Answer: {d['correct_ans']}")
+                        st.write("---")
 
    # ==========================================
     # 📝 [5단계 완성] 오답 시 수정 가능한 동기부여형 퀴즈 & 기록 연동 UI
