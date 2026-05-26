@@ -341,29 +341,27 @@ if selected_main_nav == "🏆 내 학습 기록":
     st.title("🏆 내 학습 기록")
     st.write("지금까지 여러 문법 방에서 나눈 대화들을 한눈에 모아볼 수 있습니다.")
     
-    # 🔍 검색창 추가 (UX를 위해 입력창을 위에 배치)
+    # 🔍 검색창 추가
     search_query = st.text_input("🔍 검색어 입력 (문법 방 이름이나 질문 내용을 검색해 보세요)", "")
     
-    # Firestore에서 내 이메일(또는 게스트ID)로 시작하는 대화 기록 싹 다 가져오기
+    # Firestore에서 내 대화 기록 싹 다 가져오기
     chats_ref = db.collection("chats").stream()
     my_chats = []
     
     for doc in chats_ref:
         if doc.id.startswith(f"{st.session_state.user_email}_"):
-            # 문서 이름에서 방 이름만 쏙 빼내기
             room_name = doc.id.replace(f"{st.session_state.user_email}_", "")
             my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
             
     if not my_chats:
         st.info("아직 대화 기록이 없습니다. 문법 클리닉에서 첫 질문을 남겨보세요!")
     else:
-        # 💡 검색어 필터링 로직
+        # 검색어 필터링 로직
         filtered_chats = []
         for chat in my_chats:
             if not search_query:
-                filtered_chats.append(chat) # 검색어가 없으면 전부 다 보여줌
+                filtered_chats.append(chat)
             else:
-                # 방 이름에 검색어가 있거나, 대화 내용 중 하나라도 검색어가 포함되어 있으면 매칭!
                 is_match = search_query.lower() in chat['room'].lower()
                 if not is_match:
                     for msg in chat['messages']:
@@ -373,18 +371,33 @@ if selected_main_nav == "🏆 내 학습 기록":
                 if is_match:
                     filtered_chats.append(chat)
         
-        # 💡 필터링된 결과 화면에 뿌려주기
+        # 필터링된 결과 화면에 뿌려주기
         if not filtered_chats:
             st.warning(f"'{search_query}'에 대한 검색 결과가 없습니다.")
         else:
+            import re  # 💡 단어 치환 및 강조를 위한 파이썬 정규표현식 모듈 임포트
+            
             for chat in filtered_chats:
-                # 검색어가 있을 때는 결과창이 자동으로 열려있게(expanded=True) 설정!
                 with st.expander(f"🚪 '{chat['room']}' 클리닉 기록 보기", expanded=True if search_query else False):
                     for msg in chat['messages']:
+                        display_content = msg['content']
+                        
+                        # 💡 검색어가 입력되어 있다면, 본문 안에서 해당 단어를 찾아 형광펜(<mark>) 처리!
+                        if search_query:
+                            escaped_search = re.escape(search_query) # 특수문자 예외 처리
+                            # 원본 글자 케이스(대소문자 등)를 유지하면서 노란색 마킹 스타일 적용
+                            display_content = re.sub(
+                                f"({escaped_search})", 
+                                r"<mark style='background-color: #FFEB3B; color: black; font-weight: bold; padding: 1px 3px; border-radius: 3px;'>\1</mark>", 
+                                display_content, 
+                                flags=re.IGNORECASE
+                            )
+                        
+                        # HTML 마킹 태그를 인식할 수 있도록 unsafe_allow_html=True 옵션 추가
                         if msg["role"] == "user":
-                            st.markdown(f"**👤 나:** {msg['content']}")
+                            st.markdown(f"**👤 나:** {display_content}", unsafe_allow_html=True)
                         else:
-                            st.markdown(f"**🤖 선생님:** {msg['content']}")
+                            st.markdown(f"**🤖 선생님:** {display_content}", unsafe_allow_html=True)
                             st.divider()
                             
 # 1. 📊 관리자 대시보드 로직 (표 형태로 UI 업그레이드!)
