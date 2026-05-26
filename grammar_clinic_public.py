@@ -647,6 +647,22 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         # 💡 여기가 핵심! 로그인이 되어 있을 때만 아래 채팅 로직이 실행됨
         with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
             target_rules = file.read()    
+            # [추가할 부분: 채팅 엔진 코드]
+        # 1. 채팅 기록 초기화
+        if f"messages_{selected_meta_word}" not in st.session_state:
+            st.session_state[f"messages_{selected_meta_word}"] = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
+        
+        # 2. 화면에 이전 대화 출력
+        for message in st.session_state[f"messages_{selected_meta_word}"]:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+        
+        # 3. 유저 입력 처리 (질문 입력창 + suggested_q 처리)
+        chat_input = st.chat_input(t["input_prompt"])
+        
+        # (여기에 suggested_q가 존재하면 자동으로 채팅창에 쏘는 로직을 넣으면 됨!)
+        if chat_input or suggested_q:
+            query = chat_input if chat_input else suggested_q
 
 # 4. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
