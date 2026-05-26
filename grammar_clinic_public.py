@@ -864,10 +864,13 @@ elif selected_main_nav == t["menu_quiz_note"]:
                     st.error(t["error_key"])
             else:
                 genai.configure(api_key=api_key)
-                if st.session_state.selected_lang == "한국어":
+
+                current_lang = st.session_state.selected_lang
+                
+                if current_lang == "한국어":
                     lang_rule = "모든 답변은 한자(漢字)나 영어를 절대 섞지 말고 오직 '자연스러운 한글(한국어)'로만 작성하세요. 문법 용어도 무조건 한글로만 적으세요."
                 else:
-                    lang_rule = f"모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)"
+                    lang_rule = f"모든 답변은 반드시 {current_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {current_lang} 번역 병기)"
                 
                 system_instruction = f"""
                 당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
