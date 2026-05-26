@@ -644,26 +644,33 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     if st.session_state.user_email is None:
             show_login_ui()  
     else:
-        # 💡 여기가 핵심! 로그인이 되어 있을 때만 아래 채팅 로직이 실행됨
-        with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
-            target_rules = file.read()    
-            # [추가할 부분: 채팅 엔진 코드]
         # 1. 채팅 기록 초기화
-        if f"messages_{selected_meta_word}" not in st.session_state:
-            st.session_state[f"messages_{selected_meta_word}"] = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
+        msg_key = f"messages_{selected_meta_word}"
+        if msg_key not in st.session_state:
+            st.session_state[msg_key] = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
         
-        # 2. 화면에 이전 대화 출력
-        for message in st.session_state[f"messages_{selected_meta_word}"]:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+        # 2. 메시지 출력
+        for msg in st.session_state[msg_key]:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
         
-        # 3. 유저 입력 처리 (질문 입력창 + suggested_q 처리)
-        chat_input = st.chat_input(t["input_prompt"])
+        # 3. 질문 처리 (입력창 또는 버튼 클릭)
+        # 핵심: chat_input을 렌더링하고, 바로 밑에서 prompt를 결정해
+        user_input = st.chat_input(t["input_prompt"])
         
-        # (여기에 suggested_q가 존재하면 자동으로 채팅창에 쏘는 로직을 넣으면 됨!)
-        if chat_input or suggested_q:
-            query = chat_input if chat_input else suggested_q
-
+        # suggested_q는 이미 위에서 버튼 눌릴 때 값이 할당됨
+        final_prompt = user_input if user_input else suggested_q
+        
+        if final_prompt:
+            # 질문을 session_state에 저장
+            st.session_state[msg_key].append({"role": "user", "content": final_prompt})
+            
+            # (여기서부터 기존의 AI 응답 생성 및 DB 저장 로직 수행)
+            # ... (아까 있던 챗봇 응답 생성 및 DB 저장 코드들 그대로 유지) ...
+            
+            # 마지막에 꼭 rerun을 걸어줘야 질문이 채팅창에 남음
+            st.rerun()
+            
 # 4. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
     st.title(t["menu_quiz_note"])
