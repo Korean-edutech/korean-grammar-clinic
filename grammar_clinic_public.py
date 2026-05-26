@@ -335,34 +335,58 @@ else:
     st.sidebar.caption("🔓 Admin Active")
 
 # --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
+
 # 0. 🏆 내 학습 기록 (마이페이지) 로직
 if selected_main_nav == "🏆 내 학습 기록":
     st.title("🏆 내 학습 기록")
     st.write("지금까지 여러 문법 방에서 나눈 대화들을 한눈에 모아볼 수 있습니다.")
     
-    # Firestore에서 내 이메일(또는 게스트ID)로 시작하는 대화 기록만 싹 다 가져오기
+    # 🔍 검색창 추가 (UX를 위해 입력창을 위에 배치)
+    search_query = st.text_input("🔍 검색어 입력 (문법 방 이름이나 질문 내용을 검색해 보세요)", "")
+    
+    # Firestore에서 내 이메일(또는 게스트ID)로 시작하는 대화 기록 싹 다 가져오기
     chats_ref = db.collection("chats").stream()
     my_chats = []
     
     for doc in chats_ref:
         if doc.id.startswith(f"{st.session_state.user_email}_"):
-            # 문서 이름(예: junhyeop@email.com_아요어요)에서 방 이름만 쏙 빼내기
+            # 문서 이름에서 방 이름만 쏙 빼내기
             room_name = doc.id.replace(f"{st.session_state.user_email}_", "")
             my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
             
     if not my_chats:
         st.info("아직 대화 기록이 없습니다. 문법 클리닉에서 첫 질문을 남겨보세요!")
     else:
-        # 방 이름별로 예쁜 접이식 메뉴(Expander) 만들어서 대화 내용 보여주기
+        # 💡 검색어 필터링 로직
+        filtered_chats = []
         for chat in my_chats:
-            with st.expander(f"🚪 '{chat['room']}' 클리닉 기록 보기", expanded=False):
-                for msg in chat['messages']:
-                    if msg["role"] == "user":
-                        st.markdown(f"**👤 나:** {msg['content']}")
-                    else:
-                        st.markdown(f"**🤖 선생님:** {msg['content']}")
-                        st.divider()
-
+            if not search_query:
+                filtered_chats.append(chat) # 검색어가 없으면 전부 다 보여줌
+            else:
+                # 방 이름에 검색어가 있거나, 대화 내용 중 하나라도 검색어가 포함되어 있으면 매칭!
+                is_match = search_query.lower() in chat['room'].lower()
+                if not is_match:
+                    for msg in chat['messages']:
+                        if search_query.lower() in msg['content'].lower():
+                            is_match = True
+                            break
+                if is_match:
+                    filtered_chats.append(chat)
+        
+        # 💡 필터링된 결과 화면에 뿌려주기
+        if not filtered_chats:
+            st.warning(f"'{search_query}'에 대한 검색 결과가 없습니다.")
+        else:
+            for chat in filtered_chats:
+                # 검색어가 있을 때는 결과창이 자동으로 열려있게(expanded=True) 설정!
+                with st.expander(f"🚪 '{chat['room']}' 클리닉 기록 보기", expanded=True if search_query else False):
+                    for msg in chat['messages']:
+                        if msg["role"] == "user":
+                            st.markdown(f"**👤 나:** {msg['content']}")
+                        else:
+                            st.markdown(f"**🤖 선생님:** {msg['content']}")
+                            st.divider()
+                            
 # 1. 📊 관리자 대시보드 로직 (표 형태로 UI 업그레이드!)
 if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
     st.title("📊 실시간 이용 통계 및 로그 (Firestore)")
@@ -551,6 +575,17 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
                     # 실시간 대화 상태 변경 후 Firestore 원격 백업 갱신
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
+                    
             except Exception as e:
+                error_msg = str(e)
                 with st.chat_message("assistant"):
-                    st.error(f"{t['error_msg']}: {e}")
+                    # 💡 에러 내용에 '429'나 'quota'라는 단어가 포함되어 있으면 친절한 안내문 띄우기
+                    if "429" in error_msg or "quota" in error_msg.lower():
+                        if st.session_state.selected_lang == "English":
+                            st.warning("⏳ The AI needs a quick breather! Please try asking again in about 20 seconds.")
+                        elif st.session_state.selected_lang == "한국어":
+                            st.warning("⏳ 앗, 질문이 너무 빠르게 들어왔어요! 인공지능이 숨을 고를 수 있게 약 20초 뒤에 다시 질문해 주세요.")
+                        else:
+                            st.warning("⏳ Please wait about 20 seconds before asking again. (잠시만 기다렸다가 다시 질문해 주세요.)")
+                    else:
+                        st.error(f"{t['error_msg']}: {error_msg}")
