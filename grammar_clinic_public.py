@@ -322,90 +322,73 @@ t = ui_texts[st.session_state.selected_lang]
 lang_list = list(ui_texts.keys())
 
 # ==========================================
-# 🔓 비로그인 상태: 로그인 / 회원가입 / 비회원 접속 화면
+# 🔐 공통 로그인 UI 컴포넌트 (함수로 빼서 필요할 때만 호출)
 # ==========================================
-if st.session_state.user_email is None:
-    st.title(t["main_title"]) 
-    
-    # 첫 화면 언어 선택 드롭다운 
-    default_idx = lang_list.index(st.session_state.selected_lang)
-    lang_choice = st.selectbox(t["choose_lang"], lang_list, index=default_idx)
-    if lang_choice != st.session_state.selected_lang:
-        st.session_state.selected_lang = lang_choice
-        st.rerun()
-        
-    st.write("---")
-    
-    col1, col2, col3 = st.columns([1.6, 0.4, 2])
-    with col1:
-        st.subheader(t["login_title"])
-        auth_email = st.text_input(t["email"], key="auth_email")
-        auth_pwd = st.text_input(t["pwd"], type="password", key="auth_pwd")
-        
-        # 📝 회원가입용 필수 약관 체크박스
-        signup_agree = st.checkbox(t["signup_agree"], key="signup_agree_key")
-        
-        btn_action1, btn_action2 = st.columns(2)
-        
-        # 🔑 로그인 인증 기능
-        with btn_action1:
-            if st.button(t["btn_login"], use_container_width=True):
-                if auth_email and auth_pwd:
-                    user_ref = db.collection("users").document(auth_email).get()
-                    if user_ref.exists and user_ref.to_dict().get("password") == auth_pwd:
-                        st.session_state.user_email = auth_email
-                        st.success("Success!")
-                        st.rerun()
-                    else:
-                        st.error("Invalid email or password.")
-                else:
-                    st.warning("Please fill in all fields.")
-                    
-        # 📝 회원가입 데이터 수집 기능 (체크박스 검증)
-        with btn_action2:
-            if st.button(t["btn_signup"], use_container_width=True):
-                if not signup_agree:
-                    st.warning(t["agree_warn_signup"])
-                elif auth_email and auth_pwd:
-                    user_ref = db.collection("users").document(auth_email).get()
-                    if user_ref.exists:
-                        st.error("This email already exists.")
-                    else:
-                        db.collection("users").document(auth_email).set({
-                            "email": auth_email,
-                            "password": auth_pwd,
-                            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        })
-                        st.success("Account created successfully! Please click Login.")
-                else:
-                    st.warning("Please fill in all fields.")
-        
-        st.write("<br><br><br>", unsafe_allow_html=True)
-        st.write("---")
-        
-        # 👤 비회원 무기명 로그 수집 필수 약관 체크박스
-        guest_agree = st.checkbox(t["guest_agree"], key="guest_agree_key")
-        
-        # 👤 비회원(Guest) 입장 처리 버튼
-        if st.button(t["btn_guest"], use_container_width=True, type="primary"):
-            if not guest_agree:
-                st.warning(t["agree_warn_guest"])
-            else:
-                st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
-                st.rerun()
+def show_login_ui():
+    st.write("<br>", unsafe_allow_html=True)
+    st.info("💬 챗봇과 대화하거나 서비스를 이용하려면 로그인(또는 비회원 시작)이 필요합니다.")
+    with st.container(border=True):
+        col1, col2, col3 = st.columns([1.6, 0.4, 2])
+        with col1:
+            st.subheader(t["login_title"])
+            auth_email = st.text_input(t["email"], key="auth_email")
+            auth_pwd = st.text_input(t["pwd"], type="password", key="auth_pwd")
             
-    st.stop() 
+            signup_agree = st.checkbox(t["signup_agree"], key="signup_agree_key")
+            
+            btn_action1, btn_action2 = st.columns(2)
+            with btn_action1:
+                if st.button(t["btn_login"], use_container_width=True):
+                    if auth_email and auth_pwd:
+                        user_ref = db.collection("users").document(auth_email).get()
+                        if user_ref.exists and user_ref.to_dict().get("password") == auth_pwd:
+                            st.session_state.user_email = auth_email
+                            st.success("Success!")
+                            st.rerun()
+                        else:
+                            st.error("Invalid email or password.")
+                    else:
+                        st.warning("Please fill in all fields.")
+            with btn_action2:
+                if st.button(t["btn_signup"], use_container_width=True):
+                    if not signup_agree:
+                        st.warning(t["agree_warn_signup"])
+                    elif auth_email and auth_pwd:
+                        user_ref = db.collection("users").document(auth_email).get()
+                        if user_ref.exists:
+                            st.error("This email already exists.")
+                        else:
+                            db.collection("users").document(auth_email).set({
+                                "email": auth_email,
+                                "password": auth_pwd,
+                                "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            })
+                            st.success("Account created successfully! Please click Login.")
+                    else:
+                        st.warning("Please fill in all fields.")
+            
+            st.write("---")
+            guest_agree = st.checkbox(t["guest_agree"], key="guest_agree_key")
+            if st.button(t["btn_guest"], use_container_width=True, type="primary"):
+                if not guest_agree:
+                    st.warning(t["agree_warn_guest"])
+                else:
+                    st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
+                    st.rerun()
 
 # ==========================================
-# 🔐 인증 완료 상태: 메인 대시보드 및 서비스 구동
+# 🎨 메인 화면 및 사이드바 (이제 비로그인 유저도 100% 볼 수 있음!)
 # ==========================================
 
 # 사이드바 프로필 및 로그아웃 처리
-st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
-if st.sidebar.button("Logout"):
-    st.session_state.user_email = None
-    st.session_state.is_admin = False
-    st.rerun()
+if st.session_state.user_email:
+    st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
+    if st.sidebar.button("Logout"):
+        st.session_state.user_email = None
+        st.session_state.is_admin = False
+        st.rerun()
+else:
+    st.sidebar.markdown("👤 **로그인이 필요합니다**")
 
 st.sidebar.divider()
 
@@ -419,7 +402,7 @@ if selected_lang != st.session_state.selected_lang:
 st.sidebar.divider()
 
 # 메인 메뉴 탭 구성
-nav_options = [t["menu_clinic"], t["menu_board"], t["menu_history"]] # 💡 다국어 변수로 교체 완료!
+nav_options = [t["menu_clinic"], t["menu_board"], t["menu_history"]]
 if st.session_state.is_admin:
     nav_options.append("📊 관리자 대시보드")
 
@@ -463,113 +446,78 @@ if selected_main_nav == t["menu_history"]:
     st.title(t["menu_history"])
     st.write(t["history_desc"])
     
-    # 🔍 검색창 추가 (다국어화 완료)
-    search_query = st.text_input(t["history_search"], "")
-    
-    # Firestore에서 내 대화 기록 싹 다 가져오기
-    chats_ref = db.collection("chats").stream()
-    my_chats = []
-    
-    for doc in chats_ref:
-        if doc.id.startswith(f"{st.session_state.user_email}_"):
-            room_name = doc.id.replace(f"{st.session_state.user_email}_", "")
-            my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
-            
-    if not my_chats:
-        st.info(t["history_no_record"])
+    # 💡 비로그인 유저 차단 및 로그인 창 표시
+    if st.session_state.user_email is None:
+        show_login_ui()
     else:
-        filtered_chats = []
-        for chat in my_chats:
-            if not search_query:
-                filtered_chats.append(chat)
-            else:
-                is_match = search_query.lower() in chat['room'].lower()
-                if not is_match:
-                    for msg in chat['messages']:
-                        if search_query.lower() in msg['content'].lower():
-                            is_match = True
-                            break
-                if is_match:
+        search_query = st.text_input(t["history_search"], "")
+        chats_ref = db.collection("chats").stream()
+        my_chats = []
+        
+        for doc in chats_ref:
+            if doc.id.startswith(f"{st.session_state.user_email}_"):
+                room_name = doc.id.replace(f"{st.session_state.user_email}_", "")
+                my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
+                
+        if not my_chats:
+            st.info(t["history_no_record"])
+        else:
+            filtered_chats = []
+            for chat in my_chats:
+                if not search_query:
                     filtered_chats.append(chat)
-        
-        if not filtered_chats:
-            st.warning(t["history_no_result"].format(query=search_query))
-        else:
-            import re
-            for chat in filtered_chats:
-                with st.expander(t["history_view"].format(room=chat['room']), expanded=True if search_query else False):
-                    for msg in chat['messages']:
-                        display_content = msg['content']
-                        
-                        if search_query:
-                            escaped_search = re.escape(search_query)
-                            display_content = re.sub(
-                                f"({escaped_search})", 
-                                r"<mark style='background-color: #FFEB3B; color: black; font-weight: bold; padding: 1px 3px; border-radius: 3px;'>\1</mark>", 
-                                display_content, 
-                                flags=re.IGNORECASE
-                            )
-                        
-                        if msg["role"] == "user":
-                            st.markdown(f"**{t['history_me']}:** {display_content}", unsafe_allow_html=True)
-                        else:
-                            st.markdown(f"**{t['history_teacher']}:** {display_content}", unsafe_allow_html=True)
-                            st.divider()
-        
-        # 필터링된 결과 화면에 뿌려주기
-        if not filtered_chats:
-            st.warning(f"'{search_query}'에 대한 검색 결과가 없습니다.")
-        else:
-            import re  # 💡 단어 치환 및 강조를 위한 파이썬 정규표현식 모듈 임포트
+                else:
+                    is_match = search_query.lower() in chat['room'].lower()
+                    if not is_match:
+                        for msg in chat['messages']:
+                            if search_query.lower() in msg['content'].lower():
+                                is_match = True
+                                break
+                    if is_match:
+                        filtered_chats.append(chat)
             
-            for chat in filtered_chats:
-                with st.expander(f"🚪 '{chat['room']}' 클리닉 기록 보기", expanded=True if search_query else False):
-                    for msg in chat['messages']:
-                        display_content = msg['content']
-                        
-                        # 💡 검색어가 입력되어 있다면, 본문 안에서 해당 단어를 찾아 형광펜(<mark>) 처리!
-                        if search_query:
-                            escaped_search = re.escape(search_query) # 특수문자 예외 처리
-                            # 원본 글자 케이스(대소문자 등)를 유지하면서 노란색 마킹 스타일 적용
-                            display_content = re.sub(
-                                f"({escaped_search})", 
-                                r"<mark style='background-color: #FFEB3B; color: black; font-weight: bold; padding: 1px 3px; border-radius: 3px;'>\1</mark>", 
-                                display_content, 
-                                flags=re.IGNORECASE
-                            )
-                        
-                        # HTML 마킹 태그를 인식할 수 있도록 unsafe_allow_html=True 옵션 추가
-                        if msg["role"] == "user":
-                            st.markdown(f"**👤 나:** {display_content}", unsafe_allow_html=True)
-                        else:
-                            st.markdown(f"**🤖 선생님:** {display_content}", unsafe_allow_html=True)
-                            st.divider()
-                            
-# 1. 📊 관리자 대시보드 로직 (표 형태로 UI 업그레이드!)
-if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
+            if not filtered_chats:
+                st.warning(t["history_no_result"].format(query=search_query))
+            else:
+                import re
+                for chat in filtered_chats:
+                    with st.expander(t["history_view"].format(room=chat['room']), expanded=True if search_query else False):
+                        for msg in chat['messages']:
+                            display_content = msg['content']
+                            if search_query:
+                                escaped_search = re.escape(search_query)
+                                display_content = re.sub(
+                                    f"({escaped_search})", 
+                                    r"<mark style='background-color: #FFEB3B; color: black; font-weight: bold; padding: 1px 3px; border-radius: 3px;'>\1</mark>", 
+                                    display_content, 
+                                    flags=re.IGNORECASE
+                                )
+                            if msg["role"] == "user":
+                                st.markdown(f"**{t['history_me']}:** {display_content}", unsafe_allow_html=True)
+                            else:
+                                st.markdown(f"**{t['history_teacher']}:** {display_content}", unsafe_allow_html=True)
+                                st.divider()
+                                
+# 1. 📊 관리자 대시보드 로직
+elif selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
     st.title("📊 실시간 이용 통계 및 로그 (Firestore)")
-    
     logs_ref = db.collection("logs").order_by("time", direction=firestore.Query.DESCENDING).stream()
     logs_list = [doc.to_dict() for doc in logs_ref]
     
     st.metric(label="총 누적 질문 수", value=f"{len(logs_list)} 회")
     st.divider()
-    
     st.subheader("📝 상세 질문 로그 데이터")
     
     if logs_list:
-        # 데이터프레임(표) 형태로 깔끔하게 렌더링
         st.dataframe(
             logs_list,
             column_config={
                 "time": st.column_config.TextColumn("⏰ 질문 시간", width="medium"),
-                "user": st.column_config.TextColumn("👤 사용자(이메일/게스트)", width="medium"),
+                "user": st.column_config.TextColumn("👤 사용자", width="medium"),
                 "lang": st.column_config.TextColumn("🌐 언어", width="small"),
-                "room": st.column_config.TextColumn("🚪 문법 주제", width="small"),
+                "room": st.column_config.TextColumn("🚪 주제", width="small"),
                 "prompt": st.column_config.TextColumn("💬 질문 내용", width="large")
-            },
-            hide_index=True,
-            use_container_width=True
+            }, hide_index=True, use_container_width=True
         )
     else:
         st.info("아직 수집된 질문 데이터가 없습니다.")
@@ -578,21 +526,21 @@ if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_ad
 elif selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
-    with st.form("new_post_form", clear_on_submit=True):
-        new_content = st.text_area(t["board_prompt"], height=100)
-        if st.form_submit_button(t["board_btn"]) and new_content.strip():
-            post_id = str(uuid.uuid4())
-            db.collection("posts").document(post_id).set({
-                "id": post_id,
-                "time": datetime.now().strftime("%y/%m/%d %H:%M"),
-                "lang": st.session_state.selected_lang,
-                "content": new_content.strip(),
-                "likes": 0,
-                "comments": [],
-                "user": st.session_state.user_email
-            })
-            st.rerun()
-            
+    # 💡 비로그인 유저 글쓰기 차단 및 로그인 폼 출력
+    if st.session_state.user_email is None:
+        show_login_ui()
+    else:
+        with st.form("new_post_form", clear_on_submit=True):
+            new_content = st.text_area(t["board_prompt"], height=100)
+            if st.form_submit_button(t["board_btn"]) and new_content.strip():
+                post_id = str(uuid.uuid4())
+                db.collection("posts").document(post_id).set({
+                    "id": post_id, "time": datetime.now().strftime("%y/%m/%d %H:%M"),
+                    "lang": st.session_state.selected_lang, "content": new_content.strip(),
+                    "likes": 0, "comments": [], "user": st.session_state.user_email
+                })
+                st.rerun()
+                
     st.divider()
 
     posts_ref = db.collection("posts").order_by("time", direction=firestore.Query.DESCENDING).stream()
@@ -621,15 +569,16 @@ elif selected_main_nav == t["menu_board"]:
                 for cmt in post['comments']:
                     st.markdown(f"<div style='background-color:rgba(128,128,128,0.1); padding:8px; border-radius:5px; margin-bottom:5px; font-size:0.9em;'>- {cmt}</div>", unsafe_allow_html=True)
                 
-                cmt_input = st.text_input(" ", placeholder=t["comment_prompt"], key=f"cmt_input_{post['id']}", label_visibility="collapsed")
-                if st.button(t["comment_btn"], key=f"cmt_btn_{post['id']}"):
-                    if cmt_input.strip():
-                        updated_comments = post['comments'] + [f"{st.session_state.user_email}: {cmt_input.strip()}"]
-                        db.collection("posts").document(post['id']).update({"comments": updated_comments})
-                        st.rerun()
-        st.write("---")
+                # 댓글 작성도 로그인 필요
+                if st.session_state.user_email:
+                    cmt_input = st.text_input(" ", placeholder=t["comment_prompt"], key=f"cmt_input_{post['id']}", label_visibility="collapsed")
+                    if st.button(t["comment_btn"], key=f"cmt_btn_{post['id']}"):
+                        if cmt_input.strip():
+                            updated_comments = post['comments'] + [f"{st.session_state.user_email}: {cmt_input.strip()}"]
+                            db.collection("posts").document(post['id']).update({"comments": updated_comments})
+                            st.rerun()
 
-# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (개인정보 수집 동의 고지 완료 및 기록 암묵적 무한 영구 저장)
+# 3. 🚪 문법 클리닉 챗봇 엔진 로직
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -639,9 +588,7 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
 
-   # ==========================================
-    # 💡 [1단계 적용] 방 사용 가이드 및 예상 질문 칩 (다국어 완벽 적용)
-    # ==========================================
+    # 가이드 및 추천 질문 칩
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
@@ -654,93 +601,120 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             suggested_q = t["prompt_q2"].format(room=selected_meta_word)
         if col3.button(t["btn_q3"], use_container_width=True):
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+
     # ==========================================
+    # 📝 [3단계 복구 적용] 미니 퀴즈 시스템 UI
     # ==========================================
-
-    # 각 개인 유저 이메일/게스트 ID 기반의 Firestore 개인 대화 백업 세션 로드
-    chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
-    chat_ref = db.collection("chats").document(chat_doc_id).get()
-    
-    if chat_ref.exists:
-        st.session_state.messages = chat_ref.to_dict().get("messages", [])
-    else:
-        initial_greeting = t["welcome"].format(room=actual_room_name)
-        st.session_state.messages = [{"role": "assistant", "content": initial_greeting}]
-        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
-
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]): 
-            st.markdown(msg["content"])
-
-    # 💡 개인정보 입력 절대 금지 안내 자막 실시간 다국어 출력 
-    st.caption(t["chat_warn"])
-    
-    # 💡 추천 질문 버튼을 눌렀거나(suggested_q), 직접 텍스트를 입력했을 때(user_input) 둘 다 정상 작동하도록 설계
-    user_input = st.chat_input(t["input_prompt"])
-    prompt = suggested_q or user_input
-    
-    if prompt:
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"): 
-            st.markdown(prompt)
+    if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
+        st.write("<br>", unsafe_allow_html=True)
+        with st.expander(f"📝 '{selected_meta_word}' 미니 퀴즈 풀고 실력 확인하기!", expanded=False):
+            quiz_list = quiz_vault[selected_meta_word]
             
-        # 📊 중앙 대시보드 집계용 글로벌 로그 기록 누적 (Firestore)
-        db.collection("logs").add({
-            "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-            "user": st.session_state.user_email,
-            "lang": st.session_state.selected_lang,
-            "room": actual_room_name,
-            "prompt": prompt
-        })
-        
-        if not api_key:
-            with st.chat_message("assistant"):
-                st.error(t["error_key"])
-        else:
-            genai.configure(api_key=api_key)
-            
-            if st.session_state.selected_lang == "한국어":
-                lang_rule = "모든 답변은 한자(漢字)나 영어를 절대 섞지 말고 오직 '자연스러운 한글(한국어)'로만 작성하세요. 문법 용어도 무조건 한글로만 적으세요."
-            else:
-                lang_rule = f"모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)"
-            
-            system_instruction = f"""
-            당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
-            
-            [대화 행동 지침 - 최우선 준수 사항]
-            0. {lang_rule}
-            1. 답변은 잡다한 설명 없이 간단하게 질문에 대한 핵심 내용만 명확히 하세요.
-            2. 모든 문법 답변엔 반드시 한국어 예문을 정확히 3개씩 덧붙이세요.
-            3. 예문을 만들 땐 문법적, 문맥적 오류나 비문이 없는지 출력 전에 스스로 한 번 더 철저하게 검토하세요.
-            4. 사용자가 본격적으로 문법에 대해 질문하거나 대화를 시도할 때만 아래 관리자가 등록한 교안/문법 규칙을 바탕으로 설명하세요.
-            5. 💡 답변의 맨 마지막에는 반드시 '**💡 더 알아보면 좋은 개념**'이라는 소제목을 달고, 현재 설명한 내용과 연관된 심화 문법이나 비교해서 알아두면 좋은 다른 문법 1~2가지를 짧게 추천하여 추가 학습을 유도하세요.
-            
-            [관리자 등록 문법 규칙]
-            {target_rules}
-            """
-            
-            try:
-                model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
+            with st.form(key=f"quiz_form_{selected_meta_word}"):
+                user_answers = []
+                for i, quiz in enumerate(quiz_list):
+                    st.markdown(f"**Q{i+1}. {quiz['q']}**")
+                    ans = st.radio("보기 선택", quiz['options'], key=f"q_{selected_meta_word}_{i}", index=None, label_visibility="collapsed")
+                    user_answers.append(ans)
+                    st.write("---")
                 
-                with st.chat_message("assistant"):
-                    with st.spinner(t["loading"]):
-                        response = model.generate_content(prompt)
-                    st.markdown(response.text)
-                    
-                    st.session_state.messages.append({"role": "assistant", "content": response.text})
-                    # 실시간 대화 상태 변경 후 Firestore 원격 백업 갱신
-                    db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
-                    
-            except Exception as e:
-                # 💡 [버그 픽스] 에러 발생 시 방금 들어간 질문을 타임머신처럼 취소(삭제)해서 버튼 먹통 방지!
-                if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-                    st.session_state.messages.pop() 
-                    db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages}) 
-
-                error_msg = str(e)
-                with st.chat_message("assistant"):
-                    if "429" in error_msg or "quota" in error_msg.lower():
-                        # 💡 길고 지저분했던 if문 다 지우고, 다국어 사전에 만들어둔 키값으로 한 방에 연동!
-                        st.warning(t["error_quota"]) 
+                submit_quiz = st.form_submit_button("💯 정답 확인하기", use_container_width=True)
+                
+                if submit_quiz:
+                    if None in user_answers:
+                        st.warning("⚠️ 모든 문제의 정답을 선택해 주세요!")
                     else:
-                        st.error(f"{t['error_msg']}: {error_msg}")
+                        score = sum([1 for i, q in enumerate(quiz_list) if user_answers[i] == q['answer']])
+                        
+                        if score == len(quiz_list):
+                            st.success(f"🎉 완벽해요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다! 100점!")
+                            st.balloons()
+                        elif score >= len(quiz_list) / 2:
+                            st.info(f"👍 잘했어요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다.")
+                        else:
+                            st.error(f"💪 아쉽네요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다. 선생님에게 다시 질문해 볼까요?")
+    # ==========================================
+
+    # 💡 로그인되지 않았을 때는 대화창 대신 로그인 UI 표시
+    if st.session_state.user_email is None:
+        show_login_ui()
+    else:
+        # 로그인된 유저만 대화 기록 불러오기 및 채팅 가능
+        chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
+        chat_ref = db.collection("chats").document(chat_doc_id).get()
+        
+        if chat_ref.exists:
+            st.session_state.messages = chat_ref.to_dict().get("messages", [])
+        else:
+            initial_greeting = t["welcome"].format(room=actual_room_name)
+            st.session_state.messages = [{"role": "assistant", "content": initial_greeting}]
+            db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
+
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]): 
+                st.markdown(msg["content"])
+
+        st.caption(t["chat_warn"])
+        
+        user_input = st.chat_input(t["input_prompt"])
+        prompt = suggested_q or user_input
+        
+        if prompt:
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"): 
+                st.markdown(prompt)
+                
+            db.collection("logs").add({
+                "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                "user": st.session_state.user_email,
+                "lang": st.session_state.selected_lang,
+                "room": actual_room_name,
+                "prompt": prompt
+            })
+            
+            if not api_key:
+                with st.chat_message("assistant"):
+                    st.error(t["error_key"])
+            else:
+                genai.configure(api_key=api_key)
+                if st.session_state.selected_lang == "한국어":
+                    lang_rule = "모든 답변은 한자(漢字)나 영어를 절대 섞지 말고 오직 '자연스러운 한글(한국어)'로만 작성하세요. 문법 용어도 무조건 한글로만 적으세요."
+                else:
+                    lang_rule = f"모든 답변은 반드시 {st.session_state.selected_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {st.session_state.selected_lang} 번역 병기)"
+                
+                system_instruction = f"""
+                당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
+                
+                [대화 행동 지침 - 최우선 준수 사항]
+                0. {lang_rule}
+                1. 답변은 잡다한 설명 없이 간단하게 질문에 대한 핵심 내용만 명확히 하세요.
+                2. 모든 문법 답변엔 반드시 한국어 예문을 정확히 3개씩 덧붙이세요.
+                3. 예문을 만들 땐 문법적, 문맥적 오류나 비문이 없는지 출력 전에 스스로 한 번 더 철저하게 검토하세요.
+                4. 사용자가 본격적으로 문법에 대해 질문하거나 대화를 시도할 때만 아래 관리자가 등록한 교안/문법 규칙을 바탕으로 설명하세요.
+                5. 💡 답변의 맨 마지막에는 반드시 '**💡 더 알아보면 좋은 개념**'이라는 소제목을 달고, 현재 설명한 내용과 연관된 심화 문법이나 비교해서 알아두면 좋은 다른 문법 1~2가지를 짧게 추천하여 추가 학습을 유도하세요.
+                
+                [관리자 등록 문법 규칙]
+                {target_rules}
+                """
+                
+                try:
+                    model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
+                    with st.chat_message("assistant"):
+                        with st.spinner(t["loading"]):
+                            response = model.generate_content(prompt)
+                        st.markdown(response.text)
+                        
+                        st.session_state.messages.append({"role": "assistant", "content": response.text})
+                        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
+                        
+                except Exception as e:
+                    if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
+                        st.session_state.messages.pop() 
+                        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages}) 
+
+                    error_msg = str(e)
+                    with st.chat_message("assistant"):
+                        if "429" in error_msg or "quota" in error_msg.lower():
+                            st.warning(t["error_quota"]) 
+                        else:
+                            st.error(f"{t['error_msg']}: {error_msg}")
