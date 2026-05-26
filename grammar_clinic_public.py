@@ -297,7 +297,7 @@ if selected_lang != st.session_state.selected_lang:
 st.sidebar.divider()
 
 # 메인 메뉴 탭 구성
-nav_options = [t["menu_clinic"], t["menu_board"]]
+nav_options = [t["menu_clinic"], t["menu_board"], "🏆 내 학습 기록"] # 💡 여기에 "🏆 내 학습 기록" 추가!
 if st.session_state.is_admin:
     nav_options.append("📊 관리자 대시보드")
 
@@ -335,6 +335,33 @@ else:
     st.sidebar.caption("🔓 Admin Active")
 
 # --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
+# 0. 🏆 내 학습 기록 (마이페이지) 로직
+if selected_main_nav == "🏆 내 학습 기록":
+    st.title("🏆 내 학습 기록")
+    st.write("지금까지 여러 문법 방에서 나눈 대화들을 한눈에 모아볼 수 있습니다.")
+    
+    # Firestore에서 내 이메일(또는 게스트ID)로 시작하는 대화 기록만 싹 다 가져오기
+    chats_ref = db.collection("chats").stream()
+    my_chats = []
+    
+    for doc in chats_ref:
+        if doc.id.startswith(f"{st.session_state.user_email}_"):
+            # 문서 이름(예: junhyeop@email.com_아요어요)에서 방 이름만 쏙 빼내기
+            room_name = doc.id.replace(f"{st.session_state.user_email}_", "")
+            my_chats.append({"room": room_name, "messages": doc.to_dict().get("messages", [])})
+            
+    if not my_chats:
+        st.info("아직 대화 기록이 없습니다. 문법 클리닉에서 첫 질문을 남겨보세요!")
+    else:
+        # 방 이름별로 예쁜 접이식 메뉴(Expander) 만들어서 대화 내용 보여주기
+        for chat in my_chats:
+            with st.expander(f"🚪 '{chat['room']}' 클리닉 기록 보기", expanded=False):
+                for msg in chat['messages']:
+                    if msg["role"] == "user":
+                        st.markdown(f"**👤 나:** {msg['content']}")
+                    else:
+                        st.markdown(f"**🤖 선생님:** {msg['content']}")
+                        st.divider()
 
 # 1. 📊 관리자 대시보드 로직 (표 형태로 UI 업그레이드!)
 if selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_admin:
@@ -448,7 +475,8 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         if col2.button("📝 이 문법으로 예문 3개 만들어 줘", use_container_width=True):
             suggested_q = f"'{selected_meta_word}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘."
         if col3.button("🤔 비슷한 문법과 차이점 알려 줘", use_container_width=True):
-            suggested_q = f"'{selected_meta_word}' 문법과 의미가 비슷해서 헷갈리기 쉬운 다른 문법을 하나 소개하고 차이점을 알려 줘."
+            # 💡 비교는 아주 짧게 하고, 다시 원래 문법으로 포커스를 돌리도록 지시!
+            suggested_q = f"'{selected_meta_word}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 아주 짧게 설명하고, 반드시 다시 '{selected_meta_word}' 문법의 핵심 특징을 요약하면서 답변을 마무리해 줘."
     # ==========================================
 
     # 각 개인 유저 이메일/게스트 ID 기반의 Firestore 개인 대화 백업 세션 로드
