@@ -635,10 +635,13 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         
         if col1.button(t["btn_q1"], use_container_width=True):
             suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+            st.rerun()
         if col2.button(t["btn_q2"], use_container_width=True):
             suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+            st.rerun()
         if col3.button(t["btn_q3"], use_container_width=True):
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+            st.rerun()
 
     # [2] 로그인 확인 및 채팅 엔진
     if st.session_state.user_email is None:
