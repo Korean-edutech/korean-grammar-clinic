@@ -598,6 +598,9 @@ elif selected_main_nav == t["menu_board"]:
 
 # 3. 🚪 문법 클리닉 챗봇 엔진 로직
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
+    if st.session_state.user_email is None:
+        show_login_ui()
+        
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
     
