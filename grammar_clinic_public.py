@@ -602,39 +602,100 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         if col3.button(t["btn_q3"], use_container_width=True):
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
 
-    # ==========================================
-    # 📝 [3단계 복구 적용] 미니 퀴즈 시스템 UI
+   # ==========================================
+    # 📝 [5단계 완성] 오답 시 수정 가능한 동기부여형 퀴즈 & 기록 연동 UI
     # ==========================================
     if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
         st.write("<br>", unsafe_allow_html=True)
-        with st.expander(f"📝 '{selected_meta_word}' 미니 퀴즈 풀고 실력 확인하기!", expanded=False):
+        with st.expander(f"📝 '{selected_meta_word}' 미니 퀴즈 풀고 실력 확인하기!", expanded=True):
             quiz_list = quiz_vault[selected_meta_word]
             
-            with st.form(key=f"quiz_form_{selected_meta_word}"):
-                user_answers = []
-                for i, quiz in enumerate(quiz_list):
-                    st.markdown(f"**Q{i+1}. {quiz['q']}**")
-                    ans = st.radio("보기 선택", quiz['options'], key=f"q_{selected_meta_word}_{i}", index=None, label_visibility="collapsed")
-                    user_answers.append(ans)
-                    st.write("---")
-                
-                submit_quiz = st.form_submit_button("💯 정답 확인하기", use_container_width=True)
-                
-                if submit_quiz:
-                    if None in user_answers:
-                        st.warning("⚠️ 모든 문제의 정답을 선택해 주세요!")
-                    else:
-                        score = sum([1 for i, q in enumerate(quiz_list) if user_answers[i] == q['answer']])
-                        
-                        if score == len(quiz_list):
-                            st.success(f"🎉 완벽해요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다! 100점!")
-                            st.balloons()
-                        elif score >= len(quiz_list) / 2:
-                            st.info(f"👍 잘했어요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다.")
-                        else:
-                            st.error(f"💪 아쉽네요! {len(quiz_list)}문제 중 {score}문제를 맞혔습니다. 선생님에게 다시 질문해 볼까요?")
-    # ==========================================
+            q_idx_key = f"quiz_idx_{selected_meta_word}"           
+            q_score_key = f"quiz_score_{selected_meta_word}"       
+            q_submitted_key = f"q_submitted_{selected_meta_word}"  
+            
+            if q_idx_key not in st.session_state:
+                st.session_state[q_idx_key] = 0
+                st.session_state[q_score_key] = 0
+                st.session_state[q_submitted_key] = False
 
+            current_idx = st.session_state[q_idx_key]
+
+            # 📌 아직 풀 문제가 남아있을 때
+            if current_idx < len(quiz_list):
+                quiz = quiz_list[current_idx]
+                
+                st.progress((current_idx) / len(quiz_list), text=f"진행도: Q{current_idx+1} / {len(quiz_list)}")
+                st.markdown(f"**Q{current_idx+1}. {quiz['q']}**")
+                
+                # 💡 수정: disabled 속성을 아예 지워서 언제든 맘 편히 보기를 바꿀 수 있게 열어둠!
+                ans = st.radio("보기 선택", quiz['options'], key=f"q_{selected_meta_word}_{current_idx}", index=None, label_visibility="collapsed")
+                
+                if not st.session_state[q_submitted_key]:
+                    # 첫 제출 전 화면
+                    if st.button("정답 확인", key=f"check_{current_idx}", use_container_width=True):
+                        if ans is None:
+                            st.warning("⚠️ 보기 중 하나를 선택해 주세요!")
+                        else:
+                            st.session_state[q_submitted_key] = True
+                            st.rerun() 
+                else:
+                    # 💡 제출 후 피드백 화면 (틀려도 다른 보기를 누르면 즉각 반응함!)
+                    if ans == quiz['answer']:
+                        st.success("⭕ 정답입니다! 훌륭해요!")
+                    else:
+                        # 무자비하게 정답을 스포일러 하지 않고 스스로 찾게 유도
+                        st.error("❌ 아쉽네요. 다른 보기를 선택해서 다시 확인해 볼까요?")
+                        
+                    btn_label = "다음 문제 ➡️" if current_idx < len(quiz_list)-1 else "최종 결과 확인 ➡️"
+                    if st.button(btn_label, use_container_width=True, type="primary"):
+                        # 최종적으로 정답인 상태에서 넘어가야 점수 인정
+                        if ans == quiz['answer']:
+                            st.session_state[q_score_key] += 1 
+                            
+                        st.session_state[q_idx_key] += 1
+                        st.session_state[q_submitted_key] = False 
+                        st.rerun()
+                        
+            # 📌 모든 문제를 다 풀었을 때
+            else:
+                final_score = st.session_state[q_score_key]
+                total_q = len(quiz_list)
+                
+                st.progress(1.0, text=f"진행도: {total_q}/{total_q} (완료)")
+                
+                if final_score == total_q:
+                    st.success(f"🎉 완벽해요! {total_q}문제 중 {final_score}문제를 맞혔습니다! 100점!")
+                    st.balloons()
+                else:
+                    st.info(f"👍 노력했어요! {total_q}문제 중 {final_score}문제를 맞혔습니다.")
+                
+                save_flag_key = f"quiz_saved_{selected_meta_word}"
+                if save_flag_key not in st.session_state:
+                    if st.session_state.user_email:
+                        chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
+                        quiz_log_msg = f"📝 **[미니 퀴즈 완료]** 방금 이 클리닉에서 {total_q}문제 중 {final_score}문제를 맞혔습니다! 복습이 필요하다면 언제든 질문해 주세요."
+                        
+                        chat_ref = db.collection("chats").document(chat_doc_id).get()
+                        if chat_ref.exists:
+                            messages = chat_ref.to_dict().get("messages", [])
+                        else:
+                            messages = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
+                            
+                        messages.append({"role": "assistant", "content": quiz_log_msg})
+                        db.collection("chats").document(chat_doc_id).set({"messages": messages})
+                        
+                    st.session_state[save_flag_key] = True 
+                    
+                if st.button("🔄 퀴즈 다시 풀기", use_container_width=True):
+                    st.session_state[q_idx_key] = 0
+                    st.session_state[q_score_key] = 0
+                    st.session_state[q_submitted_key] = False
+                    if save_flag_key in st.session_state:
+                        del st.session_state[save_flag_key]
+                    st.rerun()
+    # ==========================================
+    
     # 💡 로그인되지 않았을 때는 대화창 대신 로그인 UI 표시
     if st.session_state.user_email is None:
         show_login_ui()
