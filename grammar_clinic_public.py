@@ -627,9 +627,6 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     # 가이드 및 추천 질문 칩
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
-
-        if st.session_state.user_email is None:
-            show_login_ui()
         
         col1, col2, col3 = st.columns(3)
         suggested_q = None
@@ -643,6 +640,9 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             suggested_q = t["prompt_q2"].format(room=selected_meta_word)
         if col3.button(t["btn_q3"], use_container_width=True):
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+            
+    if st.session_state.user_email is None:
+            show_login_ui()        
 
 # 4. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
