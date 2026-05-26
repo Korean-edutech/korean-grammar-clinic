@@ -615,26 +615,28 @@ elif selected_main_nav == t["menu_board"]:
                             st.rerun()
 
 # 3. 🚪 문법 클리닉 챗봇 엔진 로직
+elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
+    
     selected_meta_word = actual_room_name.replace(f" {t['clinic']}", "")
     
-    # [1] 가이드 및 추천 질문 로직
+    with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
+        target_rules = file.read()
+
+    # 가이드 및 추천 질문 칩
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
         col1, col2, col3 = st.columns(3)
-        if "suggested_q" not in st.session_state: st.session_state.suggested_q = None
+        suggested_q = None
         
         if col1.button(t["btn_q1"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q1"].format(room=selected_meta_word)
-            st.rerun()
+            suggested_q = t["prompt_q1"].format(room=selected_meta_word)
         if col2.button(t["btn_q2"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q2"].format(room=selected_meta_word)
-            st.rerun()
+            suggested_q = t["prompt_q2"].format(room=selected_meta_word)
         if col3.button(t["btn_q3"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q3"].format(room=selected_meta_word)
-            st.rerun()
+            suggested_q = t["prompt_q3"].format(room=selected_meta_word)
 
     # [2] 로그인 확인 및 채팅 엔진
     if st.session_state.user_email is None:
