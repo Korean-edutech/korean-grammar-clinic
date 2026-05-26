@@ -642,7 +642,11 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             suggested_q = t["prompt_q3"].format(room=selected_meta_word)
             
     if st.session_state.user_email is None:
-            show_login_ui()        
+            show_login_ui()  
+    else:
+        # 💡 여기가 핵심! 로그인이 되어 있을 때만 아래 채팅 로직이 실행됨
+        with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
+            target_rules = file.read()    
 
 # 4. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
