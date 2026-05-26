@@ -654,23 +654,45 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             with st.chat_message(msg["role"]):
                 st.markdown(msg["content"])
         
-        # 3. 질문 처리 (입력창 또는 버튼 클릭)
-        # 핵심: chat_input을 렌더링하고, 바로 밑에서 prompt를 결정해
-        user_input = st.chat_input(t["input_prompt"])
-        
-        # suggested_q는 이미 위에서 버튼 눌릴 때 값이 할당됨
-        final_prompt = user_input if user_input else suggested_q
-        
+        # 💡 이 if 블록 안에 챗봇 엔진의 모든 기능을 다 넣어야 해!
         if final_prompt:
-            # 질문을 session_state에 저장
+            # 1) 질문 기록 및 화면 표시
             st.session_state[msg_key].append({"role": "user", "content": final_prompt})
+            with st.chat_message("user"):
+                st.markdown(final_prompt)
             
-            # (여기서부터 기존의 AI 응답 생성 및 DB 저장 로직 수행)
-            # ... (아까 있던 챗봇 응답 생성 및 DB 저장 코드들 그대로 유지) ...
+            # 2) DB 로그 기록 (기존에 있던 코드)
+            db.collection("logs").add({
+                "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                "user": st.session_state.user_email,
+                "lang": st.session_state.selected_lang,
+                "room": actual_room_name,
+                "prompt": final_prompt
+            })
             
-            # 마지막에 꼭 rerun을 걸어줘야 질문이 채팅창에 남음
+            # 3) 챗봇 엔진 (Gemini 호출)
+            genai.configure(api_key=api_key)
+            # ... (중략: lang_rule 설정, system_instruction 설정) ...
+            
+            try:
+                model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
+                with st.chat_message("assistant"):
+                    with st.spinner(t["loading"]):
+                        response = model.generate_content(final_prompt)
+                        st.markdown(response.text)
+                
+                # 4) 기록 저장 및 Rerun
+                st.session_state[msg_key].append({"role": "assistant", "content": response.text})
+                db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
+                st.rerun() # 👈 여기가 있어야 질문이 안 사라짐!
+            
+            except Exception as e:
+                st.error(f"{t['error_msg']}: {str(e)}")
+                
+            # 5. 모든 작업이 끝난 후 딱 한 번만 새로고침!
             st.rerun()
-            
+
+
 # 4. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
     st.title(t["menu_quiz_note"])
