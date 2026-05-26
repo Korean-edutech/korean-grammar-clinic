@@ -615,55 +615,51 @@ elif selected_main_nav == t["menu_board"]:
                             st.rerun()
 
 # 3. 🚪 문법 클리닉 챗봇 엔진 로직
-elif selected_main_nav == t["menu_clinic"] and selected_display_name:        
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
-    
     selected_meta_word = actual_room_name.replace(f" {t['clinic']}", "")
     
-    with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
-        target_rules = file.read()
-
-    # 가이드 및 추천 질문 칩
+    # [1] 가이드 및 추천 질문 로직
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
         col1, col2, col3 = st.columns(3)
-        suggested_q = None
-
-        # 💡 로그인 안 했을 때는 버튼을 비활성화(disabled)하면 더 완벽해!
-        is_disabled = (st.session_state.user_email is None)
+        if "suggested_q" not in st.session_state: st.session_state.suggested_q = None
         
         if col1.button(t["btn_q1"], use_container_width=True):
-            suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+            st.session_state.suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+            st.rerun()
         if col2.button(t["btn_q2"], use_container_width=True):
-            suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+            st.session_state.suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+            st.rerun()
         if col3.button(t["btn_q3"], use_container_width=True):
-            suggested_q = t["prompt_q3"].format(room=selected_meta_word)
-            
+            st.session_state.suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+            st.rerun()
+
+    # [2] 로그인 확인 및 채팅 엔진
     if st.session_state.user_email is None:
-            show_login_ui()  
+        show_login_ui()
     else:
-        # 1. 채팅 기록 초기화
+        chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
         msg_key = f"messages_{selected_meta_word}"
-        if msg_key not in st.session_state:
-            st.session_state[msg_key] = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
         
-        # 2. 메시지 출력
+        if msg_key not in st.session_state:
+            chat_ref = db.collection("chats").document(chat_doc_id).get()
+            st.session_state[msg_key] = chat_ref.to_dict().get("messages", [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]) if chat_ref.exists else [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
+        
         for msg in st.session_state[msg_key]:
             with st.chat_message(msg["role"]):
                 st.markdown(msg["content"])
-                
-        final_prompt = user_input if user_input else suggested_q
         
-        # 💡 이 if 블록 안에 챗봇 엔진의 모든 기능을 다 넣어야 해!
+        st.caption(t["chat_warn"])
+        user_input = st.chat_input(t["input_prompt"])
+        final_prompt = user_input if user_input else st.session_state.suggested_q
+        
         if final_prompt:
-            # 1) 질문 기록 및 화면 표시
             st.session_state[msg_key].append({"role": "user", "content": final_prompt})
             with st.chat_message("user"):
                 st.markdown(final_prompt)
             
-            # 2) DB 로그 기록 (기존에 있던 코드)
             db.collection("logs").add({
                 "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
                 "user": st.session_state.user_email,
@@ -672,26 +668,22 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                 "prompt": final_prompt
             })
             
-            # 3) 챗봇 엔진 (Gemini 호출)
+            # 챗봇 응답 처리
             genai.configure(api_key=api_key)
-            # ... (중략: lang_rule 설정, system_instruction 설정) ...
+            with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
+                target_rules = file.read()
             
-            try:
-                model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
-                with st.chat_message("assistant"):
-                    with st.spinner(t["loading"]):
-                        response = model.generate_content(final_prompt)
-                        st.markdown(response.text)
-                
-                # 4) 기록 저장 및 Rerun
-                st.session_state[msg_key].append({"role": "assistant", "content": response.text})
-                db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
-                st.rerun() # 👈 여기가 있어야 질문이 안 사라짐!
+            system_instruction = f"당신은 한국어 강사입니다. 규칙: {target_rules}" # 기존 시스템 지침 유지
+            model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
             
-            except Exception as e:
-                st.error(f"{t['error_msg']}: {str(e)}")
-                
-            # 5. 모든 작업이 끝난 후 딱 한 번만 새로고침!
+            with st.chat_message("assistant"):
+                with st.spinner(t["loading"]):
+                    response = model.generate_content(final_prompt)
+                    st.markdown(response.text)
+            
+            st.session_state[msg_key].append({"role": "assistant", "content": response.text})
+            db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
+            st.session_state.suggested_q = None
             st.rerun()
 
 
