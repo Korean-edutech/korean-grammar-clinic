@@ -68,7 +68,7 @@ ui_texts = {
         "prompt_q1": "'{room}' 문법의 기본적인 의미와 사용 규칙을 초보자도 이해하기 쉽게 설명해 줘.",
         "prompt_q2": "'{room}' 문법을 활용한 자연스러운 한국어 예문 3개를 만들어 줘.",
         "prompt_q3": "'{room}' 문법과 가장 헷갈리기 쉬운 문법을 딱 1개만 골라서 차이점을 짧게 설명하고, 다시 '{room}' 문법의 핵심 특징으로 마무리해 줘.",
-        "error_quota": "⏳ 앗, 선생님이 잠시 생각할 시간이 필요해요! 약 20초 뒤에 다시 질문해 주세요."
+        "error_quota": "⏳ 앗, 선생님이 잠시 생각할 시간이 필요해요! 약 20초 뒤에 다시 질문해 주세요.",
         "menu_quiz_note": "📝 퀴즈 오답 노트"
     },
     "English": {
@@ -97,7 +97,7 @@ ui_texts = {
         "prompt_q1": "Please explain the basic meaning and usage rules of the '{room}' grammar in an easy way for beginners to understand.",
         "prompt_q2": "Please create 3 natural Korean example sentences using the '{room}' grammar.",
         "prompt_q3": "Please pick exactly 1 grammar point that is easily confused with the '{room}' grammar, briefly explain the difference, and finish by summarizing the core features of the '{room}' grammar.",
-        "error_quota": "⏳ The teacher needs a moment to think! Please try asking again in about 20 seconds."
+        "error_quota": "⏳ The teacher needs a moment to think! Please try asking again in about 20 seconds.",
         "menu_quiz_note": "📝 Quiz Review Note"
     },
     "日本語": {
@@ -126,7 +126,7 @@ ui_texts = {
         "prompt_q1": "初心者にもわかりやすいように、'{room}' 文法の基本的な意味と使用規則を説明してください。",
         "prompt_q2": "'{room}' 文法を活用した自然な韓国語の例文を3つ作成してください。",
         "prompt_q3": "'{room}' 文法と最も混同しやすい文法を1つだけ選び、違いを短く説明した後、再び '{room}' 文法の核心的な特徴で締めくくってください。",
-        "error_quota": "⏳ 先生が少し考える時間が必要です！約20秒後にもう一度質問してください。"
+        "error_quota": "⏳ 先生が少し考える時間が必要です！約20秒後にもう一度質問してください。",
         "menu_quiz_note": "📝 クイズ誤答ノート"
     },
     "中文": {
@@ -155,7 +155,7 @@ ui_texts = {
         "prompt_q1": "请用初学者易于理解的方式解释 '{room}' 语法的基本含义和使用规则。",
         "prompt_q2": "请使用 '{room}' 语法创建3个自然的韩语例句。",
         "prompt_q3": "请挑出1个最容易与 '{room}' 语法混淆的语法，简要说明差异，然后再次以 '{room}' 语法的核心特征作为总结。",
-        "error_quota": "⏳ 老师需要一点时间思考！请在大约20秒后再试一次。"
+        "error_quota": "⏳ 老师需要一点时间思考！请在大约20秒后再试一次。",
         "menu_quiz_note": "📝 测验错题本"
     },
     "Español": {
@@ -184,7 +184,7 @@ ui_texts = {
         "prompt_q1": "Explica el significado básico y las reglas de uso de '{room}' de manera fácil.",
         "prompt_q2": "Crea 3 oraciones de ejemplo naturales usando '{room}'.",
         "prompt_q3": "Elige 1 gramática que se confunda con '{room}', explica la diferencia y resume '{room}'.",
-        "error_quota": "⏳ ¡El profesor necesita un momento para pensar! Vuelve a preguntar en unos 20 segundos."
+        "error_quota": "⏳ ¡El profesor necesita un momento para pensar! Vuelve a preguntar en unos 20 segundos.",
         "menu_quiz_note": "📝 Nota de errores"
     },
     "Tiếng Việt": {
@@ -213,7 +213,7 @@ ui_texts = {
         "prompt_q1": "Hãy giải thích ý nghĩa cơ bản và quy tắc sử dụng của ngữ pháp '{room}' một cách dễ hiểu.",
         "prompt_q2": "Hãy tạo 3 câu ví dụ tiếng Hàn tự nhiên sử dụng ngữ pháp '{room}'.",
         "prompt_q3": "Hãy chọn đúng 1 ngữ pháp dễ nhầm lẫn nhất với '{room}', giải thích ngắn gọn sự khác biệt và tóm tắt lại '{room}'.",
-        "error_quota": "⏳ Giáo viên cần một chút thời gian để suy nghĩ! Vui lòng hỏi lại sau khoảng 20 giây."
+        "error_quota": "⏳ Giáo viên cần một chút thời gian để suy nghĩ! Vui lòng hỏi lại sau khoảng 20 giây.",
         "menu_quiz_note": "📝 Ghi chú bài kiểm tra"
     },
     "Français": {
@@ -242,7 +242,7 @@ ui_texts = {
         "prompt_q1": "Expliquez le sens de base et les règles de '{room}' facilement.",
         "prompt_q2": "Créez 3 phrases d'exemple naturelles utilisant '{room}'.",
         "prompt_q3": "Choisissez 1 grammaire confondue avec '{room}', expliquez la différence et résumez '{room}'.",
-        "error_quota": "⏳ Le professeur a besoin d'un moment pour réfléchir ! Veuillez réessayer dans environ 20 secondes."
+        "error_quota": "⏳ Le professeur a besoin d'un moment pour réfléchir ! Veuillez réessayer dans environ 20 secondes.",
         "menu_quiz_note": "📝 Note d'erreurs"
     },
     "हिन्दी": {
@@ -271,7 +271,7 @@ ui_texts = {
         "prompt_q1": "आसान तरीके से '{room}' के मूल अर्थ की व्याख्या करें।",
         "prompt_q2": "'{room}' का उपयोग करके 3 उदाहरण बनाएं।",
         "prompt_q3": "'{room}' के साथ भ्रमित व्याकरण की तुलना करें।",
-        "error_quota": "⏳ शिक्षक को सोचने के लिए थोड़ा समय चाहिए! कृपया लगभग 20 सेकंड के बाद फिर से पूछें।"
+        "error_quota": "⏳ शिक्षक को सोचने के लिए थोड़ा समय चाहिए! कृपया लगभग 20 सेकंड के बाद फिर से पूछें।",
         "menu_quiz_note": "📝 क्विज़ समीक्षा नोट"
     },
     "Italiano": {
@@ -300,7 +300,7 @@ ui_texts = {
         "prompt_q1": "Spiega il significato e le regole di '{room}' in modo facile.",
         "prompt_q2": "Crea 3 frasi di esempio usando '{room}'.",
         "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza.",
-        "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi."
+        "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi.",
         "menu_quiz_note": "📝 Nota sugli errori"
     }
 }
