@@ -623,16 +623,19 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
-        
-    if st.session_state.user_email is None:
-        show_login_ui()
 
     # 가이드 및 추천 질문 칩
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
+
+        if st.session_state.user_email is None:
+            show_login_ui()
         
         col1, col2, col3 = st.columns(3)
         suggested_q = None
+
+        # 💡 로그인 안 했을 때는 버튼을 비활성화(disabled)하면 더 완벽해!
+        is_disabled = (st.session_state.user_email is None)
         
         if col1.button(t["btn_q1"], use_container_width=True):
             suggested_q = t["prompt_q1"].format(room=selected_meta_word)
