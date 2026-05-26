@@ -352,6 +352,8 @@ if "user_email" not in st.session_state:
     st.session_state.user_email = None
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
+if "suggested_q" not in st.session_state:
+    st.session_state.suggested_q = None
 
 # 현재 선택된 언어 사전 매핑
 t = ui_texts[st.session_state.selected_lang]
