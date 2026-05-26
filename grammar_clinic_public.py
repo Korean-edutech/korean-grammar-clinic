@@ -653,6 +653,8 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         for msg in st.session_state[msg_key]:
             with st.chat_message(msg["role"]):
                 st.markdown(msg["content"])
+                
+        final_prompt = user_input if user_input else suggested_q
         
         # 💡 이 if 블록 안에 챗봇 엔진의 모든 기능을 다 넣어야 해!
         if final_prompt:
