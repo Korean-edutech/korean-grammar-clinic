@@ -597,10 +597,7 @@ elif selected_main_nav == t["menu_board"]:
                             st.rerun()
 
 # 3. 🚪 문법 클리닉 챗봇 엔진 로직
-elif selected_main_nav == t["menu_clinic"] and selected_display_name:
-    if st.session_state.user_email is None:
-        show_login_ui()
-        
+elif selected_main_nav == t["menu_clinic"] and selected_display_name:        
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
     
@@ -608,6 +605,9 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
+        
+    if st.session_state.user_email is None:
+        show_login_ui()
 
     # 가이드 및 추천 질문 칩
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
