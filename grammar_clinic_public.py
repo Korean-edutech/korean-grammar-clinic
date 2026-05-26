@@ -630,17 +630,18 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
+        # 가이드 버튼 코드
         col1, col2, col3 = st.columns(3)
-        suggested_q = None
         
+        # 버튼을 누를 때 값을 session_state에 저장!
         if col1.button(t["btn_q1"], use_container_width=True):
-            suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+            st.session_state.suggested_q = t["prompt_q1"].format(room=selected_meta_word)
             st.rerun()
         if col2.button(t["btn_q2"], use_container_width=True):
-            suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+            st.session_state.suggested_q = t["prompt_q2"].format(room=selected_meta_word)
             st.rerun()
         if col3.button(t["btn_q3"], use_container_width=True):
-            suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+            st.session_state.suggested_q = t["prompt_q3"].format(room=selected_meta_word)
             st.rerun()
 
     # [2] 로그인 확인 및 채팅 엔진
@@ -663,6 +664,9 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
         final_prompt = user_input if user_input else st.session_state.suggested_q
         
         if final_prompt:
+            # 💡 [핵심] 처리 후에는 반드시 저장소를 비워줘야 다음에 일반 대화할 때 꼬이지 않아!
+            st.session_state.suggested_q = None
+            
             st.session_state[msg_key].append({"role": "user", "content": final_prompt})
             with st.chat_message("user"):
                 st.markdown(final_prompt)
