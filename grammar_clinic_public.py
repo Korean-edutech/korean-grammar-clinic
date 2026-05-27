@@ -40,7 +40,7 @@ try:
 except FileNotFoundError:
     pass
     
-# 🌐 다국어 UI 사전 (에러 메시지 다국어 완벽 추가!)
+# 🌐 다국어 UI 사전
 ui_texts = {
     "한국어": {
         "main_title": "한국어 문법 클리닉에 오신 것을 환영합니다! 👋", "choose_lang": "🌐 언어를 선택하세요",
@@ -341,7 +341,6 @@ try:
     with open("quiz_data.json", "r", encoding="utf-8") as f:
         quiz_vault = json.load(f)
 except FileNotFoundError:
-    # 만약 파일을 깜빡하고 안 만들었더라도 에러가 나지 않도록 빈 금고 생성
     quiz_vault = {}
     st.warning("⚠️ quiz_data.json 파일을 찾을 수 없습니다. 퀴즈 기능이 비활성화됩니다.")
 
@@ -360,14 +359,26 @@ t = ui_texts[st.session_state.selected_lang]
 lang_list = list(ui_texts.keys())
 
 # ==========================================
-# 🔐 공통 로그인 UI 컴포넌트 (함수로 빼서 필요할 때만 호출)
+# 🌐 언어 선택기 (메인 화면 상단으로 이동 완료!)
+# ==========================================
+st.write("<br>", unsafe_allow_html=True)
+top1, top2, top3 = st.columns([1, 4, 1])
+with top3:
+    selected_lang = st.selectbox(t["choose_lang"], lang_list, index=lang_list.index(st.session_state.selected_lang), label_visibility="collapsed")
+    if selected_lang != st.session_state.selected_lang:
+        st.session_state.selected_lang = selected_lang
+        st.rerun()
+
+# ==========================================
+# 🔐 공통 로그인 UI 컴포넌트 (가운데 정렬 완료!)
 # ==========================================
 def show_login_ui():
     st.write("<br>", unsafe_allow_html=True)
-    st.info(t["login_prompt"])
-    with st.container(border=True):
-        col1, col2, col3 = st.columns([1.6, 0.4, 2])
-        with col1:
+    # 로그인 창을 1:2:1 비율로 가운데로 쏙 모아줌!
+    _, center_col, _ = st.columns([1, 2, 1])
+    with center_col:
+        st.info(t["login_prompt"])
+        with st.container(border=True):
             st.subheader(t["login_title"])
             auth_email = st.text_input(t["email"], key="auth_email")
             auth_pwd = st.text_input(t["pwd"], type="password", key="auth_pwd")
@@ -415,10 +426,8 @@ def show_login_ui():
                     st.rerun()
 
 # ==========================================
-# 🎨 메인 화면 및 사이드바 (이제 비로그인 유저도 100% 볼 수 있음!)
+# 🎨 사이드바 구성
 # ==========================================
-
-# 사이드바 프로필 및 로그아웃 처리
 if st.session_state.user_email:
     st.sidebar.markdown(f"👤 **{st.session_state.user_email}**")
     if st.sidebar.button("Logout"):
@@ -427,15 +436,6 @@ if st.session_state.user_email:
         st.rerun()
 else:
     st.sidebar.markdown(f"**{t['sidebar_login_msg']}**")
-
-st.sidebar.divider()
-
-# 사이드바 내부 언어 변경 연동
-default_idx = lang_list.index(st.session_state.selected_lang)
-selected_lang = st.sidebar.selectbox(t["choose_lang"], lang_list, index=default_idx)
-if selected_lang != st.session_state.selected_lang:
-    st.session_state.selected_lang = selected_lang
-    st.rerun()
 
 st.sidebar.divider()
 
@@ -477,6 +477,7 @@ if not st.session_state.is_admin:
 else:
     st.sidebar.caption("🔓 Admin Active")
 
+
 # --- 각 메뉴별 메인 비즈니스 로직 렌더링 ---
 
 # 0. 🏆 내 학습 기록 (마이페이지) 로직
@@ -484,7 +485,6 @@ if selected_main_nav == t["menu_history"]:
     st.title(t["menu_history"])
     st.write(t["history_desc"])
     
-    # 💡 비로그인 유저 차단 및 로그인 창 표시
     if st.session_state.user_email is None:
         show_login_ui()
     else:
@@ -564,7 +564,6 @@ elif selected_main_nav == "📊 관리자 대시보드" and st.session_state.is_
 elif selected_main_nav == t["menu_board"]:
     st.title(f"📢 {t['board_title']}")
     
-    # 💡 비로그인 유저 글쓰기 차단 및 로그인 폼 출력
     if st.session_state.user_email is None:
         show_login_ui()
     else:
@@ -607,7 +606,6 @@ elif selected_main_nav == t["menu_board"]:
                 for cmt in post['comments']:
                     st.markdown(f"<div style='background-color:rgba(128,128,128,0.1); padding:8px; border-radius:5px; margin-bottom:5px; font-size:0.9em;'>- {cmt}</div>", unsafe_allow_html=True)
                 
-                # 댓글 작성도 로그인 필요
                 if st.session_state.user_email:
                     cmt_input = st.text_input(" ", placeholder=t["comment_prompt"], key=f"cmt_input_{post['id']}", label_visibility="collapsed")
                     if st.button(t["comment_btn"], key=f"cmt_btn_{post['id']}"):
@@ -616,7 +614,32 @@ elif selected_main_nav == t["menu_board"]:
                             db.collection("posts").document(post['id']).update({"comments": updated_comments})
                             st.rerun()
 
-# 3. 🚪 문법 클리닉 챗봇 엔진 로직
+# 4. 📝 퀴즈 복습 노트 페이지 로직
+elif selected_main_nav == t["menu_quiz_note"]: 
+    st.title(t["menu_quiz_note"])
+    st.write(t["note_desc"])
+    
+    if st.session_state.user_email is None:
+        show_login_ui()
+    else:
+        history_ref = db.collection("quiz_history").where("user", "==", st.session_state.user_email).stream()
+        records = sorted([doc.to_dict() for doc in history_ref], key=lambda x: x.get("time", ""), reverse=True)
+        
+        if not records:
+            st.info(t["no_quiz"])
+        else:
+            for rec in records:
+                status = "🎉" if rec['score'] == rec['total'] else "💪"
+                with st.expander(f"{status} {rec['room']} ({rec['score']}/{rec['total']}) - ⏰ {rec['time']}"):
+                    for i, d in enumerate(rec['details']):
+                        st.markdown(f"**Q{i+1}. {d['question']}**")
+                        if d['is_correct']:
+                            st.success(f"✅ {t.get('history_me', 'Me')}: {d['user_ans']}")
+                        else:
+                            st.error(f"❌ {t.get('history_me', 'Me')}: {d['user_ans']}  |  🎯 Answer: {d['correct_ans']}")
+                        st.write("---")
+
+# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (중복 제거 및 완벽 통합!)
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -630,10 +653,7 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
-        # 가이드 버튼 코드
         col1, col2, col3 = st.columns(3)
-        
-        # 버튼을 누를 때 값을 session_state에 저장!
         if col1.button(t["btn_q1"], use_container_width=True):
             st.session_state.suggested_q = t["prompt_q1"].format(room=selected_meta_word)
             st.rerun()
@@ -644,27 +664,110 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             st.session_state.suggested_q = t["prompt_q3"].format(room=selected_meta_word)
             st.rerun()
 
-    # [2] 로그인 확인 및 채팅 엔진
     if st.session_state.user_email is None:
         show_login_ui()
     else:
+        # [퀴즈 기능 연동]
+        if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
+            st.write("<br>", unsafe_allow_html=True)
+            with st.expander(f"📝 '{selected_meta_word}' 미니 퀴즈 풀고 실력 확인하기!", expanded=True):
+                quiz_list = quiz_vault[selected_meta_word]
+                
+                q_idx_key = f"quiz_idx_{selected_meta_word}"            
+                q_score_key = f"quiz_score_{selected_meta_word}"        
+                q_submitted_key = f"q_submitted_{selected_meta_word}"  
+                
+                if q_idx_key not in st.session_state:
+                    st.session_state[q_idx_key] = 0
+                    st.session_state[q_score_key] = 0
+                    st.session_state[q_submitted_key] = False
+
+                current_idx = st.session_state[q_idx_key]
+
+                if current_idx < len(quiz_list):
+                    quiz = quiz_list[current_idx]
+                    st.progress((current_idx) / len(quiz_list), text=f"진행도: Q{current_idx+1} / {len(quiz_list)}")
+                    st.markdown(f"**Q{current_idx+1}. {quiz['q']}**")
+                    
+                    ans = st.radio("보기 선택", quiz['options'], key=f"q_{selected_meta_word}_{current_idx}", index=None, label_visibility="collapsed")
+                    
+                    if not st.session_state[q_submitted_key]:
+                        if st.button("정답 확인", key=f"check_{current_idx}", use_container_width=True):
+                            if ans is None:
+                                st.warning("⚠️ 보기 중 하나를 선택해 주세요!")
+                            else:
+                                st.session_state[q_submitted_key] = True
+                                st.rerun() 
+                    else:
+                        if ans == quiz['answer']:
+                            st.success("⭕ 정답입니다! 훌륭해요!")
+                        else:
+                            st.error("❌ 아쉽네요. 다른 보기를 선택해서 다시 확인해 볼까요?")
+                            
+                        btn_label = "다음 문제 ➡️" if current_idx < len(quiz_list)-1 else "최종 결과 확인 ➡️"
+                        if st.button(btn_label, use_container_width=True, type="primary"):
+                            if ans == quiz['answer']:
+                                st.session_state[q_score_key] += 1 
+                            st.session_state[q_idx_key] += 1
+                            st.session_state[q_submitted_key] = False 
+                            st.rerun()
+                else:
+                    final_score = st.session_state[q_score_key]
+                    total_q = len(quiz_list)
+                    st.progress(1.0, text=f"진행도: {total_q}/{total_q} (완료)")
+                    
+                    if final_score == total_q:
+                        st.success(f"🎉 완벽해요! {total_q}문제 중 {final_score}문제를 맞혔습니다! 100점!")
+                    else:
+                        st.info(f"👍 노력했어요! {total_q}문제 중 {final_score}문제를 맞혔습니다.")
+                    
+                    save_flag_key = f"quiz_saved_{selected_meta_word}"
+                    if save_flag_key not in st.session_state:
+                        if final_score == total_q:
+                            st.balloons()
+                            
+                        if st.session_state.user_email:
+                            chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
+                            quiz_log_msg = f"📝 **[미니 퀴즈 완료]** 방금 이 클리닉에서 {total_q}문제 중 {final_score}문제를 맞혔습니다! 복습이 필요하다면 언제든 질문해 주세요."
+                            
+                            chat_ref = db.collection("chats").document(chat_doc_id).get()
+                            if chat_ref.exists:
+                                messages = chat_ref.to_dict().get("messages", [])
+                            else:
+                                messages = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
+                                
+                            messages.append({"role": "assistant", "content": quiz_log_msg})
+                            db.collection("chats").document(chat_doc_id).set({"messages": messages})
+                            
+                        st.session_state[save_flag_key] = True 
+                        
+                    if st.button("🔄 퀴즈 다시 풀기", use_container_width=True):
+                        st.session_state[q_idx_key] = 0
+                        st.session_state[q_score_key] = 0
+                        st.session_state[q_submitted_key] = False
+                        if save_flag_key in st.session_state:
+                            del st.session_state[save_flag_key]
+                        st.rerun()
+
+        # [채팅 엔진 시작]
         chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
         msg_key = f"messages_{selected_meta_word}"
         
         if msg_key not in st.session_state:
             chat_ref = db.collection("chats").document(chat_doc_id).get()
             st.session_state[msg_key] = chat_ref.to_dict().get("messages", [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]) if chat_ref.exists else [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
-        
+
         for msg in st.session_state[msg_key]:
-            with st.chat_message(msg["role"]):
+            with st.chat_message(msg["role"]): 
                 st.markdown(msg["content"])
-        
+
         st.caption(t["chat_warn"])
+        
         user_input = st.chat_input(t["input_prompt"])
         final_prompt = user_input if user_input else st.session_state.suggested_q
         
         if final_prompt:
-            # 💡 [핵심] 처리 후에는 반드시 저장소를 비워줘야 다음에 일반 대화할 때 꼬이지 않아!
+            # 💡 [핵심] 처리 후에는 반드시 저장소를 비워줘야 꼬이지 않아!
             st.session_state.suggested_q = None
             
             st.session_state[msg_key].append({"role": "user", "content": final_prompt})
@@ -679,198 +782,18 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                 "prompt": final_prompt
             })
             
-            # 챗봇 응답 처리
-            genai.configure(api_key=api_key)
-            with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
-                target_rules = file.read()
-            
-            system_instruction = f"당신은 한국어 강사입니다. 규칙: {target_rules}" # 기존 시스템 지침 유지
-            model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
-            
-            with st.chat_message("assistant"):
-                with st.spinner(t["loading"]):
-                    response = model.generate_content(final_prompt)
-                    st.markdown(response.text)
-            
-            st.session_state[msg_key].append({"role": "assistant", "content": response.text})
-            db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
-            st.session_state.suggested_q = None
-            st.rerun()
-
-
-# 4. 📝 퀴즈 복습 노트 페이지 로직
-elif selected_main_nav == t["menu_quiz_note"]: 
-    st.title(t["menu_quiz_note"])
-    st.write(t["note_desc"]) # 💡 다국어 문구 적용
-    
-    if st.session_state.user_email is None:
-        show_login_ui()
-    else:
-        # DB에서 퀴즈 기록 가져오기
-        history_ref = db.collection("quiz_history").where("user", "==", st.session_state.user_email).stream()
-        records = sorted([doc.to_dict() for doc in history_ref], key=lambda x: x.get("time", ""), reverse=True)
-        
-        if not records:
-            st.info(t["no_quiz"]) # 💡 다국어 문구 적용
-        else:
-            for rec in records:
-                status = "🎉" if rec['score'] == rec['total'] else "💪"
-                with st.expander(f"{status} {rec['room']} ({rec['score']}/{rec['total']}) - ⏰ {rec['time']}"):
-                    for i, d in enumerate(rec['details']):
-                        st.markdown(f"**Q{i+1}. {d['question']}**")
-                        
-                        if d['is_correct']:
-                            st.success(f"✅ {t.get('history_me', 'Me')}: {d['user_ans']}")
-                        else:
-                            st.error(f"❌ {t.get('history_me', 'Me')}: {d['user_ans']}  |  🎯 Answer: {d['correct_ans']}")
-                        st.write("---")
-
-   # ==========================================
-    # 📝 [5단계 완성] 오답 시 수정 가능한 동기부여형 퀴즈 & 기록 연동 UI
-    # ==========================================
-    if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
-        st.write("<br>", unsafe_allow_html=True)
-        with st.expander(f"📝 '{selected_meta_word}' 미니 퀴즈 풀고 실력 확인하기!", expanded=True):
-            quiz_list = quiz_vault[selected_meta_word]
-            
-            q_idx_key = f"quiz_idx_{selected_meta_word}"           
-            q_score_key = f"quiz_score_{selected_meta_word}"       
-            q_submitted_key = f"q_submitted_{selected_meta_word}"  
-            
-            if q_idx_key not in st.session_state:
-                st.session_state[q_idx_key] = 0
-                st.session_state[q_score_key] = 0
-                st.session_state[q_submitted_key] = False
-
-            current_idx = st.session_state[q_idx_key]
-
-            # 📌 아직 풀 문제가 남아있을 때
-            if current_idx < len(quiz_list):
-                quiz = quiz_list[current_idx]
-                
-                st.progress((current_idx) / len(quiz_list), text=f"진행도: Q{current_idx+1} / {len(quiz_list)}")
-                st.markdown(f"**Q{current_idx+1}. {quiz['q']}**")
-                
-                # 💡 수정: disabled 속성을 아예 지워서 언제든 맘 편히 보기를 바꿀 수 있게 열어둠!
-                ans = st.radio("보기 선택", quiz['options'], key=f"q_{selected_meta_word}_{current_idx}", index=None, label_visibility="collapsed")
-                
-                if not st.session_state[q_submitted_key]:
-                    # 첫 제출 전 화면
-                    if st.button("정답 확인", key=f"check_{current_idx}", use_container_width=True):
-                        if ans is None:
-                            st.warning("⚠️ 보기 중 하나를 선택해 주세요!")
-                        else:
-                            st.session_state[q_submitted_key] = True
-                            st.rerun() 
-                else:
-                    # 💡 제출 후 피드백 화면 (틀려도 다른 보기를 누르면 즉각 반응함!)
-                    if ans == quiz['answer']:
-                        st.success("⭕ 정답입니다! 훌륭해요!")
-                    else:
-                        # 무자비하게 정답을 스포일러 하지 않고 스스로 찾게 유도
-                        st.error("❌ 아쉽네요. 다른 보기를 선택해서 다시 확인해 볼까요?")
-                        
-                    btn_label = "다음 문제 ➡️" if current_idx < len(quiz_list)-1 else "최종 결과 확인 ➡️"
-                    if st.button(btn_label, use_container_width=True, type="primary"):
-                        # 최종적으로 정답인 상태에서 넘어가야 점수 인정
-                        if ans == quiz['answer']:
-                            st.session_state[q_score_key] += 1 
-                            
-                        st.session_state[q_idx_key] += 1
-                        st.session_state[q_submitted_key] = False 
-                        st.rerun()
-                        
-            # 📌 모든 문제를 다 풀었을 때
-            else:
-                final_score = st.session_state[q_score_key]
-                total_q = len(quiz_list)
-                
-                st.progress(1.0, text=f"진행도: {total_q}/{total_q} (완료)")
-                
-                if final_score == total_q:
-                    st.success(f"🎉 완벽해요! {total_q}문제 중 {final_score}문제를 맞혔습니다! 100점!")
-                else:
-                    st.info(f"👍 노력했어요! {total_q}문제 중 {final_score}문제를 맞혔습니다.")
-                
-                save_flag_key = f"quiz_saved_{selected_meta_word}"
-                if save_flag_key not in st.session_state:
-                    # 💡 여기에 풍선 코드를 추가! (100점일 때 딱 한 번만 터짐)
-                    if final_score == total_q:
-                        st.balloons()
-                        
-                    if st.session_state.user_email:
-                        chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
-                        quiz_log_msg = f"📝 **[미니 퀴즈 완료]** 방금 이 클리닉에서 {total_q}문제 중 {final_score}문제를 맞혔습니다! 복습이 필요하다면 언제든 질문해 주세요."
-                        
-                        chat_ref = db.collection("chats").document(chat_doc_id).get()
-                        if chat_ref.exists:
-                            messages = chat_ref.to_dict().get("messages", [])
-                        else:
-                            messages = [{"role": "assistant", "content": t["welcome"].format(room=actual_room_name)}]
-                            
-                        messages.append({"role": "assistant", "content": quiz_log_msg})
-                        db.collection("chats").document(chat_doc_id).set({"messages": messages})
-                        
-                    st.session_state[save_flag_key] = True 
-                    
-                if st.button("🔄 퀴즈 다시 풀기", use_container_width=True):
-                    st.session_state[q_idx_key] = 0
-                    st.session_state[q_score_key] = 0
-                    st.session_state[q_submitted_key] = False
-                    if save_flag_key in st.session_state:
-                        del st.session_state[save_flag_key]
-                    st.rerun()
-    # ==========================================
-    
-    # 💡 로그인되지 않았을 때는 대화창 대신 로그인 UI 표시
-    if st.session_state.user_email is None:
-        show_login_ui()
-    else:
-        # 로그인된 유저만 대화 기록 불러오기 및 채팅 가능
-        chat_doc_id = f"{st.session_state.user_email}_{selected_meta_word}"
-        chat_ref = db.collection("chats").document(chat_doc_id).get()
-        
-        if chat_ref.exists:
-            st.session_state.messages = chat_ref.to_dict().get("messages", [])
-        else:
-            initial_greeting = t["welcome"].format(room=actual_room_name)
-            st.session_state.messages = [{"role": "assistant", "content": initial_greeting}]
-            db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
-
-        for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]): 
-                st.markdown(msg["content"])
-
-        st.caption(t["chat_warn"])
-        
-        user_input = st.chat_input(t["input_prompt"])
-        prompt = suggested_q or user_input
-        
-        if prompt:
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            with st.chat_message("user"): 
-                st.markdown(prompt)
-                
-            db.collection("logs").add({
-                "time": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-                "user": st.session_state.user_email,
-                "lang": st.session_state.selected_lang,
-                "room": actual_room_name,
-                "prompt": prompt
-            })
-            
             if not api_key:
                 with st.chat_message("assistant"):
                     st.error(t["error_key"])
             else:
                 genai.configure(api_key=api_key)
-
                 current_lang = st.session_state.selected_lang
                 
+                # 💡 언어 규칙(강제 설정) 적용 완료
                 if current_lang == "한국어":
                     lang_rule = "모든 답변은 한자(漢字)나 영어를 절대 섞지 말고 오직 '자연스러운 한글(한국어)'로만 작성하세요. 문법 용어도 무조건 한글로만 적으세요."
                 else:
-                    lang_rule = f"모든 답변은 반드시 {current_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {current_lang} 번역 병기)"
+                    lang_rule = f"CRITICAL: You MUST answer entirely in {current_lang}. 모든 답변은 반드시 {current_lang}로 작성하세요. (한국어 문법 용어는 한글로 표기하고 {current_lang} 번역 병기)"
                 
                 system_instruction = f"""
                 당신은 외국인에게 한국어를 가르치는 친절하고 정밀한 전문 강사입니다. 
@@ -892,20 +815,35 @@ elif selected_main_nav == t["menu_quiz_note"]:
                     model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
                     with st.chat_message("assistant"):
                         with st.spinner(t["loading"]):
-                            response = model.generate_content(prompt)
-                        st.markdown(response.text)
-                        
-                        st.session_state.messages.append({"role": "assistant", "content": response.text})
-                        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages})
-                        
+                            response = model.generate_content(final_prompt)
+                            st.markdown(response.text)
+                    
+                    st.session_state[msg_key].append({"role": "assistant", "content": response.text})
+                    db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
+                    
+                    # 💡 자동 스크롤 기능 추가 완료
+                    st.markdown(
+                        """
+                        <script>
+                            var chat_div = window.parent.document.querySelectorAll('.stChatMessage');
+                            if (chat_div.length > 0) {
+                                var last_chat = chat_div[chat_div.length - 1];
+                                last_chat.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        </script>
+                        """, unsafe_allow_html=True
+                    )
+                    
                 except Exception as e:
-                    if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-                        st.session_state.messages.pop() 
-                        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state.messages}) 
-
+                    if st.session_state[msg_key] and st.session_state[msg_key][-1]["role"] == "user":
+                        st.session_state[msg_key].pop() 
+                        db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]}) 
                     error_msg = str(e)
                     with st.chat_message("assistant"):
                         if "429" in error_msg or "quota" in error_msg.lower():
                             st.warning(t["error_quota"]) 
                         else:
                             st.error(f"{t['error_msg']}: {error_msg}")
+            
+            # 마지막으로 페이지 다시 읽기
+            st.rerun()
