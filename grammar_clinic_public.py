@@ -376,60 +376,70 @@ with top4:
         st.rerun()
 
 # ==========================================
-# 🔐 공통 로그인 UI 컴포넌트 (가운데 정렬 완료!)
+# 🔐 공통 로그인 UI 컴포넌트 (엔터키 지원 + 반응형 폼으로 업그레이드!)
 # ==========================================
 def show_login_ui():
     st.write("<br>", unsafe_allow_html=True)
-    # 로그인 창을 1:2:1 비율로 가운데로 쏙 모아줌!
+    # PC에서는 1:2:1 비율로 예쁘게 가운데 정렬, 모바일에서는 자동으로 꽉 차게 변환됨!
     _, center_col, _ = st.columns([1, 2, 1])
     with center_col:
         st.info(t["login_prompt"])
-        with st.container(border=True):
+        
+        # 💡 st.container 대신 st.form을 써서 '엔터(Enter)' 키로도 로그인 가능하게 만듦
+        with st.form("login_form", border=True):
             st.subheader(t["login_title"])
             auth_email = st.text_input(t["email"], key="auth_email")
             auth_pwd = st.text_input(t["pwd"], type="password", key="auth_pwd")
             
             signup_agree = st.checkbox(t["signup_agree"], key="signup_agree_key")
             
+            # 버튼 2개를 나란히 꽉 차게 배치 (반응형)
             btn_action1, btn_action2 = st.columns(2)
             with btn_action1:
-                if st.button(t["btn_login"], use_container_width=True):
-                    if auth_email and auth_pwd:
-                        user_ref = db.collection("users").document(auth_email).get()
-                        if user_ref.exists and user_ref.to_dict().get("password") == auth_pwd:
-                            st.session_state.user_email = auth_email
-                            st.success("Success!")
-                            st.rerun()
-                        else:
-                            st.error("Invalid email or password.")
-                    else:
-                        st.warning("Please fill in all fields.")
+                login_submitted = st.form_submit_button(t["btn_login"], use_container_width=True)
             with btn_action2:
-                if st.button(t["btn_signup"], use_container_width=True):
-                    if not signup_agree:
-                        st.warning(t["agree_warn_signup"])
-                    elif auth_email and auth_pwd:
-                        user_ref = db.collection("users").document(auth_email).get()
-                        if user_ref.exists:
-                            st.error("This email already exists.")
-                        else:
-                            db.collection("users").document(auth_email).set({
-                                "email": auth_email,
-                                "password": auth_pwd,
-                                "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                            })
-                            st.success("Account created successfully! Please click Login.")
+                signup_submitted = st.form_submit_button(t["btn_signup"], use_container_width=True)
+
+            # 🚀 폼 제출 로직 처리 (로그인 버튼 클릭 또는 엔터키 입력 시)
+            if login_submitted:
+                if auth_email and auth_pwd:
+                    user_ref = db.collection("users").document(auth_email).get()
+                    if user_ref.exists and user_ref.to_dict().get("password") == auth_pwd:
+                        st.session_state.user_email = auth_email
+                        st.success("Success!")
+                        st.rerun()
                     else:
-                        st.warning("Please fill in all fields.")
-            
-            st.write("---")
-            guest_agree = st.checkbox(t["guest_agree"], key="guest_agree_key")
-            if st.button(t["btn_guest"], use_container_width=True, type="primary"):
-                if not guest_agree:
-                    st.warning(t["agree_warn_guest"])
+                        st.error("Invalid email or password.")
                 else:
-                    st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
-                    st.rerun()
+                    st.warning("Please fill in all fields.")
+
+            # 🚀 회원가입 로직 처리
+            if signup_submitted:
+                if not signup_agree:
+                    st.warning(t["agree_warn_signup"])
+                elif auth_email and auth_pwd:
+                    user_ref = db.collection("users").document(auth_email).get()
+                    if user_ref.exists:
+                        st.error("This email already exists.")
+                    else:
+                        db.collection("users").document(auth_email).set({
+                            "email": auth_email,
+                            "password": auth_pwd,
+                            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        })
+                        st.success("Account created successfully! Please click Login.")
+                else:
+                    st.warning("Please fill in all fields.")
+        
+        # 비회원 로그인 버튼은 폼 바깥에 배치 (디자인 구분을 위해)
+        st.write("---")
+        guest_agree = st.checkbox(t["guest_agree"], key="guest_agree_key")
+        if st.button(t["btn_guest"], use_container_width=True, type="primary"):
+            if not guest_agree:
+                st.warning(t["agree_warn_guest"])
+            else:
+                st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
+                st.rerun()
 
 # ==========================================
 # 🎨 사이드바 구성
