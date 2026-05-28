@@ -362,9 +362,15 @@ lang_list = list(ui_texts.keys())
 # 🌐 언어 선택기 (메인 화면 상단으로 이동 완료!)
 # ==========================================
 st.write("<br>", unsafe_allow_html=True)
-top1, top2, top3 = st.columns([1, 4, 1])
+top1, top2, top3, top4 = st.columns([1, 4, 0.5, 1.5])
+# top3에 지구본 이모티콘을 가운데 정렬해서 넣기
 with top3:
-    selected_lang = st.selectbox(t["choose_lang"], lang_list, index=lang_list.index(st.session_state.selected_lang), label_visibility="collapsed")
+    st.markdown("<h3 style='text-align: right; margin-top: -5px;'>🌐</h3>", unsafe_allow_html=True)
+
+# top4에 라벨(글자)을 숨긴 선택 박스 넣기
+with top4:
+    # label_visibility="collapsed" 덕분에 글자는 안 보이고 박스만 깔끔하게 나와!
+    selected_lang = st.selectbox("Language", lang_list, index=lang_list.index(st.session_state.selected_lang), label_visibility="collapsed")
     if selected_lang != st.session_state.selected_lang:
         st.session_state.selected_lang = selected_lang
         st.rerun()
