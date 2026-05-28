@@ -381,7 +381,7 @@ with top4:
 def show_login_ui():
     st.write("<br>", unsafe_allow_html=True)
     # PC에서는 1:2:1 비율로 예쁘게 가운데 정렬, 모바일에서는 자동으로 꽉 차게 변환됨!
-    _, center_col, _ = st.columns([1, 4, 1])
+    _, center_col, _ = st.columns([1, 7, 1])
     with center_col:
         st.info(t["login_prompt"])
         
