@@ -842,24 +842,23 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
                     
                     # 💡 [자동 스크롤 완결판] 말풍선을 렌더링할 시간(300ms)을 벌어주는 게 핵심!
-                        st.components.v1.html(
-                            """
-                            <script>
-                                // 0.3초(300ms) 대기 후 스크롤 실행
-                                setTimeout(function() {
-                                    var doc = window.parent.document;
-                                    var mainContainer = doc.querySelector('.main') || doc.querySelector('[data-testid="stAppViewContainer"]');
-                                    if (mainContainer) {
-                                        mainContainer.scrollTo({
-                                            top: mainContainer.scrollHeight,
-                                            behavior: 'smooth'
-                                        });
-                                    }
-                                }, 300); 
-                            </script>
-                            """,
-                            height=0
-                        )
+                    st.components.v1.html(
+                    """
+                    <script>
+                        setTimeout(function() {
+                            var doc = window.parent.document;
+                            var mainContainer = doc.querySelector('.main') || doc.querySelector('[data-testid="stAppViewContainer"]');
+                            if (mainContainer) {
+                                mainContainer.scrollTo({
+                                    top: mainContainer.scrollHeight,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }, 300); 
+                    </script>
+                    """,
+                    height=0
+                )   
                     
                 except Exception as e:
                     if st.session_state[msg_key] and st.session_state[msg_key][-1]["role"] == "user":
