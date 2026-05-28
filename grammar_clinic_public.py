@@ -847,7 +847,26 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                 
                 try:
                     model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
+                    
                     with st.chat_message("assistant"):
+                        # ==========================================
+                        # 💡 [핵심 추가] '생각 중...' 말풍선이 화면에 뜨자마자 즉시 스크롤 내리기!
+                        # ==========================================
+                        st.components.v1.html(
+                            """
+                            <script>
+                                setTimeout(function() {
+                                    var chat_messages = window.parent.document.querySelectorAll('[data-testid="stChatMessage"]');
+                                    if (chat_messages.length > 0) {
+                                        chat_messages[chat_messages.length - 1].scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                    }
+                                }, 50); 
+                            </script>
+                            """,
+                            height=0
+                        )
+                        # ==========================================
+                        
                         with st.spinner(t["loading"]):
                             response = model.generate_content(final_prompt)
                             st.markdown(response.text)
