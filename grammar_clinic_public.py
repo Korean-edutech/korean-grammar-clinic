@@ -324,7 +324,7 @@ ui_texts = {
         "prompt_q1": "Spiega il significato e le regole di '{room}' in modo facile.",
         "prompt_q2": "Crea 3 frasi di esempio usando '{room}'.",
         "prompt_q3": "Scegli 1 grammatica che si confonde con '{room}' e spiega la differenza.",
-        "error_quota": "⏳ L'insegnante ha bisogno di un momento per pensare! Riprova tra circa 20 secondi.",
+        "error_quota": "⏳ L'insegnante ha bisogno un momento per pensare! Riprova tra circa 20 secondi.",
         "note_desc": "Rivedi qui la cronologia dei quiz e i tuoi errori!", "no_quiz": "Nessun record di quiz. Fai un quiz nella Clinica di Grammatica!",
         "menu_quiz_note": "📝 Nota di ripasso",
         "login_prompt": "💬 Accedi (o continua come ospite) per chattare con il bot o utilizzare il servizio.",
@@ -777,6 +777,20 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
             with st.chat_message(msg["role"]): 
                 st.markdown(msg["content"])
 
+        st.components.v1.html(
+            """
+            <script>
+                setTimeout(function() {
+                    var chat_messages = window.parent.document.querySelectorAll('[data-testid="stChatMessage"]');
+                    if (chat_messages.length > 0) {
+                        chat_messages[chat_messages.length - 1].scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                }, 300); 
+            </script>
+            """,
+            height=0
+        )
+
         st.caption(t["chat_warn"])
         
         user_input = st.chat_input(t["input_prompt"])
@@ -840,25 +854,6 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     
                     st.session_state[msg_key].append({"role": "assistant", "content": response.text})
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
-                    
-                    # 💡 [자동 스크롤 완결판] 말풍선을 렌더링할 시간(300ms)을 벌어주는 게 핵심!
-                    st.components.v1.html(
-                    """
-                    <script>
-                        setTimeout(function() {
-                            var doc = window.parent.document;
-                            var mainContainer = doc.querySelector('.main') || doc.querySelector('[data-testid="stAppViewContainer"]');
-                            if (mainContainer) {
-                                mainContainer.scrollTo({
-                                    top: mainContainer.scrollHeight,
-                                    behavior: 'smooth'
-                                });
-                            }
-                        }, 300); 
-                    </script>
-                    """,
-                    height=0
-                )   
                     
                 except Exception as e:
                     if st.session_state[msg_key] and st.session_state[msg_key][-1]["role"] == "user":
