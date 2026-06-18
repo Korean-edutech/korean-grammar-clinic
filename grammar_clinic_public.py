@@ -888,6 +888,8 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                     
                     st.session_state[msg_key].append({"role": "assistant", "content": response.text})
                     db.collection("chats").document(chat_doc_id).set({"messages": st.session_state[msg_key]})
+
+                    st.rerun()
                     
                 except Exception as e:
                     if st.session_state[msg_key] and st.session_state[msg_key][-1]["role"] == "user":
@@ -899,6 +901,4 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                             st.warning(t["error_quota"]) 
                         else:
                             st.error(f"{t['error_msg']}: {error_msg}")
-            
-            # 마지막으로 페이지 다시 읽기
-            st.rerun()
+                            
