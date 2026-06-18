@@ -847,6 +847,17 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                 
                 try:
                     model = genai.GenerativeModel('models/gemini-2.5-flash', system_instruction=system_instruction)
+
+                    # 1️⃣ Streamlit 세션에 저장된 이전 대화 내역을 제미나이 API 형식으로 변환
+                    gemini_history = []
+                    # session_state[msg_key]의 마지막 요소는 방금 넣은 user의 final_prompt이므로 제외[:-1]하고 변환
+                    for msg in st.session_state[msg_key][:-1]:
+                        # Streamlit의 'assistant' 역할을 제미나이가 이해하는 'model'로 변경
+                        role = "model" if msg["role"] == "assistant" else "user"
+                        gemini_history.append({"role": role, "parts": [msg["content"]]})
+                        
+                    # 2️⃣ 변환한 대화 내역(history)을 담아서 채팅 세션 시작
+                    chat_session = model.start_chat(history=gemini_history)
                     
                     with st.chat_message("assistant"):
                         # ==========================================
@@ -868,7 +879,8 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
                         # ==========================================
                         
                         with st.spinner(t["loading"]):
-                            response = model.generate_content(final_prompt)
+                            # 3️⃣ generate_content 대신 chat_session의 send_message를 사용해 맥락 유지!
+                            response = chat_session.send_message(final_prompt)
                             st.markdown(response.text)
                     
                     st.session_state[msg_key].append({"role": "assistant", "content": response.text})
