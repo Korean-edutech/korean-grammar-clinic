@@ -741,7 +741,8 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     # ====================================================================
 
     if st.session_state.user_email is None:
-        show_login_ui()    else:
+        show_login_ui()    
+    else:
         # [퀴즈 기능 연동]
         if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
             st.write("<br>", unsafe_allow_html=True)
