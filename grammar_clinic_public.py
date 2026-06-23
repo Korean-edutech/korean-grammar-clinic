@@ -72,7 +72,13 @@ ui_texts = {
         "note_desc": "지금까지 푼 미니 퀴즈의 상세 기록과 오답을 복습해 보세요!", "no_quiz": "아직 푼 퀴즈가 없습니다. 문법 클리닉에서 먼저 풀어보세요!",
         "menu_quiz_note": "📝 퀴즈 복습 노트",
         "login_prompt": "💬 챗봇과 대화하거나 서비스를 이용하려면 로그인(또는 비회원 시작)이 필요합니다.",
-        "sidebar_login_msg": "👤 로그인이 필요합니다"
+        "sidebar_login_msg": "👤 로그인이 필요합니다",
+        "btn_level1": "🌱 1단계: 기본 개념과 규칙 배우기",
+        "prompt_level1": "'{room}' 문법 문서에서 [1단계]에 해당하는 기본 내용을 먼저 설명해 줘.",
+        "btn_level2": "🌿 2단계: 예외와 불규칙 마스터하기",
+        "prompt_level2": "'{room}' 문법 문서에서 [2단계]에 해당하는 예외나 불규칙 내용을 설명해 줘.",
+        "btn_level3": "🌳 3단계: 헷갈리기 쉬운 표현/심화",
+        "prompt_level3": "'{room}' 문법 문서에서 [3단계]에 해당하는 심화 내용이나 동음이의어를 설명해 줘."
     },
     "English": {
         "main_title": "Welcome to Korean Grammar Clinic! 👋", "choose_lang": "🌐 Choose Your Language",
@@ -104,7 +110,13 @@ ui_texts = {
         "note_desc": "Review your quiz history and mistakes here!", "no_quiz": "No quiz records yet. Go take a quiz in the Grammar Clinic!",
         "menu_quiz_note": "📝 Quiz Review Note",
         "login_prompt": "💬 Please sign in (or start as a guest) to chat with the bot or use the service.",
-        "sidebar_login_msg": "👤 Sign in required"
+        "sidebar_login_msg": "👤 Sign in required",
+        "btn_level1": "🌱 Step 1: Basic Concepts & Rules",
+        "prompt_level1": "Please explain the [Step 1] basic concepts and rules from the '{room}' grammar document.",
+        "btn_level2": "🌿 Step 2: Exceptions & Irregulars",
+        "prompt_level2": "Please explain the [Step 2] exceptions and irregulars from the '{room}' grammar document.",
+        "btn_level3": "🌳 Step 3: Advanced Nuances & Expressions",
+        "prompt_level3": "Please explain the [Step 3] advanced nuances and tricky expressions from the '{room}' grammar document."
     },
     "日本語": {
         "main_title": "韓国語文法クリニックへようこそ！ 👋", "choose_lang": "🌐 言語を選択してください",
@@ -136,7 +148,13 @@ ui_texts = {
         "note_desc": "これまでのクイズ記録と誤答を復習しましょう！", "no_quiz": "まだクイズの履歴がありません。クリニックでクイズを解いてみましょう！",
         "menu_quiz_note": "📝 クイズ復習ノート",
         "login_prompt": "💬 チャットボットと会話したりサービスを利用するには、ログイン（またはゲストとして開始）が必要です。",
-        "sidebar_login_msg": "👤 ログインが必要です"
+        "sidebar_login_msg": "👤 ログインが必要です",
+        "btn_level1": "🌱 第1段階：基本概念と規則を学ぶ",
+        "prompt_level1": "'{room}' の文法ドキュメントから、[1段階] に該当する基本内容を説明してください。",
+        "btn_level2": "🌿 第2段階：例外と不規則をマスターする",
+        "prompt_level2": "'{room}' の文法ドキュメントから、[2段階] に該当する例外や不規則な内容を説明してください。",
+        "btn_level3": "🌳 第3段階：紛らわしい表現・応用",
+        "prompt_level3": "'{room}' の文法ドキュメントから、[3段階] に該当する応用内容や同音異義語を説明してください。"
     },
     "中文": {
         "main_title": "欢迎来到韩国语语法诊所！ 👋", "choose_lang": "🌐 请选择您的语言",
@@ -168,7 +186,13 @@ ui_texts = {
         "note_desc": "复习您的测验历史和错题！", "no_quiz": "暂无测验记录。请先在语法诊所参加测验！",
         "menu_quiz_note": "📝 测验复习本",
         "login_prompt": "💬 请登录（或以游客身份开始）以进行对话或使用服务。",
-        "sidebar_login_msg": "👤 需要登录"
+        "sidebar_login_msg": "👤 需要登录",
+        "btn_level1": "🌱 第1阶段：学习基本概念与规则",
+        "prompt_level1": "请解释 '{room}' 语法文件中 [1阶段] 的基本内容。",
+        "btn_level2": "🌿 第2阶段：掌握例外与不规则",
+        "prompt_level2": "请解释 '{room}' 语法文件中 [2阶段] 的例外和不规则内容。",
+        "btn_level3": "🌳 第3阶段：易混淆表达与进阶",
+        "prompt_level3": "请解释 '{room}' 语法文件中 [3阶段] 的进阶内容或同音异义词。"
     },
     "Español": {
         "main_title": "¡Bienvenido a la Clínica de Gramática Coreana! 👋", "choose_lang": "🌐 Elige tu idioma",
@@ -200,7 +224,13 @@ ui_texts = {
         "note_desc": "¡Repasa tu historial de cuestionarios y errores aquí!", "no_quiz": "Aún no hay cuestionarios. ¡Haz uno en la Clínica de Gramática!",
         "menu_quiz_note": "📝 Nota de repaso",
         "login_prompt": "💬 Por favor, inicia sesión (o continúa como invitado) para chatear o usar el servicio.",
-        "sidebar_login_msg": "👤 Inicio de sesión requerido"
+        "sidebar_login_msg": "👤 Inicio de sesión requerido",
+        "btn_level1": "🌱 Paso 1: Conceptos Básicos y Reglas",
+        "prompt_level1": "Por favor, explica el contenido básico del [Paso 1] del documento de gramática '{room}'.",
+        "btn_level2": "🌿 Paso 2: Excepciones e Irregulares",
+        "prompt_level2": "Por favor, explica el contenido de excepciones e irregulares del [Paso 2] del documento de gramática '{room}'.",
+        "btn_level3": "🌳 Paso 3: Expresiones Avanzadas",
+        "prompt_level3": "Por favor, explica los matices avanzados o palabras homónimas del [Paso 3] del documento de gramática '{room}'."
     },
     "Tiếng Việt": {
         "main_title": "Chào mừng đến với Phòng khám Ngữ pháp Tiếng Hàn! 👋", "choose_lang": "🌐 Chọn ngôn ngữ của bạn",
@@ -232,7 +262,13 @@ ui_texts = {
         "note_desc": "Xem lại lịch sử bài kiểm tra và các lỗi sai của bạn tại đây!", "no_quiz": "Chưa có bài kiểm tra nào. Hãy làm bài kiểm tra trong Phòng khám Ngữ pháp!",
         "menu_quiz_note": "📝 Ghi chú ôn tập",
         "login_prompt": "💬 Vui lòng đăng nhập (hoặc tiếp tục với tư cách khách) để trò chuyện hoặc sử dụng dịch vụ.",
-        "sidebar_login_msg": "👤 Cần đăng nhập"
+        "sidebar_login_msg": "👤 Cần đăng nhập",
+        "btn_level1": "🌱 Bước 1: Khái niệm & Quy tắc cơ bản",
+        "prompt_level1": "Vui lòng giải thích nội dung cơ bản của [Bước 1] trong tài liệu ngữ pháp '{room}'.",
+        "btn_level2": "🌿 Bước 2: Ngoại lệ & Bất quy tắc",
+        "prompt_level2": "Vui lòng giải thích các ngoại lệ và bất quy tắc của [Bước 2] trong tài liệu ngữ pháp '{room}'.",
+        "btn_level3": "🌳 Bước 3: Biểu hiện nâng cao",
+        "prompt_level3": "Vui lòng giải thích nội dung nâng cao hoặc từ đồng âm của [Bước 3] trong tài liệu ngữ pháp '{room}'."
     },
     "Français": {
         "main_title": "Bienvenue à la Clinique de Grammaire Coréenne ! 👋", "choose_lang": "🌐 Choisissez votre langue",
@@ -264,7 +300,13 @@ ui_texts = {
         "note_desc": "Revoyez votre historique de quiz et vos erreurs ici !", "no_quiz": "Aucun quiz pour le moment. Faites un quiz dans la Clinique de Grammaire !",
         "menu_quiz_note": "📝 Notes de révision",
         "login_prompt": "💬 Veuillez vous connecter (ou continuer en tant qu'invité) pour discuter ou utiliser le service.",
-        "sidebar_login_msg": "👤 Connexion requise"
+        "sidebar_login_msg": "👤 Connexion requise",
+        "btn_level1": "🌱 Étape 1 : Concepts de base et Règles",
+        "prompt_level1": "Veuillez expliquer les concepts de base de l'[Étape 1] du document de grammaire '{room}'.",
+        "btn_level2": "🌿 Étape 2 : Exceptions et Irréguliers",
+        "prompt_level2": "Veuillez expliquer les exceptions et irréguliers de l'[Étape 2] du document de grammaire '{room}'.",
+        "btn_level3": "🌳 Étape 3 : Expressions Avancées",
+        "prompt_level3": "Veuillez expliquer les nuances avancées ou homonymes de l'[Étape 3] du document de grammaire '{room}'."
     },
     "हिन्दी": {
         "main_title": "कोरियाई व्याकरण क्लिनिक में आपका स्वागत है! 👋", "choose_lang": "🌐 अपनी भाषा चुनें",
@@ -296,7 +338,13 @@ ui_texts = {
         "note_desc": "अपने क्विज़ इतिहास और गलतियों की समीक्षा यहाँ करें!", "no_quiz": "अभी तक कोई क्विज़ रिकॉर्ड नहीं है। व्याकरण क्लिनिक में क्विज़ दें!",
         "menu_quiz_note": "📝 क्विज़ समीक्षा नोट",
         "login_prompt": "💬 बॉट के साथ चैट करने या सेवा का उपयोग करने के लिए कृपया साइन इन करें (या अतिथि के रूप में जारी रखें)।",
-        "sidebar_login_msg": "👤 साइन इन आवश्यक है"
+        "sidebar_login_msg": "👤 साइन इन आवश्यक है",
+        "btn_level1": "🌱 चरण 1: मूल अवधारणाएँ और नियम",
+        "prompt_level1": "कृपया '{room}' व्याकरण दस्तावेज़ से [चरण 1] मूल सामग्री की व्याख्या करें।",
+        "btn_level2": "🌿 चरण 2: अपवाद और अनियमितता",
+        "prompt_level2": "कृपया '{room}' व्याकरण दस्तावेज़ से [चरण 2] अपवाद और अनियमित सामग्री की व्याख्या करें।",
+        "btn_level3": "🌳 चरण 3: उन्नत भाव",
+        "prompt_level3": "कृपया '{room}' व्याकरण दस्तावेज़ से [चरण 3] उन्नत सामग्री या समानार्थक शब्दों की व्याख्या करें।"
     },
     "Italiano": {
         "main_title": "Benvenuti alla Clinica di Grammatica Coreana! 👋", "choose_lang": "🌐 Scegli la tua lingua",
@@ -328,7 +376,13 @@ ui_texts = {
         "note_desc": "Rivedi qui la cronologia dei quiz e i tuoi errori!", "no_quiz": "Nessun record di quiz. Fai un quiz nella Clinica di Grammatica!",
         "menu_quiz_note": "📝 Nota di ripasso",
         "login_prompt": "💬 Accedi (o continua come ospite) per chattare con il bot o utilizzare il servizio.",
-        "sidebar_login_msg": "👤 Accesso richiesto"
+        "sidebar_login_msg": "👤 Accesso richiesto",
+        "btn_level1": "🌱 Fase 1: Concetti base e Regole",
+        "prompt_level1": "Spiega i concetti di base della [Fase 1] dal documento di grammatica '{room}'.",
+        "btn_level2": "🌿 Fase 2: Eccezioni e Irregolari",
+        "prompt_level2": "Spiega le eccezioni e le irregolarità della [Fase 2] dal documento di grammatica '{room}'.",
+        "btn_level3": "🌳 Fase 3: Espressioni Avanzate",
+        "prompt_level3": "Spiega le sfumature avanzate o gli omonimi della [Fase 3] dal documento di grammatica '{room}'."
     }
 }
 
@@ -630,7 +684,7 @@ elif selected_main_nav == t["menu_board"]:
                             db.collection("posts").document(post['id']).update({"comments": updated_comments})
                             st.rerun()
 
-# 4. 📝 퀴즈 복습 노트 페이지 로직
+# 3. 📝 퀴즈 복습 노트 페이지 로직
 elif selected_main_nav == t["menu_quiz_note"]: 
     st.title(t["menu_quiz_note"])
     st.write(t["note_desc"])
@@ -655,7 +709,8 @@ elif selected_main_nav == t["menu_quiz_note"]:
                             st.error(f"❌ {t.get('history_me', 'Me')}: {d['user_ans']}  |  🎯 Answer: {d['correct_ans']}")
                         st.write("---")
 
-# 3. 🚪 문법 클리닉 챗봇 엔진 로직 (중복 제거 및 완벽 통합!)
+# 4. 🚪 문법 클리닉 챗봇 엔진 로직 (중복 제거 및 완벽 통합!)
+
 elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     actual_room_name = selected_display_name.replace("&nbsp;", "").strip()
     st.title(f"🚪 {actual_room_name}")
@@ -665,24 +720,28 @@ elif selected_main_nav == t["menu_clinic"] and selected_display_name:
     with open(f"grammar_data/{selected_meta_word}.txt", "r", encoding="utf-8") as file:
         target_rules = file.read()
 
-    # 가이드 및 추천 질문 칩
+    # ====================================================================
+    # 🎯 범용 가이드 및 추천 질문 칩 (모든 방 공통 세로 배치 메뉴)
+    # ====================================================================
     with st.expander(t["guide_title"].format(room=selected_meta_word), expanded=True):
         st.markdown(t["guide_desc"].format(room=selected_meta_word))
         
-        col1, col2, col3 = st.columns(3)
-        if col1.button(t["btn_q1"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q1"].format(room=selected_meta_word)
+        # 가로형 컬럼(col1, col2...)을 빼고, 세로형 버튼으로 대체
+        if st.button(t["btn_level1"], use_container_width=True):
+            st.session_state.suggested_q = t["prompt_level1"].format(room=selected_meta_word)
             st.rerun()
-        if col2.button(t["btn_q2"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q2"].format(room=selected_meta_word)
+            
+        if st.button(t["btn_level2"], use_container_width=True):
+            st.session_state.suggested_q = t["prompt_level2"].format(room=selected_meta_word)
             st.rerun()
-        if col3.button(t["btn_q3"], use_container_width=True):
-            st.session_state.suggested_q = t["prompt_q3"].format(room=selected_meta_word)
+            
+        if st.button(t["btn_level3"], use_container_width=True):
+            st.session_state.suggested_q = t["prompt_level3"].format(room=selected_meta_word)
             st.rerun()
+    # ====================================================================
 
     if st.session_state.user_email is None:
-        show_login_ui()
-    else:
+        show_login_ui()    else:
         # [퀴즈 기능 연동]
         if selected_meta_word in quiz_vault and quiz_vault[selected_meta_word]:
             st.write("<br>", unsafe_allow_html=True)
