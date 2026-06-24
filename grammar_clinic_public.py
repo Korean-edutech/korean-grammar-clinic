@@ -7,6 +7,23 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
+import extra_streamlit_components as stx
+
+# 👉. import들 바로 아래에 쿠키 매니저 초기화 코드 덩어리 추가!
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()
+
+# 👉. 쿠키 매니저 바로 아래에 '자동 로그인 체크' 로직 추가!
+if "user_email" not in st.session_state:
+    st.session_state.user_email = None
+
+cached_email = cookie_manager.get(cookie="saved_user_email")
+if cached_email and st.session_state.user_email is None:
+    st.session_state.user_email = cached_email
+    st.rerun()
 
 # 페이지 기본 설정
 st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
@@ -460,6 +477,10 @@ def show_login_ui():
                     user_ref = db.collection("users").document(auth_email).get()
                     if user_ref.exists and user_ref.to_dict().get("password") == auth_pwd:
                         st.session_state.user_email = auth_email
+                        
+                        # 👉 여기에 쿠키 굽기 딱 한 줄 추가! (30일 유지)
+                        cookie_manager.set("saved_user_email", auth_email, max_age=30*24*60*60)
+                        
                         st.success("Success!")
                         st.rerun()
                     else:
@@ -493,6 +514,10 @@ def show_login_ui():
                 st.warning(t["agree_warn_guest"])
             else:
                 st.session_state.user_email = f"Guest_{str(uuid.uuid4())[:4]}"
+                
+                # 👉 비회원(게스트)도 자동 로그인되도록 쿠키 굽기 추가!
+                cookie_manager.set("saved_user_email", st.session_state.user_email, max_age=30*24*60*60)
+                
                 st.rerun()
 
 # ==========================================
@@ -503,6 +528,10 @@ if st.session_state.user_email:
     if st.sidebar.button("Logout"):
         st.session_state.user_email = None
         st.session_state.is_admin = False
+        
+        # 👉 로그아웃 버튼을 누르면 구워둔 쿠키도 확실하게 삭제!
+        cookie_manager.delete("saved_user_email")
+        
         st.rerun()
 else:
     st.sidebar.markdown(f"**{t['sidebar_login_msg']}**")
