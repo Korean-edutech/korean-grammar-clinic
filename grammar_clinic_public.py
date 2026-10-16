@@ -9,14 +9,13 @@ from firebase_admin import credentials, firestore
 import json
 import extra_streamlit_components as stx
 
-# 👉. import들 바로 아래에 쿠키 매니저 초기화 코드 덩어리 추가!
-@st.cache_resource
-def get_manager():
-    return stx.CookieManager()
+# 👉 1. (수정) 페이지 기본 설정이 무조건 st 관련 명령어 중 1등으로 와야 합니다!
+st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
 
-cookie_manager = get_manager()
+# 👉 2. (수정) 에러의 원인이었던 @st.cache_resource와 함수 껍데기(def)를 아예 없애고 바로 실행합니다.
+cookie_manager = stx.CookieManager()
 
-# 👉. 쿠키 매니저 바로 아래에 '자동 로그인 체크' 로직 추가!
+# 자동 로그인 체크 로직
 if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
@@ -24,9 +23,6 @@ cached_email = cookie_manager.get(cookie="saved_user_email")
 if cached_email and st.session_state.user_email is None:
     st.session_state.user_email = cached_email
     st.rerun()
-
-# 페이지 기본 설정
-st.set_page_config(layout="wide", page_title="Korean Grammar Clinic")
 
 # 1. 🔑 제미나이 API 키 로드
 api_key = os.environ.get("GEMINI_API_KEY")
