@@ -10,7 +10,7 @@ import json
 import extra_streamlit_components as stx
 
 # 👉. import들 바로 아래에 쿠키 매니저 초기화 코드 덩어리 추가!
-@st.cache_resource(experimental_allow_widgets=True)
+@st.cache_resource
 def get_manager():
     return stx.CookieManager()
 
